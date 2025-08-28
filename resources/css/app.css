@@ -130,6 +130,40 @@
     --sidebar-ring: oklch(0.439 0 0);
 }
 
+.rsw-ce ul {
+  list-style: disc;
+  padding-left: 2em;
+}
+
+.rsw-ce ol {
+  list-style: decimal;
+  padding-left: 2em;
+}
+
+.rsw-ce {
+    background-color: var(--color-neutral-900);
+}
+
+.dark .rsw-toolbar {
+    background-color: var(--color-neutral-900);
+    border: none;
+    border-bottom: 1px solid var(--color-neutral-800);
+}
+
+.dark .rsw-toolbar .rsw-btn {
+    color: var(--color-neutral-100);
+}
+
+.dark .rsw-toolbar :hover {
+    background-color: var(--color-neutral-700);
+}
+
+.dark .rsw-toolbar .rsw-separator {
+    border-color: var(--color-neutral-600);
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
 @layer base {
     * {
         @apply border-border;
