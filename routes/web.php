@@ -15,11 +15,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::controller(PageController::class)
-    ->name('pages.')
+    ->name('onboarding.')
     ->prefix('/page')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/{slug}', 'show')->name('show');
         Route::get('/create', 'create')->name('create');
+        Route::get('/{slug}', 'show')->name('show');
     });
 });
 

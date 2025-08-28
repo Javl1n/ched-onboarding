@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 
 import AppearanceTabs from '@/components/appearance-tabs';
 import HeadingSmall from '@/components/heading-small';
@@ -9,23 +9,34 @@ import SettingsLayout from '@/layouts/settings/layout';
 import { appearance } from '@/routes';
 import OnboardingLayout from '@/layouts/onboarding/layout';
 import onboarding from '@/routes/onboarding';
+import { Input } from '@/components/ui/input';
+import TitleInput from '@/components/onboarding/create/title-input';
 
 const breadcrumbs: BreadcrumbItem[] = [
      {
           title: 'Onboarding Information',
           href: onboarding.index().url,
      },
+     {
+          title: 'Add Page',
+          href: onboarding.create().url,
+     },
 ];
 
-export default function OnboardingEmpty() {
-     const {auth: {user}} = usePage<SharedData>().props;
+export default function OnboardingCreate() {
+     const {data, setData} = useForm({
+          title: '',
+     });
 
      return (
           <AppLayout breadcrumbs={breadcrumbs}>
-               <Head title="Empty" />
+               <Head title="Create" />
                <OnboardingLayout>
                     <div className="space-y-6">
-                         <HeadingSmall title="No Pages found" description={user.role != 'trainee' ? `Add a page to get started` : undefined} />
+                         <TitleInput value={data.title} onChange={(e) => setData('title', e.target.value)} />
+                         <div className='grid'>
+                              
+                         </div>
                     </div>
                </OnboardingLayout>
           </AppLayout>

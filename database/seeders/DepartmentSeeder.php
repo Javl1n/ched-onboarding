@@ -14,6 +14,10 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
         Department::create([
+            'name' => "Admin"
+        ]);
+
+        Department::create([
             'name' => "Unifast",
         ]);
 
@@ -23,10 +27,6 @@ class DepartmentSeeder extends Seeder
 
         Department::create([
             'name' => "Scholarship"
-        ]);
-
-        Department::create([
-            'name' => "Admin"
         ]);
 
         Department::create([

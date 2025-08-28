@@ -7,7 +7,7 @@ import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, FileUser, Folder, LayoutGrid } from 'lucide-react';
 import AppLogo from './app-logo';
-import pages from '@/routes/pages';
+import onboarding from '@/routes/onboarding';
 
 const traineeNavItems: NavItem[] = [
     {
@@ -25,7 +25,7 @@ const adminNavItems: NavItem[] = [
     },
     {
         title: 'Onboarding',
-        href: pages.index(),
+        href: onboarding.index(),
         icon: FileUser,
     },
 ];
