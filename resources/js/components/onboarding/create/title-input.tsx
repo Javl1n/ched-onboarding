@@ -6,6 +6,7 @@ export default function TitleInput(props: InputHTMLAttributes<HTMLInputElement>)
                type="text"
                placeholder="Insert Title Here"
                className="text-4xl font-bold outline-none w-full"
+               required
                {...props}
           />
      );

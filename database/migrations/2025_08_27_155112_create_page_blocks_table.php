@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('page_id')->constrained()->cascadeOnDelete();
             $table->enum('type', ['header_3', 'header_2', 'header_1', 'paragraph', 'image', 'video']);
             $table->text('content');
+            $table->integer('order');
             $table->timestamps();
         });
     }

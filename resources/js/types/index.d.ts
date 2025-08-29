@@ -47,3 +47,8 @@ export interface OnboardingPage {
     title: string;
     slug: string;
 }
+
+export interface DepartmentInterface {
+    id: number | string;
+    name: string;
+}

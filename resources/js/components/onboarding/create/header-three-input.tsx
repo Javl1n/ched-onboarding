@@ -1,9 +1,9 @@
 import { InputHTMLAttributes } from "react";
-import BlockLayout from "./block-layout";
+import BlockLayout, { OnboardingInputAttributes } from "./block-layout";
 
-export default function HeaderThreeInput({deleteBlock, ...props}: InputHTMLAttributes<HTMLInputElement>  & { deleteBlock?: () => void }) {
+export default function HeaderThreeInput({deleteBlock, error, ...props}: InputHTMLAttributes<HTMLInputElement>  & OnboardingInputAttributes) {
      return (
-          <BlockLayout deleteBlock={deleteBlock}>
+          <BlockLayout deleteBlock={deleteBlock} error={error}>
                <input className="outline-none w-full rounded p-3 text-xl font-bold" placeholder="Header Here"  type="text" {...props} />
           </BlockLayout>
      )

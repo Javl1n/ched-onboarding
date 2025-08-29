@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Page;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Fluent;
 
 class PageController extends Controller
 {
@@ -26,7 +29,9 @@ class PageController extends Controller
      */
     public function create()
     {
-        return inertia('onboarding/create');
+        return inertia('onboarding/create', [
+            'departments' => Department::all()
+        ]);
     }
 
     /**
@@ -34,7 +39,31 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+            'title' => 'required|string',
+            'blocks' => 'array',
+            'blocks.*.type' => 'required|string',
+        ];
+        
+        foreach ($request->blocks as $index => $block) {
+            if ($block['type'] === 'file') {
+                $rules["blocks.$index.content"] = 'required|file|mimes:pdf,ppt,docx|max:2048';
+            } elseif ($block['type'] === 'image') {
+                $rules["blocks.$index.content"] = 'required|file|mimes:png,jpg,jpeg|max:2048';
+            } else  {
+                $rules["blocks.$index.content"] = 'required|string';
+                
+            }
+        }
+        
+        $validator = Validator::make($request->all(), $rules, [], [
+            'blocks.*.content' => "current"
+        ]);
+        
+        $validator->validate();
+        
+
+
     }
 
     /**

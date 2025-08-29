@@ -6,11 +6,11 @@ import Editor, {
   Toolbar
 } from 'react-simple-wysiwyg';
 
-import BlockLayout from './block-layout';
+import BlockLayout, { OnboardingInputAttributes } from './block-layout';
 
-export default function ParagraphInput({deleteBlock, ...props}: EditorProps & { deleteBlock?: () => void }) {
+export default function ParagraphInput({deleteBlock, error, ...props}: EditorProps & OnboardingInputAttributes) {
      return (
-          <BlockLayout deleteBlock={deleteBlock}>
+          <BlockLayout deleteBlock={deleteBlock} error={error}>
                <Editor placeholder='Type your paragraph here...' containerProps={{
                     style: {
                          border: "none",
