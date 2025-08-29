@@ -6,18 +6,25 @@ import Editor, {
   Toolbar
 } from 'react-simple-wysiwyg';
 
-export default function ParagraphInput(props: EditorProps) {
+import BlockLayout from './block-layout';
+
+export default function ParagraphInput(props: EditorProps & { deleteBlock?: () => void }) {
      return (
-          <Editor placeholder='Type your paragraph here...' containerProps={{
-               style: {
-                    border: "none",
-                    boxShadow: "none"
-               }
-          }} {...props}>
-               {/* <Toolbar>
-                    <BtnBold />
-                    <BtnItalic />
-               </Toolbar> */}
-          </Editor>
+          <BlockLayout deleteBlock={props.deleteBlock}>
+               <Editor placeholder='Type your paragraph here...' containerProps={{
+                    style: {
+                         border: "none",
+                         boxShadow: "none"
+                    }
+               }} {...props}>
+                    {/* <Toolbar>
+                         <BtnBold />
+                         <BtnItalic />
+                    </Toolbar> */}
+               </Editor>
+          </BlockLayout>
      )
 }
+
+
+                                   
