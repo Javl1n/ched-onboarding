@@ -8,9 +8,9 @@ import Editor, {
 
 import BlockLayout from './block-layout';
 
-export default function ParagraphInput(props: EditorProps & { deleteBlock?: () => void }) {
+export default function ParagraphInput({deleteBlock, ...props}: EditorProps & { deleteBlock?: () => void }) {
      return (
-          <BlockLayout deleteBlock={props.deleteBlock}>
+          <BlockLayout deleteBlock={deleteBlock}>
                <Editor placeholder='Type your paragraph here...' containerProps={{
                     style: {
                          border: "none",
