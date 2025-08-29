@@ -89,11 +89,11 @@ export default function OnboardingCreate() {
                                    <div className='flex ms-[calc(var(--spacing)*2-1px)]'>
                                         <div className='h-12 w-5 border-l-2 border-b-2 rounded-bl-2xl mb-[calc(var(--spacing)*4-1px)]' />
                                         <div className="flex flex-col justify-end">
-                                             <div className="bg-neutral-950 p-1 rounded-lg border-2 flex gap-1">
+                                             <div className="dark:bg-neutral-950 p-1 rounded-lg border-2 flex gap-1">
                                                   {Object.keys(addButtons).map((Button: string, idx: number) => {
                                                        const ButtonComponent = addButtons[Button];
                                                        return (
-                                                            <div className="rounded p-1 hover:bg-neutral-500/50 cursor-pointer transition" key={idx}>
+                                                            <div className="rounded p-1 hover:bg-neutral-200/50 dark:hover:bg-neutral-500/50 cursor-pointer transition" key={idx}>
                                                                  <ButtonComponent onClick={() => addBlock(Button)} key={idx} className="size-4" />
                                                             </div>
                                                        )

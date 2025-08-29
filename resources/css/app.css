@@ -140,10 +140,6 @@
   padding-left: 2em;
 }
 
-.rsw-ce {
-    background-color: var(--color-neutral-950);
-}
-
 .dark .rsw-toolbar {
     background-color: var(--color-neutral-950);
     border: none;
