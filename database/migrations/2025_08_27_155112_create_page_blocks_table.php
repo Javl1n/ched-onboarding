@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('page_blocks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('page_id')->constrained()->cascadeOnDelete();
-            $table->enum('type', ['header_3', 'header_2', 'header_1', 'paragraph', 'image', 'video']);
+            $table->enum('type', ['header_3', 'header_2', 'header_1', 'paragraph', 'image', 'video', 'file']);
             $table->text('content');
             $table->integer('order');
             $table->timestamps();

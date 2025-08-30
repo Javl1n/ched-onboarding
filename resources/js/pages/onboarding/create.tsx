@@ -37,7 +37,7 @@ const blocks: any = {
      header_three: HeaderThreeInput,
      image: ImageInput,
      video: VideoInput,
-     file: FileInput,
+     // file: FileInput,
 }
 
 const addButtons: {[key: string]: any} = {
@@ -47,7 +47,7 @@ const addButtons: {[key: string]: any} = {
      header_three: Heading3,
      image: Image,
      video: SquarePlay,
-     file: Paperclip,
+     // file: Paperclip,
 }
 
 export default function OnboardingCreate({departments} : {departments: DepartmentInterface[]}) {
@@ -78,7 +78,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
           
           post(onboarding.store({
                query: {
-                    publish: false,
+                    publish: true,
                }
           }).url, {
                forceFormData: true,
@@ -90,7 +90,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
           
           post(onboarding.store({
                query: {
-                    publish: true
+                    publish: false
                }
           }).url, {
                forceFormData: true,
@@ -162,7 +162,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                                                        })}
                                                   </div>
                                                   <Select value={data.department} onValueChange={(value) => setData('department', value)}>
-                                                       <SelectTrigger >
+                                                       <SelectTrigger className='min-w-50' >
                                                             <SelectValue placeholder="Select Department" />
                                                        </SelectTrigger>
                                                        <SelectContent>

@@ -7,6 +7,7 @@ use App\Models\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Fluent;
+use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
@@ -18,7 +19,7 @@ class PageController extends Controller
         $pages = Page::all();
 
         if ($pages->count() > 0) {
-            return redirect()->route('pages.show', ['slug' => $pages->first()->slug]);
+            return redirect()->route('onboarding.show', ['slug' => $pages->first()->slug]);
         }
 
         return inertia('onboarding/empty');
@@ -36,11 +37,12 @@ class PageController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     */
+    */
     public function store(Request $request)
     {
         $rules = [
-            'title' => 'required|string',
+            'title' => 'required|string|unique:App\Models\Page,title',
+            'department' => 'required|exists:App\Models\Department,id',
             'blocks' => 'array',
             'blocks.*.type' => 'required|string',
         ];
@@ -52,7 +54,6 @@ class PageController extends Controller
                 $rules["blocks.$index.content"] = 'required|file|mimes:png,jpg,jpeg|max:2048';
             } else  {
                 $rules["blocks.$index.content"] = 'required|string';
-                
             }
         }
         
@@ -61,9 +62,44 @@ class PageController extends Controller
         ]);
         
         $validator->validate();
+
+        $slug = Str::slug($request->title);
+
+        $page = Page::create([
+            'title' => $request->title,
+            'slug' => $slug,
+            'published' => $request->query('publish') ? true : false,
+            'department_id' => $request->department,
+        ]);
+
         
+        foreach ($request->blocks as $index => $block) {
+            $type = $block['type'];
 
+            if ($type == 'file' | $type == 'image') {
 
+                $content = $request->file("blocks.$index.content")->store($slug);
+                
+            } elseif ($type == 'video') {
+                
+                $content = $block['content'];
+                $content = Str::replace("watch?v=", "embed/", $content);
+                $content = Str::replace("view?usp=drive_link", "preview", $content);
+
+            } else {
+
+                $content = $block['content'];
+                
+            }
+
+            $page->blocks()->create([
+                'type' => $type,
+                'content' => $content,
+                'order' => $index,
+            ]);
+        }
+
+        return redirect()->route('onboarding.show', ['slug', $page->slug]);
     }
 
     /**
