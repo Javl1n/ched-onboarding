@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { FormEvent } from 'react';
 import InputError from '@/components/input-error';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import AddBlock from '@/components/onboarding/create/add-block';
 
 const breadcrumbs: BreadcrumbItem[] = [
      {
@@ -38,16 +39,6 @@ const blocks: any = {
      image: ImageInput,
      video: VideoInput,
      // file: FileInput,
-}
-
-const addButtons: {[key: string]: any} = {
-     paragraph: LetterText,
-     header_one: Heading1,
-     header_two: Heading2,
-     header_three: Heading3,
-     image: Image,
-     video: SquarePlay,
-     // file: Paperclip,
 }
 
 export default function OnboardingCreate({departments} : {departments: DepartmentInterface[]}) {
@@ -151,16 +142,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                                    <div className="flex-1 flex flex-col justify-end">
                                         <div className="flex justify-between">
                                              <div className="flex gap-2">
-                                                  <div className="dark:bg-neutral-950 p-1 rounded-lg border-2 flex gap-1">
-                                                       {Object.keys(addButtons).map((Button: string, idx: number) => {
-                                                            const ButtonComponent = addButtons[Button];
-                                                            return (
-                                                                 <div onClick={() => addBlock(Button)} className="rounded p-1 hover:bg-neutral-200/50 dark:hover:bg-neutral-500/50 cursor-pointer transition" key={`button-${idx}`}>
-                                                                      <ButtonComponent className="size-4" />
-                                                                 </div>
-                                                            )
-                                                       })}
-                                                  </div>
+                                                  <AddBlock addBlock={addBlock} />
                                                   <Select value={data.department} onValueChange={(value) => setData('department', value)}>
                                                        <SelectTrigger className='min-w-50' >
                                                             <SelectValue placeholder="Select Department" />

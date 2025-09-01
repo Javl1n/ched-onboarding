@@ -18,6 +18,7 @@ class PageController extends Controller
     {
         $pages = Page::all();
 
+        
         if ($pages->count() > 0) {
             return redirect()->route('onboarding.show', ['slug' => $pages->first()->slug]);
         }

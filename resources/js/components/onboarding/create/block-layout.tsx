@@ -1,5 +1,5 @@
 import InputError from "@/components/input-error";
-import { CircleXIcon } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, CircleXIcon } from "lucide-react";
 import { ReactNode } from "react";
 
 export interface OnboardingInputAttributes {
@@ -18,6 +18,10 @@ export default function BlockLayout({children, deleteBlock, error}: {children: R
                <div className="flex-1 my-2">
                     {children}
                     <InputError message={error} />
+               </div>
+               <div className="my-auto">
+                    <ChevronUp />
+                    <ChevronDown />
                </div>
           </div>
      )
