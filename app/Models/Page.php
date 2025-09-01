@@ -13,4 +13,9 @@ class Page extends Model
     {
         return $this->hasMany(PageBlock::class, 'page_id');
     }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

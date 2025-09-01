@@ -1,11 +1,11 @@
 import { InputHTMLAttributes, useEffect, useRef, useState } from "react";
-import BlockLayout, { OnboardingInputAttributes } from "./block-layout";
+import BlockLayout, { BlockAttributes, OnboardingInputAttributes } from "./block-layout";
 import { CloudUpload } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-export default function ImageInput({deleteBlock, error, ...props}: InputHTMLAttributes<HTMLInputElement>  & OnboardingInputAttributes) {
+export default function ImageInput({isNew = true, value, ...props}: InputHTMLAttributes<HTMLInputElement> & BlockAttributes) {
      const fileInputRef = useRef<HTMLInputElement | null>(null);
-     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+     const [previewUrl, setPreviewUrl] = useState<string | null>(!isNew ? `/private/${value as string}` : null);
 
      useEffect(() => {
           const input = fileInputRef.current;
@@ -33,8 +33,8 @@ export default function ImageInput({deleteBlock, error, ...props}: InputHTMLAttr
      }
 
      return (
-          <BlockLayout deleteBlock={deleteBlock} error={error}>
-               {previewUrl == null 
+          <>
+               {previewUrl === null 
                ? <div className="flex items-center justify-center">
                     <label onClick={handleClick} className="flex flex-col items-center justify-center w-full h-64 border-2 border-neutral-300 border-dashed rounded-lg cursor-pointer bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:border-neutral-700 dark:hover:bg-neutral-800/80">
                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -54,6 +54,6 @@ export default function ImageInput({deleteBlock, error, ...props}: InputHTMLAttr
                </div>}
                
                <Input type="file" ref={fileInputRef} className="hidden" {...props} />
-          </BlockLayout>
+          </>
      )
 }

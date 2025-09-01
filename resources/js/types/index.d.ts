@@ -42,10 +42,19 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 
-export interface OnboardingPage {
+export interface OnboardingPageInterface {
     id: number;
     title: string;
     slug: string;
+    department: DepartmentInterface,
+    blocks: PageBlockInterface[]
+}
+
+export interface PageBlockInterface {
+    id: number;
+    order: number;
+    type: 'paragraph' | 'header_one' | 'header_two' | 'header_three' | 'image' | 'video' | 'file' | string;
+    content: string;
 }
 
 export interface DepartmentInterface {

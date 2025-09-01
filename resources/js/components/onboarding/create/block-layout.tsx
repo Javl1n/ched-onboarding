@@ -1,13 +1,21 @@
 import InputError from "@/components/input-error";
+import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowUp, ChevronDown, ChevronUp, CircleXIcon } from "lucide-react";
 import { ReactNode } from "react";
 
 export interface OnboardingInputAttributes {
-     deleteBlock?: () => void,
-     error?: string
+     deleteBlock: () => void,
+     error: string,
+     onMove: (from: number, to: number) => void,
+     position: {first: boolean, last: boolean},
+     index: number
 }
 
-export default function BlockLayout({children, deleteBlock, error}: {children: ReactNode} & OnboardingInputAttributes) {
+export interface BlockAttributes {
+     isNew: boolean;
+}
+
+export default function BlockLayout({children, deleteBlock, error, position, onMove, index}: {children: ReactNode} & OnboardingInputAttributes) {
      return (
           <div className="flex gap-4">
                <div className="flex flex-col">
@@ -20,8 +28,12 @@ export default function BlockLayout({children, deleteBlock, error}: {children: R
                     <InputError message={error} />
                </div>
                <div className="my-auto">
-                    <ChevronUp />
-                    <ChevronDown />
+                    <Button onClick={() => onMove(index, index - 1)} variant={'ghost'} disabled={position.first}>
+                         <ChevronUp  />
+                    </Button>
+                    <Button onClick={() => onMove(index, index + 1)} variant={'ghost'} disabled={position.last}>
+                         <ChevronDown />
+                    </Button>
                </div>
           </div>
      )

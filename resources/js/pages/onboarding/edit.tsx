@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 
-import { DepartmentInterface, type BreadcrumbItem } from '@/types';
+import { DepartmentInterface, OnboardingPageInterface, PageBlockInterface, type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/app-layout';
 import OnboardingLayout from '@/layouts/onboarding/layout';
@@ -23,17 +23,6 @@ import { update } from '@/routes/password';
 import BlockLayout from '@/components/onboarding/create/block-layout';
 import SelectDepartment from '@/components/onboarding/create/select-department';
 
-const breadcrumbs: BreadcrumbItem[] = [
-     {
-          title: 'Onboarding Information',
-          href: onboarding.index().url,
-     },
-     {
-          title: 'Add Page',
-          href: onboarding.create().url,
-     },
-];
-
 const blocks: any = {
      paragraph: ParagraphInput,
      header_one: HeaderOneInput,
@@ -44,39 +33,71 @@ const blocks: any = {
      // file: FileInput,
 }
 
-export default function OnboardingCreate({departments} : {departments: DepartmentInterface[]}) {
-     const {data, setData, post, errors} = useForm<{
-          title: string,
-          blocks: Array<{
-               type: 'paragraph' | 'header_one' | 'header_two' | 'header_three' | 'image' | 'video' | 'file' | string,
-               content: string | undefined | File
-          }>,
-          department: string
-     }>({
-          title: '',
+interface EditFormDataInterface {
+     title: string,
+     blocks: Array<{
+          type: 'paragraph' | 'header_one' | 'header_two' | 'header_three' | 'image' | 'video' | 'file' | string,
+          content: string | undefined | File,
+          isNew: boolean,
+          id?: number | string
+     }>,
+     deleted: (string | number)[],
+     department: string
+}
+
+export default function OnboardingCreate({item, departments} : {item: OnboardingPageInterface, departments: DepartmentInterface[]}) {
+     const breadcrumbs: BreadcrumbItem[] = [
+          {
+               title: item.title,
+               href: onboarding.show({page: item.slug}).url,
+          },
+          {
+               title: 'Edit Page',
+               href: onboarding.edit({page: item.slug}).url,
+          },
+     ];
+
+     
+     const {data, setData, post, errors} = useForm<EditFormDataInterface>({
+          title: item.title,
           blocks: [
-               {
-                    type: 'paragraph',
-                    content: '',
-               },
+               ...item.blocks.sort((a, b) => a.order - b.order).map((block) => ({
+                    type: block.type,
+                    content: block.content,
+                    isNew: false,
+                    id: block.id,
+               }))
           ],
-          department: '',
+          deleted: [],
+          department: item.department.id as string,
      });
 
      const addBlock = (type: string) => {
-          setData('blocks', [...data.blocks, { type, content: '' }]);
+          setData('blocks', [...data.blocks, { type, content: '', isNew: true }]);
+     }
+
+     const deleteBlock = (index: number) => {
+          const block = data.blocks[index];
+
+          setData('blocks', data.blocks.filter((b, i) => i !== index));
+
+          if (!block.isNew) {
+               setData("deleted", [...data.deleted, block.id as string])
+          }
      }
 
      const submit = (e: FormEvent, publish: boolean) => {
           e.preventDefault();
           
-          post(onboarding.store({
+          post(onboarding.update({page: item.slug}, {
                query: {
                     publish: publish,
                }
           }).url, {
                forceFormData: true,
-          });          
+          });
+
+          
      }
 
      const moveBlock = (from: number, to: number) => {
@@ -104,17 +125,13 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                                              key={`block-${index}`} 
                                              index={index}
                                              position={{ first: index == 0, last: data.blocks.length - 1 == index}}
-                                             deleteBlock={() => {
-                                                  setData('blocks', data.blocks.filter((b, i) => i !== index));
-                                             }}
+                                             deleteBlock={() => deleteBlock(index)}
                                              error={errors?.[`blocks.${index}.content`]}
                                              onMove={moveBlock}
                                         >
                                              <BlockComponent
-                                                  value={block.type === 'image' || block.type === 'file'
-                                                       ? undefined
-                                                       : (typeof block.content === 'string' ? block.content : '')}
-                                             
+                                                  isNew={block.isNew}
+                                                  value={block.content}
                                                   onChange={(event: any) => {
                                                        setData('blocks', data.blocks.map((b, i) => {
                                                             if (i === index) {
@@ -122,13 +139,12 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                                                                  const newContent = block.type == 'image' || block.type == 'file' ? files[0] : value;
                                                                  return {
                                                                       ...b,
-                                                                      content: newContent
+                                                                      content: newContent,
                                                                  }
                                                             }
                                                             return b;
                                                        }));
                                                   }}
-                                                  
                                              />
                                         </BlockLayout>
                                    );
@@ -140,7 +156,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                                         <div className="flex justify-between">
                                              <div className="flex gap-2">
                                                   <AddBlock addBlock={addBlock} />
-                                                  <SelectDepartment value={data.department} onValueChange={(value) => setData('department', value)} />
+                                                  <SelectDepartment value={data.department} onValueChange={(value) => setData('department', value)}  />
                                              </div>
                                              <div className="flex gap-4">
                                                   <Button onClick={(e) => submit(e, false)} variant={'outline'}>

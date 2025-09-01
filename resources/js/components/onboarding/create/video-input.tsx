@@ -1,11 +1,11 @@
 import { InputHTMLAttributes, useEffect, useRef, useState } from "react";
-import BlockLayout, { OnboardingInputAttributes } from "./block-layout";
+import BlockLayout, { BlockAttributes, OnboardingInputAttributes } from "./block-layout";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function VideoInput({deleteBlock, error, ...props}: InputHTMLAttributes<HTMLInputElement>  & OnboardingInputAttributes) {
+export default function VideoInput({isNew, ...props}: InputHTMLAttributes<HTMLInputElement> & BlockAttributes) {
      const inputRef = useRef<HTMLInputElement | null>(null);
-     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+     const [previewUrl, setPreviewUrl] = useState<string | null>(props.value as string);
 
      useEffect(() => {
           const input = inputRef.current;
@@ -22,19 +22,18 @@ export default function VideoInput({deleteBlock, error, ...props}: InputHTMLAttr
                input.removeEventListener('input', handleInputChange);
           }
      }, []);
+     
      return (
-          <BlockLayout deleteBlock={deleteBlock} error={error}>
-               <div className="grid gap-2">
-                    <div className="">
-                         <Label>Youtube Link:</Label>
-                         <Input ref={inputRef} {...props} />
-                    </div>
-                    {previewUrl != null && previewUrl != '' ? 
-                         <iframe className="w-full aspect-video rounded-lg"
-                              src={`${previewUrl}`}>
-                         </iframe> 
-                    : null}
+          <div className="grid gap-2">
+               <div className="">
+                    <Label>Youtube Link:</Label>
+                    <Input ref={inputRef} {...props} />
                </div>
-          </BlockLayout>
+               {previewUrl != null && previewUrl != '' ? 
+                    <iframe className="w-full aspect-video rounded-lg"
+                         src={`${previewUrl}`}>
+                    </iframe> 
+               : null}
+          </div>
      )
 }

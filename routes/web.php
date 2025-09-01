@@ -20,7 +20,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', 'index')->name('index');
         Route::post('/', 'store')->name('store');
         Route::get('/create', 'create')->name('create');
-        Route::get('/{slug}', 'show')->name('show');
+        Route::get('{page:slug}', 'show')->name('show');
+        Route::get('{page:slug}/edit', 'edit')->name('edit');
+        Route::post('{page:slug}/update', 'update')->name('update');
     });
 });
 
