@@ -5,9 +5,10 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { dashboard } from '@/routes';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FileUser, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, FileUser, Folder, LayoutGrid, UserRoundCog } from 'lucide-react';
 import AppLogo from './app-logo';
 import onboarding from '@/routes/onboarding';
+import supervisor from '@/routes/supervisor';
 
 const traineeNavItems: NavItem[] = [
     {
@@ -27,6 +28,11 @@ const adminNavItems: NavItem[] = [
         title: 'Onboarding',
         href: onboarding.index(),
         icon: FileUser,
+    },
+    {
+        title: 'Supervisors',
+        href: supervisor.index(),
+        icon: UserRoundCog,
     },
 ];
 

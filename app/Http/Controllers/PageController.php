@@ -138,7 +138,6 @@ class PageController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-
         $rules = [
             'title' => ['required', Rule::unique('pages', 'title')->ignore($page->id)],
             'department' => 'required|exists:App\Models\Department,id',
@@ -169,7 +168,7 @@ class PageController extends Controller
             "title" => $request->title,
             "slug" => $slug,
             "department_id" => $request->department,
-            "published" => $request->published ? true : false
+            "published" => $request->publish ? true : false
         ]);
 
         // update or add new blocks

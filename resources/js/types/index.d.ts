@@ -47,7 +47,8 @@ export interface OnboardingPageInterface {
     title: string;
     slug: string;
     department: DepartmentInterface,
-    blocks: PageBlockInterface[]
+    blocks: PageBlockInterface[],
+    published: boolean,
 }
 
 export interface PageBlockInterface {

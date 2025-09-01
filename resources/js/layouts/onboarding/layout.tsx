@@ -37,7 +37,14 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
                                         })}
                                    >
                                         <Link href={onboarding.show(item.slug)} prefetch>
-                                             {item.title}
+                                             <div className="w-full flex justify-between">
+                                                  <div className="">
+                                                       {item.title}
+                                                  </div>
+                                                  {user.role !== 'trainee' ? 
+                                                  <div className={`h-1 w-1 rounded-full my-auto ${item.published ? 'bg-green-500' : 'bg-yellow-500'}`} /> 
+                                                  : null}
+                                             </div>
                                         </Link>
                                    </Button>
                               ))}

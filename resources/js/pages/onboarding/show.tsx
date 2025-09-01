@@ -50,11 +50,14 @@ export default function OnboardingShow({item}: {item: OnboardingPageInterface}) 
                                         </Button>
                                    : null}
                               </div>
-                              <div className="flex">
-                                   <div className="text-xs border px-2 py-1 rounded dark:text-neutral-600 text-neutral-500">{item.department.name} Department</div>
-                              </div>
+                              {user.role !== 'trainee' ? 
+                                   <div className="flex gap-1">
+                                        <div className="text-xs border px-2 py-1 rounded dark:text-neutral-300 dark:border-neutral-600/70 text-neutral-500">{item.department.name} Department</div>
+                                        <div className={`text-xs border px-2 py-1 rounded ${item.published ? 'text-green-500 border-green-700' : 'text-yellow-500/80 border-yellow-500/60'}`}>{item.published ? 'Published' : 'Drafted'}</div>
+                                   </div>
+                              : null}
                          </div>
-                        
+                         
                          {item.blocks.sort((a, b) => a.order - b.order).map((block, index) => {
                               const BlockComponent = blocks[block.type];
                               
