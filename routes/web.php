@@ -34,6 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->prefix('/supervisor')
     ->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
     });
 });
 

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class SupervisorController extends Controller
 {
@@ -14,6 +16,9 @@ class SupervisorController extends Controller
     {
         return inertia('supervisor/index', [
             "supervisors" => User::where('role', 'supervisor')->get(),
+            "departments" => Department::all()->except(
+                Department::where('name', "Admin")->first()->id
+            ),
         ]);
     }
 
@@ -30,7 +35,22 @@ class SupervisorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "name" => "required",
+            "email" => "required|email|unique:users,email",
+            "password" => "required",
+            "department" => "required|exists:departments,id"
+        ]);
+
+        $supervisor = User::create([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
+            "department_id" => $request->department,
+            "role" => "supervisor",
+        ]);
+
+        return back();
     }
 
     /**

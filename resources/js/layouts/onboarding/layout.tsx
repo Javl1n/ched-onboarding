@@ -24,7 +24,7 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
      return (
           <div className="px-4 py-6">
                <div className="flex flex-col lg:flex-row lg:space-x-12">
-                    <aside className="w-full max-w-xl lg:w-48">
+                    <aside className="w-full max-w-xl lg:w-64">
                          <nav className="flex flex-col space-y-1 space-x-0">
                               {pages?.map((item, index) => (
                                    <Button
@@ -37,8 +37,8 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
                                         })}
                                    >
                                         <Link href={onboarding.show(item.slug)} prefetch>
-                                             <div className="w-full flex justify-between">
-                                                  <div className="">
+                                             <div className="w-full flex justify-between gap-2">
+                                                  <div className="truncate flex-1">
                                                        {item.title}
                                                   </div>
                                                   {user.role !== 'trainee' ? 
