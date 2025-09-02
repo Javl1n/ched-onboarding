@@ -3,27 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class SupervisorController extends Controller
+class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $supervisors = User::with(['department'])->where('role', 'supervisor')->get();
-
-        return inertia('supervisor/index', [
-            "supervisors" => $supervisors,
-            "departments" => Department::all()->except(
-                Department::where('name', "Admin")->first()->id
-            )->except(
-                $supervisors->select('department_id')->flatten()->toArray()
-            ),
-        ]);
+        //
     }
 
     /**
@@ -40,18 +30,21 @@ class SupervisorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "name" => "required",
-            "email" => "required|email|unique:users,email",
-            "password" => "required",
-            "department" => "required|exists:departments,id"
+            "password" => "required|string"
         ]);
 
-        $supervisor = User::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => Hash::make($request->password),
-            "department_id" => $request->department,
-            "role" => "supervisor",
+        if (! Hash::check($request->password, auth()->user()->password)) {
+            return back()->withErrors([
+                "password" => "Incorrect password"
+            ]);
+        }
+
+        $request->validate([
+            "name" => "required|string|unique:departments,name",
+        ]);
+
+        Department::create([
+            "name" => $request->name
         ]);
 
         return back();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->prefix('/supervisor')
     ->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+    });
+
+    Route::controller(DepartmentController::class)
+    ->middleware('role:admin')
+    ->name('department.')
+    ->prefix('/department')
+    ->group(function () {
         Route::post('/', 'store')->name('store');
     });
 });

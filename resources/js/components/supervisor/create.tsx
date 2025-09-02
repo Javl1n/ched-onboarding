@@ -7,6 +7,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import InputError from "../input-error";
 import supervisor from "@/routes/supervisor";
+import { useEffect } from "react";
 
 interface CreateSupervisor {
      department: string;
@@ -24,12 +25,11 @@ export default function CreateSupervisor() {
      });
 
      const submit = () => {
-          post(supervisor.store().url);
-
-          if (wasSuccessful) {
-               reset
-          }
-
+          post(supervisor.store().url, {
+               onSuccess: () => {
+                    reset()
+               }
+          });
      }
 
      return (
@@ -52,7 +52,8 @@ export default function CreateSupervisor() {
                          </div>
                          <div>
                               <Label>Email</Label>
-                              <Input placeholder="Enter email here" value={data.email} onChange={(e) => setData("email", e.target.value)} />
+                              <Input type="hidden" name="email" />
+                              <Input type="email" autoComplete="new-email" placeholder="Enter email here" value={data.email} onChange={(e) => setData("email", e.target.value)} />
                               <InputError message={errors.email} />
                          </div>
                          <div>
