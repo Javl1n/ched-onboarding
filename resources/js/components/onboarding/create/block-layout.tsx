@@ -12,7 +12,7 @@ export interface OnboardingInputAttributes {
 }
 
 export interface BlockAttributes {
-     isNew: boolean;
+     isNew?: boolean;
 }
 
 export default function BlockLayout({children, deleteBlock, error, position, onMove, index}: {children: ReactNode} & OnboardingInputAttributes) {

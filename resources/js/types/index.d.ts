@@ -63,3 +63,8 @@ export interface DepartmentInterface {
     id: number | string;
     name: string;
 }
+
+export interface SchoolInterface {
+    id: number | string;
+    name: string;
+}
