@@ -18,7 +18,11 @@ export default function DateInput ({date, setDate}: {date: Date, setDate: (date:
                     </Button>
                </PopoverTrigger>
                <PopoverContent className="w-auto" align="start">
-                    <Calendar mode="single" selected={date} onSelect={setDate} captionLayout="dropdown" />
+                    <Calendar classNames={{
+                         today: ``,
+                         selected: `rounded-md`,
+                         chevron: ""
+                    }} mode="single" selected={date} onSelect={setDate} captionLayout="dropdown" />
                </PopoverContent>
           </Popover>
      )
