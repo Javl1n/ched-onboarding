@@ -34,6 +34,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+    
+    protected $with = [
+        'profile'
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -55,7 +59,7 @@ class User extends Authenticatable
 
     public function profile()
     {
-        if ($this->role !== "trainee") {return null;};
+        // if ($this->role !== "trainee") {return};
 
         return $this->hasOne(TraineeProfile::class); 
     }
