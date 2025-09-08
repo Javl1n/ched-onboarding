@@ -2,18 +2,18 @@ import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, FileUser, Folder, LayoutGrid, UserRoundCog } from 'lucide-react';
 import AppLogo from './app-logo';
 import onboarding from '@/routes/onboarding';
 import supervisor from '@/routes/supervisor';
+import dashboard from '@/routes/dashboard';
 
 const traineeNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: dashboard(),
+        href: dashboard.trainee(),
         icon: LayoutGrid,
     },
 ];
@@ -21,7 +21,7 @@ const traineeNavItems: NavItem[] = [
 const adminNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: dashboard(),
+        href: dashboard.admin(),
         icon: LayoutGrid,
     },
     {
@@ -71,7 +71,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={dashboard.index()} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

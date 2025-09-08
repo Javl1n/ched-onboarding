@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\EnsureTraineeHasNoProfile;
+use App\Http\Middleware\EnsureTraineeHasProfile;
 use App\Http\Middleware\EnsureUserRole;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
@@ -24,7 +26,9 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'role' => EnsureUserRole::class
+            'role' => EnsureUserRole::class,
+            'profiled' => EnsureTraineeHasProfile::class,
+            'no-profile' => EnsureTraineeHasNoProfile::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

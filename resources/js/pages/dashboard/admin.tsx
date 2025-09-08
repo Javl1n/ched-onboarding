@@ -7,11 +7,11 @@ import { Head } from '@inertiajs/react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Dashboard',
-        href: dashboard.index().url,
+        href: dashboard.admin().url,
     },
 ];
 
-export default function Dashboard() {
+export default function DashboardAdmin() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />

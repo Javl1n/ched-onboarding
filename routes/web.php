@@ -12,9 +12,34 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+    Route::prefix("dashboard")->name("dashboard.")->group(function () {
+        Route::get('/', function () {
+            switch(auth()->user()->role) {
+                case 'admin':
+                    return redirect()->route('dashboard.admin');
+                case 'trainee':
+                    return redirect()->route('dashboard.trainee');
+                case 'supervisor':
+                    return redirect()->route('dashboard.supervisor');
+            }
+
+        })->name('index');
+
+        Route::get('admin', function () {
+            return inertia()->render('dashboard/admin');
+        })->middleware('role:admin')->name('admin');
+
+        Route::get('supervisor', function () {
+            return inertia()->render('dashboard/supervisor');
+        })->middleware('role:supervisor')->name('supervisor');
+
+        Route::get('trainee', function () {
+            return inertia()->render('dashboard/trainee');
+        })->middleware(['role:trainee', 'profiled'])->name('trainee');
+    });
+
+    
+
 
     Route::controller(PageController::class)
     ->name('onboarding.')

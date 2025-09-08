@@ -19,11 +19,11 @@ export default function DateInput ({date, setDate}: {date: Date, setDate: (date:
                </PopoverTrigger>
                <PopoverContent className="w-auto" align="start">
                     <Calendar classNames={{
-                         today: ``,
+                         today: `bg-neutral-800 rounded`,
                          selected: `rounded-md`,
                          chevron: ""
                     }} mode="single" selected={date} onSelect={setDate} captionLayout="dropdown" />
                </PopoverContent>
           </Popover>
      )
-}
+} 

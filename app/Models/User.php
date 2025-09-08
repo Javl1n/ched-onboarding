@@ -52,4 +52,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function profile()
+    {
+        if ($this->role !== "trainee") {return null;};
+
+        return $this->hasOne(TraineeProfile::class); 
+    }
 }

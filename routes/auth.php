@@ -37,8 +37,12 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('register/profiling', [TraineeProfilingController::class, 'create'])
-        ->middleware('role:trainee')
+        ->middleware(['role:trainee', 'no-profile'])
         ->name('register.profiling');
+
+    Route::post('trainee/profiling', [TraineeProfilingController::class, 'store'])
+        ->middleware(['role:trainee', 'no-profile'])
+        ->name('register.profiling.store');
 
     Route::post('register/profiling', [TraineeProfilingController::class, 'create'])
         ->middleware('role:trainee');
