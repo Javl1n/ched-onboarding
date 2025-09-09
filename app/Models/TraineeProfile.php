@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
-class TraineeProfile extends Model
+class  TraineeProfile extends Model
 {
     /** @use HasFactory<\Database\Factories\TraineeProfileFactory> */
     use HasFactory;
@@ -26,7 +25,7 @@ class TraineeProfile extends Model
     public function logToday()
     {
         return $this->logs()->firstOrCreate([
-            "date" => Carbon::now()->setTimezone('Asia/Manila')->format("Y-m-d")
+            "date" => now('Asia/Manila')->format("Y-m-d")
         ]);
     }
 }

@@ -72,10 +72,22 @@ export interface SchoolInterface {
 
 export interface TraineeProfileInterface {
     id: number | string;
+    user: User;
     profile: string;
     school: SchoolInterface;
     birth: string;
     gender: "Male" | "Female";
     contact: string;
     address: string;
+    logs: TimeLogInterface[];
+}
+
+export interface TimeLogInterface {
+    trainee: TraineeProfileInterface;
+    date: string;
+    morning_in?: string;
+    morning_out?: string;
+    afternoon_in?: string;
+    afternoon_out?: string;
+    hours?: float;
 }

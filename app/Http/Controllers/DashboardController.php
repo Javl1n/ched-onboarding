@@ -24,8 +24,8 @@ class DashboardController extends Controller
     public function admin()
     {
         $date = request()->input('date', Carbon::now()->setTimezone('Asia/Manila')->format("Y-m-d"));
-        $logs = TimeLog::where('date', $date)->get();
-                
+        $logs = TimeLog::with(['trainee.user'])->where('date', $date)->get();
+            
         return inertia()->render('dashboard/admin', [
             "logs" => $logs
         ]);

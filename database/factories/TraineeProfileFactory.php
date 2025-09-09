@@ -20,7 +20,7 @@ class TraineeProfileFactory extends Factory
     {
         // dd(fake('en_PH')->mobileNumber());
         return [
-            "profile" => '/logo.png',
+            "profile" => '/empty_profile.jpg',
             "user_id" => User::factory()->create(["role" => "trainee"])->id,
             "school_id" => School::inRandomOrder()->first()->id,
             "birth" => fake()->dateTimeBetween('-21 years', '-20 years'),

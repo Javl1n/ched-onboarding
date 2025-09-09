@@ -13,6 +13,7 @@ class TimeLog extends Model
         "morning_out",
         "afternoon_in",
         "afternoon_out",
+        "hours",
     ];
 
     public function trainee() {

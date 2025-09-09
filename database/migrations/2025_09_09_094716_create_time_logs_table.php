@@ -20,7 +20,7 @@ return new class extends Migration
             $table->time("morning_out")->nullable();
             $table->time("afternoon_in")->nullable();
             $table->time("afternoon_out")->nullable();
-            $table->float("hours");
+            $table->float("hours")->nullable();
             $table->timestamps();
         });
     }

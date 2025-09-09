@@ -16,8 +16,8 @@ class TimeLogController extends Controller
         $code = str($request->code)->explode('|');
         
         $trainee = TraineeProfile::find($code[0]);
-        $qrTime = $this->createDateObject($code[1])->setTimezone("Asia/Manila");
-        $now = Carbon::now()->setTimezone('Asia/Manila');
+        $qrTime = $this->createDateObjectISO($code[1])->setTimezone("Asia/Manila");
+        $now = now('Asia/Manila');
 
         // validate qr code
         if ($trainee == null || !$qrTime) {
@@ -34,7 +34,17 @@ class TimeLogController extends Controller
         }
 
         $log = $trainee->logToday();
+
+        // dd($now->day(1)->hour(8)->minute(01)->format("Y-m-d H:i:s"));
         
+        // too early
+        if ($now->hour < 7)
+        {
+            return back()->withErrors([
+                "code" => "You're too early!"
+            ]);
+        }
+
         // m
         if ($now->hour < 12) {
             // mi
@@ -117,10 +127,10 @@ class TimeLogController extends Controller
 
 
             // total time:
-            $mi = $this->createDateObject($log->morning_in);
-            $mo = $this->createDateObject($log->morning_out);
-            $ai = $this->createDateObject($log->afternoon_in);
-            $ao = $this->createDateObject($log->afternoon_out);
+            $mi = $this->createDateObjectSQL($log->morning_in);
+            $mo = $this->createDateObjectSQL($log->morning_out);
+            $ai = $this->createDateObjectSQL($log->afternoon_in);
+            $ao = $this->createDateObjectSQL($log->afternoon_out);
             $total = 0;
 
             if ($mi && $mo) {
@@ -144,7 +154,12 @@ class TimeLogController extends Controller
         ]);
     }
 
-    protected function createDateObject($date)
+    protected function createDateObjectSQL($date)
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date);
+    }
+
+    protected function createDateObjectISO($date)
     {
         return Carbon::createFromFormat('Y-m-d\TH:i:s.u\Z', $date);
     }
