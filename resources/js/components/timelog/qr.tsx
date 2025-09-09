@@ -39,11 +39,12 @@ export default function QrAttendance() {
           }, 1000);
 
           return () => clearInterval(countdown);
+
      }, [timer]);
 
      return (
           <AlertDialog onOpenChange={(open: boolean) => {
-               // if (open) reset();
+               if (open) reset();
           }}>
                <AlertDialogTrigger asChild>
                     <Button>
@@ -60,7 +61,9 @@ export default function QrAttendance() {
                          </AlertDialogDescription>
                     </AlertDialogHeader>
 
-                    <QRCode value={user.id + "|" + date.toISOString()} className="w-full h-full" />
+                    <div className="bg-white p-1">
+                         <QRCode value={user.profile?.id + "|" + date.toISOString()} className="w-full h-full" />
+                    </div>
 
                     <AlertDialogFooter>
                          <AlertDialogCancel>Cancel</AlertDialogCancel>

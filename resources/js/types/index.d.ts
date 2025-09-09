@@ -40,6 +40,7 @@ export interface User {
     created_at: string;
     updated_at: string;
     department: DepartmentInterface;
+    profile?: TraineeProfileInterface;
     [key: string]: unknown; // This allows for additional properties...
 }
 
@@ -67,4 +68,14 @@ export interface DepartmentInterface {
 export interface SchoolInterface {
     id: number | string;
     name: string;
+}
+
+export interface TraineeProfileInterface {
+    id: number | string;
+    profile: string;
+    school: SchoolInterface;
+    birth: string;
+    gender: "Male" | "Female";
+    contact: string;
+    address: string;
 }
