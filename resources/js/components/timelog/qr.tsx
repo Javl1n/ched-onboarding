@@ -11,20 +11,39 @@ import {
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
 import { SharedData } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { format } from "date-fns";
 
 export default function QrAttendance() {
      const {auth: {user}} = usePage<SharedData>().props;
 
-     const [ code, setCode ] = useState<string>(
-          user.id + "|" + new Date().toISOString()
+     const time = 60;
+     const [timer, setTimer] = useState<number>(time);
+
+     const reset = () => {
+          setDate(new Date());
+          setTimer(time);
+     }
+
+     const [ date, setDate ] = useState<Date>(
+          new Date()
      );
 
+     useEffect(() => {
+          const countdown = setInterval(() => {
+               setTimer(prev => prev - 1);
+               if (timer <= 0) {
+                    reset()
+               }
+          }, 1000);
+
+          return () => clearInterval(countdown);
+     }, [timer]);
+
      return (
-          <AlertDialog onOpenChange={() => {
-               setCode(user.id + "|" + new Date().toISOString());
+          <AlertDialog onOpenChange={(open: boolean) => {
+               // if (open) reset();
           }}>
                <AlertDialogTrigger asChild>
                     <Button>
@@ -35,15 +54,17 @@ export default function QrAttendance() {
                     <AlertDialogHeader>
                          <AlertDialogTitle>QR Attendance</AlertDialogTitle>
                          <AlertDialogDescription>
-                              This QR Code is only valid for 1 minute.
+                              Current QR Time: {format(date, 'hh:mm aaa')}
+                              <br /> 
+                              This QR Code resets in {timer} second/s. 
                          </AlertDialogDescription>
                     </AlertDialogHeader>
 
-                    <QRCode value={code} className="w-full h-full" />
+                    <QRCode value={user.id + "|" + date.toISOString()} className="w-full h-full" />
 
                     <AlertDialogFooter>
                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                         <Button onClick={() => setCode(user.id + "|" + new Date().toISOString())}>New Code</Button>
+                         {/* <Button onClick={() => reset()}>New Code</Button> */}
                     </AlertDialogFooter>
                </AlertDialogContent>
           </AlertDialog>

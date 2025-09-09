@@ -1,6 +1,7 @@
-import QrAttendance from '@/components/trainee/qr-attendance';
+import QrAttendance from '@/components/timelog/qr';
 import { Button } from '@/components/ui/button';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
 import dashboard from '@/routes/dashboard';
 import { SharedData, type BreadcrumbItem } from '@/types';
@@ -23,7 +24,7 @@ export default function DashboardTrainee() {
                          <div className="flex-1 overflow-hidden rounded-xl p-4 border border-sidebar-border/70 dark:border-sidebar-border">
                               <div className='text-sm text-neutral-400 font-bold'>Welcome</div>
                               <div className='text-4xl font-black'>{user.name}</div>
-                              <div className='mt-4 flex gap-2'>
+                              <div className='mt-4 flex gap-4'>
                                    <QrAttendance />
                               </div>
                          </div>
