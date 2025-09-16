@@ -16,6 +16,19 @@ const traineeNavItems: NavItem[] = [
         href: dashboard.trainee(),
         icon: LayoutGrid,
     },
+    {
+        title: 'About CHED',
+        href: onboarding.index(),
+        icon: FileUser,
+    },
+];
+
+const supervisorNavItems: NavItem[] = [
+    {
+        title: 'Dashboard',
+        href: dashboard.supervisor(),
+        icon: LayoutGrid,
+    },
 ];
 
 const adminNavItems: NavItem[] = [
@@ -57,7 +70,7 @@ export function AppSidebar() {
             case 'admin':
                 return adminNavItems;
             case 'supervisor':
-                return [];
+                return supervisorNavItems;
             case 'trainee':
                 return traineeNavItems;
             default:
@@ -66,8 +79,8 @@ export function AppSidebar() {
     }
 
     return (
-        <Sidebar collapsible="icon" variant="sidebar">
-            <SidebarHeader>
+        <Sidebar collapsible="icon" variant="sidebar" className=''>
+            <SidebarHeader className="">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
@@ -79,11 +92,11 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
+            <SidebarContent className='' >
                 <NavMain items={mainNavItems()} />
             </SidebarContent>
 
-            <SidebarFooter>
+            <SidebarFooter className=''>
                 <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>

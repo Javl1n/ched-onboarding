@@ -82,6 +82,18 @@ class TimeLogController extends Controller
                 "morning_out" => $qrTime
             ]);
 
+            $mi = $this->createDateObjectSQL($log->morning_in);
+            $mo = $this->createDateObjectSQL($log->morning_out);
+            $total = $log->total ?? 0;
+
+            if ($mi && $mo) {
+                $total += $mo->diffInHours($mi); // morning hours
+            }
+
+            $log->update([
+                "total" => round($total, 2)
+            ]);
+
             return response(status: 200);
         }
 
@@ -127,15 +139,9 @@ class TimeLogController extends Controller
 
 
             // total time:
-            $mi = $this->createDateObjectSQL($log->morning_in);
-            $mo = $this->createDateObjectSQL($log->morning_out);
             $ai = $this->createDateObjectSQL($log->afternoon_in);
             $ao = $this->createDateObjectSQL($log->afternoon_out);
-            $total = 0;
-
-            if ($mi && $mo) {
-                $total += $mo->diffInHours($mi); // morning hours
-            }
+            $total = $log->total ?? 0;
 
             if ($ai && $ao) {
                 $total += $ao->diffInHours($ai); // afternoon hours
@@ -144,7 +150,6 @@ class TimeLogController extends Controller
             $log->update([
                 "total" => round($total, 2)
             ]);
-
             
             return response(status: 200);
         }

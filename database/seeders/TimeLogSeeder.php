@@ -17,7 +17,7 @@ class TimeLogSeeder extends Seeder
         $profiles = TraineeProfile::all();
         $now = now('Asia/Manila');
 
-        for ($i = 1; $i <= $now->day; $i++) {
+        for ($i = 1; $i < $now->day; $i++) {
             $day = $now->copy()->day($i);
 
             if ($day->isWeekday()) {

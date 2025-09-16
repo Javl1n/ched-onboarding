@@ -10,9 +10,11 @@ import {
      TableHeader,
      TableRow,
 } from "@/components/ui/table"
+import { DatePagination } from "./date-pagination";
 
 export default function LogList() {
-     const {logs} = usePage<{logs: TimeLogInterface[]}>().props;
+     const {logs, date} = usePage<{logs: TimeLogInterface[], date: string}>().props;
+     console.log(date);
 
      const time = (time: string | undefined) => {
           return time ? format(time, "hh:mm aaa") : '---'
@@ -27,7 +29,7 @@ export default function LogList() {
 
           const timeStart = new Date(timeIn);
           const timeEnd = new Date(timeOut);
-          const diffInMinutes = (timeEnd.getTime() - timeStart.getTime()) / 60000;
+          const diffInMinutes = ((timeEnd.getTime() - timeStart.getTime()) / 60000);
           const hours = Math.floor(diffInMinutes / 60);
 
           return `(${hours} hr ${diffInMinutes % 60} min)`;
@@ -36,7 +38,7 @@ export default function LogList() {
      return (
           <div className="border rounded-xl overflow-clip">
                <Table>
-                    <TableCaption>List of Time Logs in {format(logs[0].date, "MMMM d, yyyy")}</TableCaption>
+                    <TableCaption>List of Time Logs in {format(new Date(date), "MMMM d, yyyy")}</TableCaption>
                     <TableHeader>
                          <TableRow>
                               <TableHead className="">Name</TableHead>

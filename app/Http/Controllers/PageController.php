@@ -117,7 +117,7 @@ class PageController extends Controller
     {
         return inertia('onboarding/show', [
             'item' => $page->with(['department', 'blocks'])->where('slug', $page->slug)->first(),
-            'pages' => Page::all(),
+            'pages' => $this->pageLinks(),
         ]);
     }
 
@@ -128,7 +128,7 @@ class PageController extends Controller
     {
         return inertia('onboarding/edit', [
             'item' => $page->with(['department', 'blocks'])->where('slug', $page->slug)->first(),
-            'pages' => Page::all(),
+            'pages' => $this->pageLinks(),
             'departments' => Department::all(),
         ]);
     }
@@ -244,5 +244,19 @@ class PageController extends Controller
     public function destroy(Page $page)
     {
         //
+    }
+
+    protected function pageLinks()
+    {
+        if (auth()->user()->roleIs("admin")) {
+            return Page::all();
+        }
+
+        if (auth()->user()->roleIs("supervisor")) {
+            return Page::where('published', true)->orWhere('department_id', auth()->user()->department_id)->get();
+        }
+        if (auth()->user()->roleIs("trainee")) {
+            return Page::where('published', true)->get();
+        }
     }
 }

@@ -27,17 +27,44 @@ class DashboardController extends Controller
         $logs = TimeLog::with(['trainee.user'])->where('date', $date)->get();
             
         return inertia()->render('dashboard/admin', [
-            "logs" => $logs
+            "logs" => $logs,
+            "date" => $date,
         ]);
     }
 
     public function supervisor()
     {
-        return inertia()->render('dashboard/supervisor');
+        $date = request()->input('date', Carbon::now()->format("Y-m-d"));
+
+        $departmentId = auth()->user()->department_id;
+        $logs = TimeLog::with(['trainee.user'])->whereHas('trainee.user', function ($query) use ($departmentId) {
+            // $query->whereHas('user', function ($query) use ($departmentId) {
+                $query->where('department_id', $departmentId);
+            // });
+        })->where('date', $date)->get();
+
+        return inertia()->render('dashboard/supervisor', [
+            "logs" => $logs,
+            "date" => $date
+        ]);
     }
     
     public function trainee()
     {
-        return inertia()->render('dashboard/trainee');
+        $month = request()->input('month', now()->month );
+        $year = request()->input('year', now()->year);
+
+        $logs = auth()->user()->profile->logs()
+            ->whereMonth('date', $month)
+            ->whereYear('date', $year)
+            ->get();
+
+
+        return inertia()->render('dashboard/trainee', [
+            "logs" => $logs,
+            "month" => $month,
+            "year" => $year,
+            "profile" => auth()->user()->profile->profile,
+        ]);
     }
 }

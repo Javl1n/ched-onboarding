@@ -63,4 +63,9 @@ class User extends Authenticatable
 
         return $this->hasOne(TraineeProfile::class); 
     }
+
+    public function roleIs($role)
+    {
+        return $this->role === $role;
+    }
 }
