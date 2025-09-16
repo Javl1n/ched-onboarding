@@ -1,5 +1,5 @@
 import LogList from '@/components/timelog/admin/list';
-import AttendanceScanner from '@/components/timelog/scanner';
+import AttendanceScanner from '@/components/timelog/admin/scanner';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
 import dashboard from '@/routes/dashboard';

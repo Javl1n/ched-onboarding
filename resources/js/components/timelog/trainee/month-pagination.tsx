@@ -17,8 +17,6 @@ export function MonthPagination() {
      const month = parseInt(monthString);
      const year = parseInt(yearString);
      
-     
-     
      const prev = {query: {
           month: month - 1 <= 0 ? 12 : month - 1,
           year: month - 1 <= 0 ? year - 1 : year,
@@ -29,11 +27,9 @@ export function MonthPagination() {
           year: month + 1 > 12 ? year + 1 : year,
      }};
 
-     
-
      return (
           <div className="">
-               <Pagination className="justify-end">
+               <Pagination className="md:justify-end">
                     <PaginationContent>
                          <PaginationItem>
                               <PaginationPrevious size="sm" href={dashboard.trainee(prev).url} />
@@ -41,9 +37,6 @@ export function MonthPagination() {
                          <PaginationItem>
                               <PaginationLink href="#" size="sm">{format(new Date(year, month - 1, 1), "MMMM y")}</PaginationLink>
                          </PaginationItem>
-                         {/* <PaginationItem>
-                              <PaginationEllipsis />
-                         </PaginationItem> */}
                          <PaginationItem>
                               <PaginationNext size="sm" href={dashboard.trainee(next).url} />
                          </PaginationItem>

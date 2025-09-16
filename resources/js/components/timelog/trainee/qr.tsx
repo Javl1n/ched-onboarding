@@ -8,8 +8,8 @@ import {
      AlertDialogHeader, 
      AlertDialogTitle, 
      AlertDialogTrigger 
-} from "../ui/alert-dialog";
-import { Button } from "../ui/button";
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { SharedData } from "@/types";
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";

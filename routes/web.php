@@ -1,4 +1,6 @@
-<?php
+<?php 
+use App\Http\Controllers\SupervisorAssessmentController;
+?><?php
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
@@ -7,6 +9,7 @@ use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\TimeLogController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\TraineeController;
 
 
 Route::get('/', function () {
@@ -68,6 +71,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/time-log', 'store')->name('timelog.post');
             
         });
+    });
+
+    // Route::prefix('/assessments')
+    // ->name('assessments.')
+    // ->group(function () {
+
+    //     Route::prefix('/supervisor')->name('supervisor.')
+    //     ->controller(SupervisorAssessmentController::class)->group(function () {
+            
+    //         Route::get('/', 'index')->name('index');
+
+    //     });
+
+    // });
+
+    Route::prefix('/trainees')
+    ->middleware('role:admin,supervisor')
+    ->controller(TraineeController::class)
+    ->name('trainees.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{user}', 'show')->name('show');
     });
 });
 

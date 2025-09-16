@@ -59,9 +59,9 @@ export default function Profiling() {
                               <InputError message={errors.profile} className="mt-2" />
                          </div>
                          <div className="grid gap-2">
-                              <Label >School</Label>
-                              <SelectSchool value={data.school} onValueChange={(value: string) => setData("school", value)} />
-                              <InputError message={errors.school} className="mt-2" />
+                              <Label htmlFor="email">School</Label>
+                              <Input value={data.school} onChange={(e: ChangeEvent<HTMLInputElement>) => setData('school', e.target.value)} placeholder='Enter your school here' />
+                              <InputError message={errors.school} />
                          </div>
                          <div className="grid gap-2">
                               <Label>Date of Birth</Label>
@@ -77,7 +77,7 @@ export default function Profiling() {
                               <Label>Contact</Label>
                               <div className="flex gap-2">
                                    <div className='my-auto text-sm'>+63</div>
-                                   <Input value={data.contact} onChange={(e: any) => {
+                                   <Input value={data.contact} onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                         if (!isNumeric(e.target.value)) return null;
 
                                         setData("contact", e.target.value)

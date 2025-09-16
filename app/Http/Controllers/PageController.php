@@ -29,6 +29,23 @@ class PageController extends Controller
         return inertia('onboarding/empty');
     }
 
+    protected function pageLinks()
+    {
+        if (auth()->user()->roleIs("admin")) {
+            return Page::all()->load('department');
+        }
+
+        if (auth()->user()->roleIs("supervisor")) {
+            return Page::where('published', true)
+                    ->orWhere('department_id', auth()->user()->department_id)
+                    ->get()
+                    ->load('department');
+        }
+        if (auth()->user()->roleIs("trainee")) {
+            return Page::where('published', true)->get();
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -36,7 +53,7 @@ class PageController extends Controller
     {
         return inertia('onboarding/create', [
             'departments' => Department::all(),
-            'pages' => Page::all()
+            'pages' => $this->pageLinks(),
         ]);
     }
 
@@ -121,13 +138,24 @@ class PageController extends Controller
         ]);
     }
 
+    protected function canEdit(Page $page)
+    {
+        if (auth()->user()->role == 'supervisor' && auth()->user()->department_id != $page->department_id) {
+            abort(403, 'Unauthorized action.');
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Page $page)
     {
+        $this->canEdit($page);
+
+
+
         return inertia('onboarding/edit', [
-            'item' => $page->with(['department', 'blocks'])->where('slug', $page->slug)->first(),
+            'item' => $page->load(['department', 'blocks']),
             'pages' => $this->pageLinks(),
             'departments' => Department::all(),
         ]);
@@ -138,6 +166,10 @@ class PageController extends Controller
      */
     public function update(Request $request, Page $page)
     {
+        if (auth()->user()->role == 'supervisor' && auth()->user()->department_id != $page->department_id) {
+            abort(403, 'Unauthorized action.');
+        }
+        
         $rules = [
             'title' => ['required', Rule::unique('pages', 'title')->ignore($page->id)],
             'department' => 'required|exists:App\Models\Department,id',
@@ -244,19 +276,5 @@ class PageController extends Controller
     public function destroy(Page $page)
     {
         //
-    }
-
-    protected function pageLinks()
-    {
-        if (auth()->user()->roleIs("admin")) {
-            return Page::all();
-        }
-
-        if (auth()->user()->roleIs("supervisor")) {
-            return Page::where('published', true)->orWhere('department_id', auth()->user()->department_id)->get();
-        }
-        if (auth()->user()->roleIs("trainee")) {
-            return Page::where('published', true)->get();
-        }
     }
 }

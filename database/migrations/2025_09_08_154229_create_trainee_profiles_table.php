@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('profile');
-            $table->foreignId('school_id')->constrained();
+            $table->text('school');
             $table->date('birth');
             $table->enum('gender', ['Male', 'Female']);
             $table->string('contact');

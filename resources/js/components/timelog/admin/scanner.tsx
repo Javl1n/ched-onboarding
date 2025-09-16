@@ -8,7 +8,7 @@ import {
      AlertDialogHeader, 
      AlertDialogTitle, 
      AlertDialogTrigger 
-} from "../ui/alert-dialog";
+} from "../../ui/alert-dialog";
 
 import { IDetectedBarcode, Scanner } from '@yudiel/react-qr-scanner';
 import { useState } from "react";

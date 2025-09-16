@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -28,12 +29,20 @@ class DatabaseSeeder extends Seeder
             'name' => 'Frank Leimbergh D. Armodia',
             'email' => 'farmodia@gmail.com',
             'role' => "admin",
-            "department_id" => 1,
+            "department_id" => Department::where('name', 'Admin')->first()->id,
+        ]);
+
+        User::factory()->create([
+            'name' => 'Leimbergh D. Armodia',
+            'email' => 'supervisor@gmail.com',
+            'role' => "supervisor",
+            "department_id" => Department::where('name', 'IT')->first()->id,
         ]);
 
         $this->call([
             TraineeSeeder::class,
             TimeLogSeeder::class,
+            QuestionSeeder::class,
         ]);
     }
 }

@@ -1,6 +1,6 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 
-import { DepartmentInterface, type BreadcrumbItem } from '@/types';
+import { DepartmentInterface, SharedData, type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/app-layout';
 import OnboardingLayout from '@/layouts/onboarding/layout';
@@ -45,6 +45,10 @@ const blocks: any = {
 }
 
 export default function OnboardingCreate({departments} : {departments: DepartmentInterface[]}) {
+     const {auth: {user}} = usePage<SharedData>().props;
+
+     console.log(user);
+
      const {data, setData, post, errors} = useForm<{
           title: string,
           blocks: Array<{
@@ -60,7 +64,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                     content: '',
                },
           ],
-          department: '',
+          department: user.role === 'admin' ? '' : (user.department ? user.department.id as string : ''),
      });
 
      const addBlock = (type: string) => {
@@ -140,7 +144,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                                         <div className="flex justify-between">
                                              <div className="flex gap-2">
                                                   <AddBlock addBlock={addBlock} />
-                                                  <SelectDepartment value={data.department} onValueChange={(value) => setData('department', value)} />
+                                                  <SelectDepartment disabled={user.role !== 'admin'} value={data.department} onValueChange={(value) => setData('department', value)} />
                                              </div>
                                              <div className="flex gap-4">
                                                   <Button onClick={(e) => submit(e, false)} variant={'outline'}>

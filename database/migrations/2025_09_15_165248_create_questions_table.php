@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('content');
             $table->enum('for', ['trainee', 'supervisor']);
             $table->enum('type', ['text', 'scale'])->default('scale');
+            $table->string('category');
             $table->timestamps();
         });
     }

@@ -22,7 +22,7 @@ class TraineeProfileFactory extends Factory
         return [
             "profile" => '/empty_profile.jpg',
             "user_id" => User::factory()->create(["role" => "trainee"])->id,
-            "school_id" => School::inRandomOrder()->first()->id,
+            "school" => fake()->word() . " ". fake()->randomElement(["school", "university", "college"]),
             "birth" => fake()->dateTimeBetween('-21 years', '-20 years'),
             "gender" => fake()->randomElement(["Male", "Female"]),
             "contact" => fake('en_PH')->mobileNumber(),

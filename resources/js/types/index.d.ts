@@ -65,16 +65,11 @@ export interface DepartmentInterface {
     name: string;
 }
 
-export interface SchoolInterface {
-    id: number | string;
-    name: string;
-}
-
 export interface TraineeProfileInterface {
     id: number | string;
     user: User;
     profile: string;
-    school: SchoolInterface;
+    school: school;
     birth: string;
     gender: "Male" | "Female";
     contact: string;
@@ -90,4 +85,12 @@ export interface TimeLogInterface {
     afternoon_in?: string;
     afternoon_out?: string;
     hours?: float;
+}
+
+export interface QuestionInterface {
+    id: string | number;
+    for: "supervisor" | "trainee";
+    content: string;
+    type: "text" | "scale";
+    category: string;
 }

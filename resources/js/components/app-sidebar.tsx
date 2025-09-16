@@ -4,11 +4,12 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FileUser, Folder, LayoutGrid, UserRoundCog } from 'lucide-react';
+import { BookOpen, ClipboardCheck, File, FileUser, Folder, LayoutGrid, UserRoundCog } from 'lucide-react';
 import AppLogo from './app-logo';
 import onboarding from '@/routes/onboarding';
 import supervisor from '@/routes/supervisor';
 import dashboard from '@/routes/dashboard';
+import trainees from '@/routes/trainees';
 
 const traineeNavItems: NavItem[] = [
     {
@@ -28,6 +29,21 @@ const supervisorNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard.supervisor(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Onboarding',
+        href: onboarding.index(),
+        icon: FileUser,
+    },
+    // {
+    //     title: 'Assessments',
+    //     href: assessments.supervisor.index(),
+    //     icon: ClipboardCheck,
+    // },
+    {
+        title: 'Trainees',
+        href: trainees.index(),
+        icon: ClipboardCheck,
     },
 ];
 
