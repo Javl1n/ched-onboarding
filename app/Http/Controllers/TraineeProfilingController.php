@@ -30,7 +30,7 @@ class TraineeProfilingController extends Controller
 
         $user->profile()->create([
             "profile" => $request->file('profile')->store('profiling/' . $user->id),
-            "school_id" => $request->school,
+            "school" => $request->school,
             "birth" => $request->birth,
             "gender" => $request->gender,
             "contact" => "+63" . $request->contact,
