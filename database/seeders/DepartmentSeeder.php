@@ -18,7 +18,15 @@ class DepartmentSeeder extends Seeder
         ]);
 
         Department::create([
-            'name' => "Unifast",
+            'name' => "Administration",
+        ]);
+
+        Department::create([
+            'name' => "Unifast Region 12",
+        ]);
+
+        Department::create([
+            'name' => "Unifast BARMM"
         ]);
 
         Department::create([
@@ -26,15 +34,19 @@ class DepartmentSeeder extends Seeder
         ]);
 
         Department::create([
-            'name' => "Scholarship"
-        ]);
-
-        Department::create([
-            'name' => "IT"
+            'name' => "HEMIS"
         ]);
 
         Department::create([
             'name' => "Accounting"
+        ]);
+        
+        Department::create([
+            'name' => "Regional Director"
+        ]);
+
+        Department::create([
+            'name' => "Technical"
         ]);
     }
 }

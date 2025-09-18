@@ -19,7 +19,7 @@ class TraineeProfilingController extends Controller
     {
         $request->validate([
             "profile" => 'required|file|mimes:png,jpg',
-            "school" => 'required|exists:schools,id',
+            "school" => 'required|string',
             "birth" => 'required|date',
             "gender" => 'required|in:Male,Female',
             "contact" => 'required|numeric|digits:10',
