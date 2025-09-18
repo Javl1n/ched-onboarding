@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TraineeAssessment;
+use App\Models\TraineeProfile;
 use Illuminate\Http\Request;
 
 class SupervisorAssessmentController extends Controller
@@ -25,9 +27,26 @@ class SupervisorAssessmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TraineeProfile $trainee, Request $request)
     {
-        //
+        return back();
+
+        $request->validate([
+            'questions.*.value' => 'required'
+        ]);
+
+        $questions = $request->questions;
+
+        foreach ($questions as $question) {
+            TraineeAssessment::create([
+                'trainee_id' => $trainee->id,
+                'supervisor_id' => auth()->user()->id,
+                'question' => $question['id'],
+                'value' => $question['value'],
+            ]);
+        }
+
+        return back();
     }
 
     /**

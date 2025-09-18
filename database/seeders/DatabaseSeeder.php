@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             TraineeSeeder::class,
             TimeLogSeeder::class,
             QuestionSeeder::class,
+            PageSeeder::class
         ]);
     }
 }

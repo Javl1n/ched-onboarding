@@ -73,18 +73,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
-    // Route::prefix('/assessments')
-    // ->name('assessments.')
-    // ->group(function () {
+    Route::prefix('/assessments')
+    ->name('assessments.')
+    ->group(function () {
 
-    //     Route::prefix('/supervisor')->name('supervisor.')
-    //     ->controller(SupervisorAssessmentController::class)->group(function () {
+        Route::prefix('/supervisor')->name('supervisor.')
+        ->controller(SupervisorAssessmentController::class)->group(function () {
             
-    //         Route::get('/', 'index')->name('index');
+            Route::post('/{trainee}', 'store')->name('store');
 
-    //     });
+        });
 
-    // });
+    });
 
     Route::prefix('/trainees')
     ->middleware('role:admin,supervisor')

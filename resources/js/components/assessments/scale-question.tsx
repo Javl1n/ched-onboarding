@@ -1,6 +1,7 @@
 import { QuestionInterface } from "@/types";
+import InputError from "../input-error";
 
-export default function ScaleQuestion({question, setData, value}: {value: number, question: QuestionInterface, setData: (value: string | number) => void}) 
+export default function ScaleQuestion({question, setData, value, error}: {value: number, question: QuestionInterface, setData: (value: string | number) => void, error: string}) 
 {
      return (
           <div className="border rounded-lg p-5">
@@ -16,7 +17,7 @@ export default function ScaleQuestion({question, setData, value}: {value: number
                          </div>
                     ))}
 
-                    <div 
+               <div 
                     onClick={() => setData(3)} 
                     className={`${value == 3 ? 'bg-neutral-400/70' : ''} size-6 my-auto border-4 border-neutral-400 rounded-full transition`} />
 
@@ -29,6 +30,7 @@ export default function ScaleQuestion({question, setData, value}: {value: number
 
                     ))}
                </div>
+               <InputError message={error} className="text-center mt-4" />
           </div>
      )
 }

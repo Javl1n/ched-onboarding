@@ -9,10 +9,10 @@ import { BlockAttributes } from './block-layout';
 
 export default function ParagraphInput({isNew, ...props}: EditorProps & BlockAttributes) {
      return (
-          <Editor placeholder='Type your paragraph here...' containerProps={{
+          <Editor placeholder='Type your paragraph here...' className='' containerProps={{
                style: {
                     border: "none",
-                    boxShadow: "none"
+                    boxShadow: "none",
                }
           }} {...props}>
                {/* <Toolbar>
