@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
 use App\Models\TraineeProfile;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -20,7 +21,7 @@ class TraineeSeeder extends Seeder
             'name' => 'Frank Leimbergh D. Armodia',
             'email' => 'trainee@gmail.com',
             'role' => "trainee",
-            "department_id" => 5,
+            "department_id" => Department::where('name', 'HEMIS')->first()->id,
         ]);
         
         TraineeProfile::factory(30)->create();

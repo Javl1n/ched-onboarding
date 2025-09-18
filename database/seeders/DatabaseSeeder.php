@@ -26,17 +26,17 @@ class DatabaseSeeder extends Seeder
 
 
         User::factory()->create([
-            'name' => 'Frank Leimbergh D. Armodia',
-            'email' => 'farmodia@gmail.com',
+            'name' => 'Maria Theresa N. Magdolot',
+            'email' => 'admin@gmail.com',
             'role' => "admin",
             "department_id" => Department::where('name', 'Admin')->first()->id,
         ]);
 
         User::factory()->create([
-            'name' => 'Leimbergh D. Armodia',
+            'name' => 'Angelie Basilango',
             'email' => 'supervisor@gmail.com',
             'role' => "supervisor",
-            "department_id" => Department::where('name', 'IT')->first()->id,
+            "department_id" => Department::where('name', 'HEMIS')->first()->id,
         ]);
 
         $this->call([
