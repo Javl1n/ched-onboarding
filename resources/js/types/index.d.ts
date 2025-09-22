@@ -74,6 +74,7 @@ export interface TraineeProfileInterface {
     contact: string;
     address: string;
     logs: TimeLogInterface[];
+    assessments: AssessmentInterface[];
 }
 
 export interface TimeLogInterface {
@@ -92,4 +93,12 @@ export interface QuestionInterface {
     content: string;
     type: "text" | "scale";
     category: string;
+}
+
+export interface AssessmentInterface {
+    id: string | number;
+    question: QuestionInterface;
+    supervisor: User;
+    trainee: TraineeProfileInterface;
+    value: string;
 }

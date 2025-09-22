@@ -15,7 +15,7 @@ class TraineeAssessment extends Model
     ];
 
     public function trainee() {
-        return $this->belongsTo(TraineeProfile::class, 'supervisor_id');
+        return $this->belongsTo(TraineeProfile::class, 'trainee_id');
     }
 
     public function supervisor()

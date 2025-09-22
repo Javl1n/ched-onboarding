@@ -42,13 +42,14 @@ export default function OnboardingShow({item}: {item: OnboardingPageInterface}) 
                                    <div className="text-4xl font-black">
                                         {item.title}
                                    </div>
-                                   {user.role !== 'trainee' ? 
+                                   {(user.role === "admin" ||
+                                   (user.role === "supervisor" && item.department.id === user.department.id)) && 
                                         <Button asChild className="my-auto">
                                              <Link href={onboarding.edit({page: item.slug})}>
                                                   Edit
                                              </Link>
                                         </Button>
-                                   : null}
+                                   }
                               </div>
                               {user.role !== 'trainee' ? 
                                    <div className="flex gap-1">
@@ -60,7 +61,6 @@ export default function OnboardingShow({item}: {item: OnboardingPageInterface}) 
                          
                          {item.blocks.sort((a, b) => a.order - b.order).map((block, index) => {
                               const BlockComponent = blocks[block.type];
-                              
                               return (
                                    <BlockComponent key={index} block={block} />
                               )

@@ -9,4 +9,13 @@ class Question extends Model
 {
     /** @use HasFactory<\Database\Factories\QuestionFactory> */
     use HasFactory;
+
+    public function assessment()
+    {
+        if (auth()->user()->role() !== "trainee") {
+            return $this->hasMany(TraineeAssessment::class, "");
+        }
+        
+        return;
+    }
 }

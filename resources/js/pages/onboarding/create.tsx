@@ -22,6 +22,8 @@ import AddBlock from '@/components/onboarding/create/add-block';
 import { update } from '@/routes/password';
 import BlockLayout from '@/components/onboarding/create/block-layout';
 import SelectDepartment from '@/components/onboarding/create/select-department';
+import { toast } from 'sonner';
+import { format } from 'date-fns';
 
 const breadcrumbs: BreadcrumbItem[] = [
      {
@@ -80,7 +82,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                }
           }).url, {
                forceFormData: true,
-          });          
+          });
      }
 
      const moveBlock = (from: number, to: number) => {

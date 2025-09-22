@@ -11,9 +11,9 @@ import { NavItem, User } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
 import { format } from "date-fns";
 import { Cake, Calendar, ClipboardList, Contact, House, Mail, Mars, Phone, School, Venus } from "lucide-react";
-import React from "react";
+import { ReactNode } from "react";
 
-export default function TraineeShowLayout({children}: {children: React.ReactNode}) {
+export default function TraineeShowLayout({children, action}: {children: ReactNode, action?: ReactNode}) {
      const {trainee} = usePage<{trainee: User}>().props;
 
      const sidebarNavItems: NavItem[] = [
@@ -25,6 +25,11 @@ export default function TraineeShowLayout({children}: {children: React.ReactNode
           {
                title: 'Assessment',
                href: show.assessment(trainee),
+               icon: ClipboardList,
+          },
+          {
+               title: 'Reports',
+               href: show.report(trainee),
                icon: ClipboardList,
           },
      ];
@@ -60,7 +65,7 @@ export default function TraineeShowLayout({children}: {children: React.ReactNode
                          <div className="flex gap-2">
                               <School className="size-5 my-auto" />
                               <div className="my-auto">
-                                   {trainee.profile?.school}
+                                   <InfoTooltip content={trainee.profile?.school} />
                               </div>
                          </div>
                          <div className="flex gap-2">
@@ -96,6 +101,9 @@ export default function TraineeShowLayout({children}: {children: React.ReactNode
                                         </Link>
                                    </Button>
                               ))}
+                              <div className="mt-4">
+                                   {action}
+                              </div>
                          </nav>
                     </aside>
                     <Separator className="my-6 lg:hidden" />

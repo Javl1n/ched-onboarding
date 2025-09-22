@@ -29,4 +29,9 @@ class TraineeProfile extends Model
             "date" => now('Asia/Manila')->format("Y-m-d")
         ]);
     }
+    
+    public function assessments()
+    {
+        return $this->hasMany(TraineeAssessment::class, "trainee_id");
+    }
 }

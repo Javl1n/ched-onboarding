@@ -18,7 +18,11 @@ export default function TraineeShowLog({trainee}: {trainee: User}) {
           {
                title: trainee.name,
                href: show.log(trainee).url,
-          }
+          },
+          {
+               title: "Logs",
+               href: show.log(trainee).url,
+          },
      ];
 
      return (

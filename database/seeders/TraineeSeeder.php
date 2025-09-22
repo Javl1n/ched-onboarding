@@ -16,12 +16,13 @@ class TraineeSeeder extends Seeder
     public function run(): void
     {
         User::factory()
-        ->has(TraineeProfile::factory(), 'profile')
+        ->has(TraineeProfile::factory(state: [
+            "gender" => "Male"
+        ]), 'profile')
         ->create([
             'name' => 'Frank Leimbergh D. Armodia',
             'email' => 'trainee@gmail.com',
             'role' => "trainee",
-            "gender" => "Male",
             "department_id" => Department::where('name', 'HEMIS')->first()->id,
         ]);
         

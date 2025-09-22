@@ -1,9 +1,11 @@
-import { QuestionInterface, SharedData, TraineeProfileInterface } from "@/types";
+import { QuestionInterface, SharedData, TraineeProfileInterface, User } from "@/types";
 import { useForm, usePage } from "@inertiajs/react";
 import ScaleQuestion from "./scale-question";
 import TextQuestion from "./text-question";
 import { Button } from "../ui/button";
 import assessments from "@/routes/assessments";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 type GroupedQuestions = {
      [key: string]: QuestionInterface[]
@@ -16,7 +18,7 @@ type AssessmentsForm = {
 }
 
 export default function AssessmentForm() {
-     const {questions: questionList, trainee} = usePage<SharedData & {questions: QuestionInterface[], trainee: TraineeProfileInterface}>().props;
+     const {questions: questionList, trainee} = usePage<SharedData & {questions: QuestionInterface[], trainee: User}>().props;
 
      const questions: GroupedQuestions = questionList.reduce<GroupedQuestions>((accumulator, currentQuestion) => {
           const category = currentQuestion.category;
@@ -34,53 +36,64 @@ export default function AssessmentForm() {
           questions: Object.fromEntries(
                questionList.map((question) => [
                     question.id,
-                    ""
+                    trainee.profile?.assessments.find(assessment => assessment.question.id == question.id)?.value ?? ""
                ])
           )
      });
 
      const save = () => {
-          post(assessments.supervisor.store(trainee.id as number).url);
+          toast.promise(
+               new Promise((resolve, reject) => {
+                    post(assessments.supervisor.store(trainee.id as number).url, {
+                         onSuccess: () => resolve("Assessment Saved!"),
+                         onError: () => reject("Something went wrong."),
+                    });
+               }),
+               {
+                    loading: "Saving Assessment...",
+                    success: (msg) => msg as string,
+                    error: (msg) => msg as string,
+                    description: `${format(new Date(), "EEEE, MMMM dd, y 'at' hh:m a")}`
+               }
+          );
      }
 
      return (
           <div className="">
-               <div className="">
-                    {Object.keys(questions).filter(category => category != "General").map((category) => (
-                         <div key={category} className="mb-10">
-                              <div className="text-2xl font-bold my-4">{category}</div>
-                              <div className="space-y-5">
-                                   {questions[category].map((question, index) => (
-                                        <ScaleQuestion 
-
-                                        value={data.questions[question.id] as number} 
-
-                                        setData={(value) => setData("questions", {
-                                             ...data.questions,
-                                             [question.id]: value as number
-                                        })} question={question} key={`question-${question.id}`} error={errors[`questions.${question.id}`]} />
-                                   ))}
-                              </div>
-                         </div>
-                    ))}
-                    <div className="">
-                         <div className="text-center text-xl font-bold">Questions</div>
+               {Object.keys(questions).filter(category => category != "General").map((category) => (
+                    <div key={category} className="mb-10">
+                         <div className="text-2xl font-bold my-4">{category}</div>
                          <div className="space-y-5">
-                              {questions["General"].map((question, index) => (
-                                   <TextQuestion 
+                              {questions[category].map((question, index) => (
+                                   <ScaleQuestion 
 
-                                   value={data.questions[question.id] as string} 
+                                   value={data.questions[question.id] as number} 
 
-                                   onChange={(e) => setData("questions", {
+                                   setData={(value) => setData("questions", {
                                         ...data.questions,
-                                        [question.id]: e.target.value as string,
+                                        [question.id]: value as number
                                    })} question={question} key={`question-${question.id}`} error={errors[`questions.${question.id}`]} />
                               ))}
                          </div>
                     </div>
-                    <div className="my-10 flex justify-end gap-3">
-                         <Button onClick={save}>Save</Button>
+               ))}
+               <div className="">
+                    <div className="text-center text-xl font-bold">Questions</div>
+                    <div className="space-y-5">
+                         {questions["General"].map((question, index) => (
+                              <TextQuestion 
+
+                              value={data.questions[question.id] as string} 
+
+                              onChange={(e) => setData("questions", {
+                                   ...data.questions,
+                                   [question.id]: e.target.value as string,
+                              })} question={question} key={`question-${question.id}`} error={errors[`questions.${question.id}`]} />
+                         ))}
                     </div>
+               </div>
+               <div className="my-10 flex justify-end gap-3">
+                    <Button onClick={save}>Save</Button>
                </div>
           </div>
      )

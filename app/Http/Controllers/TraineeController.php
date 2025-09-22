@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\TraineeAssessment;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -69,10 +70,27 @@ class TraineeController extends Controller
 
     public function showAssessment(User $user)
     {
-
         return inertia()->render('trainee/show/assessment', [
-            'trainee' => $user->load(['department', 'profile']),
+            'trainee' => $user->load(['department', 'profile.assessments.question']),
             "questions" => Question::where('for', 'supervisor')->get()
+        ]);
+    }
+
+    public function showReport(User $user)
+    {
+        dd(
+            // calculate total hours
+            $user->profile->logs->map(function ($log) {
+                return $log->hours;
+            })->sum(),
+            // calcullate assessment score
+            $user->profile->assessments->map(function ($assessment) {
+                return $assessment->question->type == "scale" ? $assessment->value : 0;
+            })->sum() / 22
+        );
+
+        return inertia()->render('trainee/show', [
+            'trainee' => $user->load(['department', 'profile.assessments.question']),
         ]);
     }
 
