@@ -8,7 +8,8 @@ import {
      TableRow,
 } from "@/components/ui/table"
 import AppLayout from "@/layouts/app-layout";
-import {index, show} from "@/routes/trainees";
+import {index} from "@/routes/trainees";
+import show from "@/routes/trainees/show";
 import { BreadcrumbItem, User } from "@/types";
 import { Head, Link, router } from "@inertiajs/react";
 
@@ -36,7 +37,7 @@ export default function TraineeIndex({trainees}: {trainees: User[]}) {
                     </TableHeader>
                     <TableBody>
                          {trainees.map(trainee => (
-                              <TableRow key={trainee.id} onClick={() => router.visit(show(trainee).url)}>
+                              <TableRow key={trainee.id} onClick={() => router.visit(show.log(trainee).url)}>
                                    <TableCell className="">{trainee.name}</TableCell>
                                    <TableCell className="text-center">{trainee.department.name}</TableCell>
                                    <TableCell>{trainee.profile?.school}</TableCell>

@@ -29,21 +29,20 @@ class SupervisorAssessmentController extends Controller
      */
     public function store(TraineeProfile $trainee, Request $request)
     {
-        return back();
-
         $request->validate([
-            'questions.*.value' => 'required'
+            'questions.*' => 'required'
         ]);
 
         $questions = $request->questions;
 
         foreach ($questions as $question) {
-            TraineeAssessment::create([
+            TraineeAssessment::updateOrCreate([
                 'trainee_id' => $trainee->id,
+                'question_id' => $question['id'],
+            ], [
                 'supervisor_id' => auth()->user()->id,
-                'question' => $question['id'],
                 'value' => $question['value'],
-            ]);
+            ]); 
         }
 
         return back();

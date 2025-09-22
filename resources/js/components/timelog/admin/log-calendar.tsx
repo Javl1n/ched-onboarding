@@ -50,7 +50,7 @@ export default function LogCalendar() {
                               ))}
                               {Array.from({length: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()}, (_, index) => index + 1).map((day) => <LogDialog key={`day-${day}`} day={day} />)}
                               
-                              {Array.from({length: Math.abs(new Date(date.getFullYear(), date.getMonth() + 1, 1).getDay() - 7)}).map((_, index) => (
+                              {Array.from({length: Math.abs(new Date(date.getFullYear(), date.getMonth() + 1, 1).getDay() - 7) % 7}).map((_, index) => (
                                    <div key={`day-after-${index}`} className='p-1 border h-15 md:h-30' />
                               ))}
                          </div>

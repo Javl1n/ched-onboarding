@@ -91,7 +91,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->controller(TraineeController::class)
     ->name('trainees.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/{user}', 'show')->name('show');
+        Route::get('/{user}/logs', 'showLog')->name('show.log');
+        Route::get('/{user}/assesssment', 'showAssessment')->name('show.assessment');
     });
 });
 

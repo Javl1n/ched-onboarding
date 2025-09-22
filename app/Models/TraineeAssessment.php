@@ -10,6 +10,10 @@ class TraineeAssessment extends Model
     /** @use HasFactory<\Database\Factories\TraineeAssessmentFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        "trainee_id", "supervisor_id", "question_id", "value"
+    ];
+
     public function trainee() {
         return $this->belongsTo(TraineeProfile::class, 'supervisor_id');
     }

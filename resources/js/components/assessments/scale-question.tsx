@@ -5,7 +5,7 @@ export default function ScaleQuestion({question, setData, value, error}: {value:
 {
      return (
           <div className="border rounded-lg p-5">
-               <div className="text-center">{question.content}</div>
+               <div className="text-center">{question.id} {question.content}</div>
                <div className="flex justify-center gap-4 mt-4">
 
                     {Array.from({length: 2}, (_, i) => i + 1).map((index) => (

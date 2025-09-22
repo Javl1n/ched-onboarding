@@ -50,12 +50,12 @@ class TraineeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function showLog(User $user)
     {
         $month = request()->input('month', now()->month);
         $year = request()->input('year', now()->year);
 
-        return inertia()->render('trainee/show', [
+        return inertia()->render('trainee/show/log', [
             'trainee' => $user->load(['department', 'profile']),
             "month" => $month,
             "year" => $year,
@@ -63,6 +63,15 @@ class TraineeController extends Controller
                 ->whereMonth('date', $month)
                 ->whereYear('date', $year)
                 ->get(),
+            // "questions" => Question::where('for', 'supervisor')->get()
+        ]);
+    }
+
+    public function showAssessment(User $user)
+    {
+
+        return inertia()->render('trainee/show/assessment', [
+            'trainee' => $user->load(['department', 'profile']),
             "questions" => Question::where('for', 'supervisor')->get()
         ]);
     }

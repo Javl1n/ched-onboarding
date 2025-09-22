@@ -32,13 +32,13 @@ export function MonthPagination() {
                <Pagination className="md:justify-end">
                     <PaginationContent>
                          <PaginationItem>
-                              <PaginationPrevious size="sm" href={trainees.show(trainee, prev).url} />
+                              <PaginationPrevious size="sm" href={trainees.show.log(trainee, prev).url} />
                          </PaginationItem>
                          <PaginationItem>
                               <PaginationLink href="#" size="sm">{format(new Date(year, month - 1, 1), "MMMM y")}</PaginationLink>
                          </PaginationItem>
                          <PaginationItem>
-                              <PaginationNext size="sm" href={trainees.show(trainee, next).url} />
+                              <PaginationNext size="sm" href={trainees.show.log(trainee, next).url} />
                          </PaginationItem>
                     </PaginationContent>
                </Pagination>
