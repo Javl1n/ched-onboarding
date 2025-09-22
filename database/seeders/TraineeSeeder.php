@@ -21,6 +21,7 @@ class TraineeSeeder extends Seeder
             'name' => 'Frank Leimbergh D. Armodia',
             'email' => 'trainee@gmail.com',
             'role' => "trainee",
+            "gender" => "Male",
             "department_id" => Department::where('name', 'HEMIS')->first()->id,
         ]);
         
