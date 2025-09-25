@@ -1,5 +1,5 @@
 import { TimeLogInterface } from "@/types";
-import { usePage } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { format } from "date-fns";
 import {
      Table,
@@ -10,7 +10,7 @@ import {
      TableHeader,
      TableRow,
 } from "@/components/ui/table"
-import { DatePagination } from "./date-pagination";
+import show from "@/routes/trainees/show";
 
 export default function LogList() {
      const {logs, date} = usePage<{logs: TimeLogInterface[], date: string}>().props;
@@ -49,7 +49,7 @@ export default function LogList() {
                     </TableHeader>
                     <TableBody>
                          {logs.map((log, index) => (
-                              <TableRow key={index}>
+                              <TableRow onClick={() => router.visit(show.log(log.trainee.user).url)} key={index}>
                                    <TableCell className="font-medium">{log.trainee.user.name}</TableCell>
                                    <TableCell>{time(log.morning_in)} - {time(log.morning_out)} {hours(log.morning_in, log.morning_out)}</TableCell>
                                    <TableCell>{time(log.afternoon_in)} - {time(log.afternoon_out)} {hours(log.afternoon_in, log.afternoon_out)}</TableCell>

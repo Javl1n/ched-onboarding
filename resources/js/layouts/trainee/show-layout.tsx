@@ -10,11 +10,13 @@ import show from "@/routes/trainees/show";
 import { NavItem, User } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
 import { format } from "date-fns";
-import { Cake, Calendar, ClipboardList, Contact, House, Mail, Mars, Phone, School, Venus } from "lucide-react";
+import { BookText, Cake, Calendar, ClipboardList, Contact, House, Mail, Mars, Phone, School, Venus } from "lucide-react";
 import { ReactNode } from "react";
+import { useSidebar } from "@/components/ui/sidebar";
 
-export default function TraineeShowLayout({children, action}: {children: ReactNode, action?: ReactNode}) {
+export default function TraineeShowLayout({children, action}: {children?: ReactNode, action?: ReactNode}) {
      const {trainee} = usePage<{trainee: User}>().props;
+     const sidebar = useSidebar();
 
      const sidebarNavItems: NavItem[] = [
           {
@@ -30,7 +32,7 @@ export default function TraineeShowLayout({children, action}: {children: ReactNo
           {
                title: 'Reports',
                href: show.report(trainee),
-               icon: ClipboardList,
+               icon: BookText,
           },
      ];
      
@@ -44,7 +46,7 @@ export default function TraineeShowLayout({children, action}: {children: ReactNo
                          <img className='w-30 rounded-lg md:block hidden' src={`/private/${trainee.profile?.profile}`} alt="" />
                          <div className="my-auto">
                               <div className="flex gap-2">
-                                   <div className='md:text-5xl font-black text-3xl'>{trainee.name}</div>
+                                   <div className={`${sidebar.open ? 'md:text-4xl' : 'md:text-5xl'} font-black text-3xl`}>{trainee.name}</div>
                                    {trainee.profile?.gender == "Male" ? <Mars className="my-auto text-blue-500 size-8" /> : <Venus className="my-auto text-pink-400 size-8" />}
                               </div>
                          </div>

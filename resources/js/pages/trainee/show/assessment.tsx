@@ -1,4 +1,3 @@
-import AssessmentForm from "@/components/assessments/form";
 import { Button } from "@/components/ui/button";
 import AppLayout from "@/layouts/app-layout";
 import TraineeShowLayout from "@/layouts/trainee/show-layout";

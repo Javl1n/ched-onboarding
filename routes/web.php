@@ -94,6 +94,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/{user}/logs', 'showLog')->name('show.log');
         Route::get('/{user}/assesssment', 'showAssessment')->name('show.assessment');
         Route::get('/{user}/report', 'showReport')->name('show.report');
+
+        Route::post('/{user}/report/summary', "summary")->name('summary');
     });
 });
 
