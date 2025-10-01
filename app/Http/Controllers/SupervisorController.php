@@ -20,8 +20,6 @@ class SupervisorController extends Controller
             "supervisors" => $supervisors,
             "departments" => Department::all()->except(
                 Department::where('name', "Admin")->first()->id
-            )->except(
-                $supervisors->select('department_id')->flatten()->toArray()
             ),
         ]);
     }

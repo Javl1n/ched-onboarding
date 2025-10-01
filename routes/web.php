@@ -80,10 +80,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('/supervisor')->name('supervisor.')
         ->controller(SupervisorAssessmentController::class)->group(function () {
             
-            Route::post('/{trainee}', 'store')->name('store');
+            Route::post('/{trainee}/supervisor/{supervisor}', 'store')->name('store');
 
         });
-
     });
 
     Route::prefix('/trainees')
@@ -92,10 +91,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->name('trainees.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{user}/logs', 'showLog')->name('show.log');
-        Route::get('/{user}/assesssment', 'showAssessment')->name('show.assessment');
+        Route::get('/{user}/assessment', 'assessmentRedirect')->name('assessment.redirect');
+        Route::get('/{user}/assessment/supervisor/{supervisor}', 'showAssessment')->name('show.assessment');
         Route::get('/{user}/report', 'showReport')->name('show.report');
 
         Route::post('/{user}/report/summary', "summary")->name('summary');
+        Route::post('/{user}/report/summary/saved', "savedReport")->name("summary.saved");
+        Route::post('/{user}/summary/store', "storeReport")->name('summary.store');
     });
 });
 

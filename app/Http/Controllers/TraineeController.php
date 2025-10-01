@@ -3,8 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
+use App\Models\TraineeAssessment;
+use App\Models\TraineeReport;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Stmt\Return_;
 use Prism\Prism\Enums\Provider;
 use Prism\Prism\Prism;
 
@@ -42,14 +48,6 @@ class TraineeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    } 
-
-    /**
      * Display the specified resource.
      */
     public function showLog(User $user)
@@ -65,32 +63,30 @@ class TraineeController extends Controller
                 ->whereMonth('date', $month)
                 ->whereYear('date', $year)
                 ->get(),
-            // "questions" => Question::where('for', 'supervisor')->get()
         ]);
     }
 
-    public function showAssessment(User $user)
+    public function assessmentRedirect(User $user)
+    {
+        return redirect()->route('trainees.show.assessment', [
+            "user" => $user,
+            "supervisor" => $user->department->users()->where('role', 'supervisor')->first()
+        ]);
+    }
+
+    public function showAssessment(User $user, User $supervisor)
     {
         return inertia()->render('trainee/show/assessment', [
-            'trainee' => $user->load(['department', 'profile.assessments.question']),
-            "questions" => Question::where('for', 'supervisor')->get()
+            'trainee' => $user->load(['department']),
+            "questions" => Question::where('for', 'supervisor')->get(),
+            "supervisor" => $supervisor,
+            "assessments" => $user->profile->assessments()->with('question')->where('supervisor_id', $supervisor->id)->get(),
+            'supervisors' => $user->department->users()->where('role', 'supervisor')->get()
         ]);
     }
 
     public function showReport(User $user)
     {
-        // dd(
-        //     // calculate total hours
-        //     $user->profile->logs->map(function ($log) {
-        //         return $log->hours;
-        //     })->sum(),
-        //     // calcullate assessment score
-        //     $user->profile->assessments->map(function ($assessment) {
-        //         return $assessment->question->type == "scale" ? $assessment->value : 0;
-        //     })->sum() / 22,
-        // );
-
-
         return inertia()->render('trainee/show/reports', [
             'trainee' => $user->load(['department', 'profile']),
             'assessments' => $user->profile->assessments->load(['question']),
@@ -100,6 +96,14 @@ class TraineeController extends Controller
 
     public function summary (User $user)
     {
+        // $key = "summary:" . $user->id;
+
+        // if (RateLimiter::tooManyAttempts($key, 3)) {
+        //     return response("you've hit the maxmimum summary for this user", 429);
+        // }
+
+        // RateLimiter::hit($key, now()->addDay());
+
         $timelogs = $user->profile->logs;
 
         $totalHours = $timelogs->sum('hours');
@@ -107,8 +111,13 @@ class TraineeController extends Controller
         $averageHours = $daysPresent ? round($totalHours / $daysPresent, 2) : 0;
         
         $responses = $user->profile->assessments->load(['question']);
-        $assessmentSummary = $responses->map(function ($response) {
-            return $response->question->content . ': ' . $response->value;
+
+        $assessmentSummary = $responses->groupBy('supervisor.name')->map(function ($responses, $key) {
+            return "supervisor: {$key}\nresponses: {\n" .
+                $responses->map(function ($response) {
+                    return $response->question->content . ": " . $response->value;
+                })->implode("\n")
+            . "}";
         })->implode("\n");
 
         $prompt = "
@@ -161,6 +170,57 @@ class TraineeController extends Controller
             // 'Content-Type'  => 'text/event-stream', // or text/plain depending on frontend
             // 'X-Accel-Buffering' => 'no',
         ]);
+    }
+
+    public function savedReport (User $user)
+    {
+        $id = request()->input("report", $user->profile->reports()->latest()->first()?->id);
+
+        $report = TraineeReport::where('id', $id)->first()?->content ?? "";
+        
+        return response()->stream(function () use ($report) {
+            foreach (str_split($report, 10) as $chunk) {
+                usleep( 25 * 1000 );
+                yield $chunk;
+            }
+
+        }, 200, [
+            // 'Cache-Control' => 'no-cache',
+            // 'Content-Type'  => 'text/event-stream', // or text/plain depending on frontend
+            // 'X-Accel-Buffering' => 'no',
+        ]);
+    }
+
+    public function storeReport(User $user, Request $request)
+    {   
+        $latest = $user->profile->reports()->latest()->first();
+
+        // if ($latest && $latest->created_at->isToday()) {
+        //     return back()->withErrors([
+        //         "summary" => "You've already saved a prompt for today."
+        //     ]);
+        // }
+
+        if ($request->summary == '') {
+            return back()->withErrors([
+                "summary" => "Please Enter a Prompt first."
+            ]);
+        }
+
+        if ($latest && $latest->created_at->gt(Carbon::now()->subDay())) {
+            $latest->update([
+                'content' => $request->summary,
+            ]);
+
+            return back();
+        }
+
+
+        $user->profile->reports()->updateOrCreate([
+            "content" => $request->summary,
+        ]);
+
+        return back();
     }
 
     /**

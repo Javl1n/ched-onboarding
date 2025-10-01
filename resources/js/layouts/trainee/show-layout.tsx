@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { BookText, Cake, Calendar, ClipboardList, Contact, House, Mail, Mars, Phone, School, Venus } from "lucide-react";
 import { ReactNode } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
+import assessment from "@/routes/trainees/assessment";
 
 export default function TraineeShowLayout({children, action}: {children?: ReactNode, action?: ReactNode}) {
      const {trainee} = usePage<{trainee: User}>().props;
@@ -25,8 +26,8 @@ export default function TraineeShowLayout({children, action}: {children?: ReactN
                icon: Calendar,
           },
           {
-               title: 'Assessment',
-               href: show.assessment(trainee),
+               title: 'Assessments',
+               href: assessment.redirect(trainee),
                icon: ClipboardList,
           },
           {
@@ -37,7 +38,6 @@ export default function TraineeShowLayout({children, action}: {children?: ReactN
      ];
      
      const currentPath = window.location.pathname;
-
 
      return (
           <div className="flex flex-1 flex-col gap-4 rounded-xl p-4">
@@ -94,7 +94,7 @@ export default function TraineeShowLayout({children, action}: {children?: ReactN
                                         variant="ghost"
                                         asChild
                                         className={cn('w-full justify-start', {
-                                             'bg-muted': currentPath === (typeof item.href === 'string' ? item.href : item.href.url),
+                                             'bg-muted': currentPath.includes(typeof item.href === 'string' ? item.href : item.href.url),
                                         })}
                                    >
                                         <Link href={item.href} prefetch>

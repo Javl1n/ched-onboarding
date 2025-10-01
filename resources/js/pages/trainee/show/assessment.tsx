@@ -3,13 +3,17 @@ import AppLayout from "@/layouts/app-layout";
 import TraineeShowLayout from "@/layouts/trainee/show-layout";
 import { index } from "@/routes/trainees";
 import show from "@/routes/trainees/show";
-import { BreadcrumbItem, QuestionInterface, SharedData, User } from "@/types";
+import { AssessmentInterface, BreadcrumbItem, QuestionInterface, SharedData, User } from "@/types";
 import { Head, usePage, useForm, } from "@inertiajs/react";
 import assessments from "@/routes/assessments";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import ScaleQuestion from "@/components/assessments/scale-question";
 import TextQuestion from "@/components/assessments/text-question";
+import assessment from "@/routes/trainees/assessment";
+import supervisor from "@/routes/supervisor";
+import { router } from "@inertiajs/core";
+import { cn } from "@/lib/utils";
 
 type GroupedQuestions = {
      [key: string]: QuestionInterface[]
@@ -21,7 +25,15 @@ type AssessmentsForm = {
      };
 }
 
-export default function TraineeShowAssessment({trainee}: {trainee: User}) {
+export default function TraineeShowAssessment({
+     trainee, supervisors, supervisor, assessments: assessmentList, questions: questionList, 
+}: {
+     trainee: User, 
+     supervisors: User[], 
+     supervisor: User, 
+     assessments: AssessmentInterface[],
+     questions: QuestionInterface[]
+}) {
      const breadcrumbs: BreadcrumbItem[] = [
           {
                title: 'Trainees',
@@ -32,12 +44,16 @@ export default function TraineeShowAssessment({trainee}: {trainee: User}) {
                href: show.log(trainee).url,
           },
           {
-               title: "Assessment",
-               href: show.assessment(trainee).url,
+               title: "Assessments",
+               href: assessment.redirect(trainee).url,
+          },
+          {
+               title: supervisor.name,
+               href: show.assessment({user: trainee, supervisor: supervisor}).url,
           },
      ];
 
-     const {questions: questionList} = usePage<SharedData & {questions: QuestionInterface[]}>().props;
+     const {auth: {user}} = usePage<SharedData>().props;
 
      const questions: GroupedQuestions= questionList.reduce<GroupedQuestions>((accumulator, currentQuestion) => {
           const category = currentQuestion.category;
@@ -53,9 +69,9 @@ export default function TraineeShowAssessment({trainee}: {trainee: User}) {
 
      const {data, setData, post, errors} = useForm<AssessmentsForm>({
           questions: Object.fromEntries(
-               questionList.map((question) => [
-                    question.id,
-                    trainee.profile?.assessments.find(assessment => assessment.question.id == question.id)?.value ?? ""
+               assessmentList.map((assessment) => [
+                    assessment.question.id,
+                    assessment.value
                ])
           )
      });
@@ -63,7 +79,10 @@ export default function TraineeShowAssessment({trainee}: {trainee: User}) {
      const save = () => {
           toast.promise(
                new Promise((resolve, reject) => {
-                    post(assessments.supervisor.store(trainee.id as number).url, {
+                    post(assessments.supervisor.store({
+                         trainee: trainee.id as number,
+                         supervisor: supervisor.id as number,
+                    }).url, {
                          onSuccess: () => resolve("Assessment Saved!"),
                          onError: () => reject("Something went wrong."),
                     });
@@ -82,9 +101,34 @@ export default function TraineeShowAssessment({trainee}: {trainee: User}) {
                <Head title="Trainees" />
                
                <TraineeShowLayout action={(
-                    <Button className="w-full" onClick={save}>
-                         Save Assessment
-                    </Button>
+                    <div className="">
+                         <div>
+                              <h1 className="text-sm font-bold text-neutral-400">Supervisors</h1>
+                              <div className="space-y-2">
+                                   {supervisors.map((supervisor) => (
+                                        <Button 
+                                             onClick={() => router.get(show.assessment({user: trainee, supervisor: supervisor}))} 
+                                             className={cn("w-full justify-start text-wrap overflow-hidden text-ellipsis", {
+                                                  'bg-muted': window.location.pathname === show.assessment({user: trainee, supervisor: supervisor}).url
+                                             })} variant={`ghost`} key={`supervisor-${supervisor.id}`}
+                                        >
+                                             {supervisor.name}
+                                        </Button>
+                                   ))}
+                              </div>
+                         </div>
+                         <div className={cn("", {
+                              "hidden": supervisor.id != user.id
+                         })}>
+                              <h1 className="text-sm font-bold text-neutral-400">Actions</h1>
+                              <Button 
+                                   disabled={supervisor.id != user.id} className="w-full mt-2" 
+                                   onClick={save}
+                              >
+                                   Save Assessment
+                              </Button>
+                         </div>
+                    </div>
                )}>
                     <div className="h-[calc(100vh-16rem)] overflow-auto px-4">
                          {Object.keys(questions).filter(category => category != "General").map((category) => (
@@ -93,7 +137,7 @@ export default function TraineeShowAssessment({trainee}: {trainee: User}) {
                                    <div className="space-y-5">
                                         {questions[category].map((question, index) => (
                                              <ScaleQuestion 
-
+                                             disabled={supervisor.id !== user.id}
                                              value={data.questions[question.id] as number} 
 
                                              setData={(value) => setData("questions", {
@@ -109,7 +153,7 @@ export default function TraineeShowAssessment({trainee}: {trainee: User}) {
                               <div className="space-y-5">
                                    {questions["General"].map((question, index) => (
                                         <TextQuestion 
-
+                                        disabled={supervisor.id !== user.id}
                                         value={data.questions[question.id] as string} 
 
                                         onChange={(e) => setData("questions", {

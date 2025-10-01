@@ -27,8 +27,12 @@ class SupervisorAssessmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(User $trainee, Request $request)
+    public function store(User $trainee, User $supervisor, Request $request)
     {
+        if (auth()->user()->id != $supervisor->id) {
+            abort(403, 'Unauthorized action.');
+        };
+
         $request->validate([
             'questions.*' => 'required'
         ]);
@@ -39,8 +43,8 @@ class SupervisorAssessmentController extends Controller
             TraineeAssessment::updateOrCreate([
                 'trainee_id' => $trainee->profile->id,
                 'question_id' => $id,
-            ], [
                 'supervisor_id' => auth()->user()->id,
+            ], [
                 'value' => $value,
             ]); 
         }
