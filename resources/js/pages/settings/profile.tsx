@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
 import { edit } from '@/routes/profile';
+import EditTraineeProfile from '@/components/trainee-profile-edit';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -112,6 +113,10 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                         )}
                     </Form>
                 </div>
+
+                {auth.user.role == "trainee" && 
+                    <EditTraineeProfile />
+                }
 
                 {/* <DeleteUser /> */}
             </SettingsLayout>

@@ -15,9 +15,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { register } from 'module';
 import { profiling } from '@/routes/register';
 import { ChangeEvent, ChangeEventHandler, TextareaHTMLAttributes } from 'react';
+import { isNumeric } from '@/lib/utils';
 
-interface ProfilingAttributes {
-     profile: File | undefined;
+export interface ProfilingAttributes {
+     profile: File | undefined | string;
      school: string;
      birth: Date;
      gender: "Male" | "Female";
@@ -38,12 +39,7 @@ export default function Profiling() {
      });
 
      const submit = () => {
-          // console.log(data);
-        post('/trainee/profiling');
-     }
-
-     const isNumeric = (value: string) => {
-          return /^[0-9]*$/.test(value);
+          post('/trainee/profiling');
      }
 
      return (
@@ -95,15 +91,7 @@ export default function Profiling() {
                               {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                               Submit
                          </Button>
-                    </div>
-
-                    {/* <div className="text-center text-sm text-muted-foreground">
-                         Already have an account?{' '}
-                         <TextLink href={login()} tabIndex={6}>
-                              Log in
-                         </TextLink>
-                    </div> */}
-                    
+                    </div>                    
                </div>
         </AuthLayout>
      );

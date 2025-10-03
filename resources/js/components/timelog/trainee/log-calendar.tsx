@@ -46,7 +46,7 @@ export default function LogCalendar({date, setDate}: {date: Date, setDate: (date
                                    
                                    return (
                                         <div onClick={() => setDate(new Date(date.getFullYear(), date.getMonth(), day))} key={`day-${day}`} 
-                                        className={`h-15 p-1 border flex flex-col justify-between md:h-30 transition ${date.getDate() === day ? 'bg-blue-500/50' : ''}`}>
+                                        className={`h-15 p-1 border flex flex-col justify-between md:h-30 transition ${date.getDate() === day ? 'bg-accent/50' : ''}`}>
                                              <div className="">{day}</div>
 
                                              {log ? 

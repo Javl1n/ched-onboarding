@@ -26,7 +26,7 @@ export function DatePagination() {
      
 
      return (
-          <div className="">
+          <div className="my-auto">
                <Pagination className="justify-end">
                     <PaginationContent>
                          <PaginationItem>

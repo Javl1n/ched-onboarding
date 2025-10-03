@@ -42,6 +42,7 @@ export default function LogList() {
                     <TableHeader>
                          <TableRow>
                               <TableHead className="">Name</TableHead>
+                              <TableHead>Department</TableHead>
                               <TableHead>Morning</TableHead>
                               <TableHead>Afternoon</TableHead>
                               <TableHead className="text-right">Time</TableHead>
@@ -51,6 +52,7 @@ export default function LogList() {
                          {logs.map((log, index) => (
                               <TableRow onClick={() => router.visit(show.log(log.trainee.user).url)} key={index}>
                                    <TableCell className="font-medium">{log.trainee.user.name}</TableCell>
+                                   <TableCell>{log.trainee.user.department.name}</TableCell>
                                    <TableCell>{time(log.morning_in)} - {time(log.morning_out)} {hours(log.morning_in, log.morning_out)}</TableCell>
                                    <TableCell>{time(log.afternoon_in)} - {time(log.afternoon_out)} {hours(log.afternoon_in, log.afternoon_out)}</TableCell>
                                    <TableCell className="text-right">{total(log)}</TableCell>

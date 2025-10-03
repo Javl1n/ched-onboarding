@@ -11,15 +11,14 @@ import { format } from "date-fns";
 import ScaleQuestion from "@/components/assessments/scale-question";
 import TextQuestion from "@/components/assessments/text-question";
 import assessment from "@/routes/trainees/assessment";
-import supervisor from "@/routes/supervisor";
 import { router } from "@inertiajs/core";
 import { cn } from "@/lib/utils";
 
-type GroupedQuestions = {
+export type GroupedQuestions = {
      [key: string]: QuestionInterface[]
 }
 
-type AssessmentsForm = {
+export type AssessmentsForm = {
      questions: {
           [key: string]: number | string | null
      };
@@ -67,11 +66,13 @@ export default function TraineeShowAssessment({
           return accumulator;
      }, {});
 
+
+
      const {data, setData, post, errors} = useForm<AssessmentsForm>({
           questions: Object.fromEntries(
-               assessmentList.map((assessment) => [
-                    assessment.question.id,
-                    assessment.value
+               questionList.map((question) => [
+                    question.id,
+                    assessmentList.find(assessment => assessment.question.id == question.id)?.value || ''
                ])
           )
      });
@@ -79,7 +80,7 @@ export default function TraineeShowAssessment({
      const save = () => {
           toast.promise(
                new Promise((resolve, reject) => {
-                    post(assessments.supervisor.store({
+                    post(assessments.trainee.store({
                          trainee: trainee.id as number,
                          supervisor: supervisor.id as number,
                     }).url, {
@@ -101,8 +102,8 @@ export default function TraineeShowAssessment({
                <Head title="Trainees" />
                
                <TraineeShowLayout action={(
-                    <div className="">
-                         <div>
+                    <div className="space-y-4">
+                         <div className="space-y-2">
                               <h1 className="text-sm font-bold text-neutral-400">Supervisors</h1>
                               <div className="space-y-2">
                                    {supervisors.map((supervisor) => (
@@ -117,12 +118,12 @@ export default function TraineeShowAssessment({
                                    ))}
                               </div>
                          </div>
-                         <div className={cn("", {
+                         <div className={cn("space-y-2", {
                               "hidden": supervisor.id != user.id
                          })}>
                               <h1 className="text-sm font-bold text-neutral-400">Actions</h1>
                               <Button 
-                                   disabled={supervisor.id != user.id} className="w-full mt-2" 
+                                   disabled={supervisor.id != user.id} className="w-full" 
                                    onClick={save}
                               >
                                    Save Assessment

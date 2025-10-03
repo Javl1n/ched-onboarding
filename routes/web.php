@@ -10,6 +10,7 @@ use App\Http\Controllers\TimeLogController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\TraineeController;
+use App\Http\Controllers\TraineeAssessmentController;
 
 
 Route::get('/', function () {
@@ -51,6 +52,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/', 'index')->name('index');
         Route::post('/', 'store')->name('store');
+        Route::get('/{supervisor}', 'show')->name('show.all');
+        Route::get('/{supervisor}/trainee/{trainee}', 'showTrainee')->name('show.trainee');
 
     });
 
@@ -78,10 +81,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->group(function () {
 
         Route::prefix('/supervisor')->name('supervisor.')
+        ->middleware('role:trainee')
         ->controller(SupervisorAssessmentController::class)->group(function () {
-            
-            Route::post('/{trainee}/supervisor/{supervisor}', 'store')->name('store');
+            Route::get('/', 'index')->name('index');
+            Route::get('/{supervisor}', 'show')->name('show');
+            Route::post('/{supervisor}', 'store')->name('store');
+        });
 
+        Route::prefix('/trainee')->name('trainee.')
+        ->middleware('role:supervisor')
+        ->controller(TraineeAssessmentController::class)->group(function () {
+            Route::post('/{trainee}/supervisor/{supervisor}', 'store')->name('store');
         });
     });
 
@@ -90,9 +100,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->controller(TraineeController::class)
     ->name('trainees.')->group(function () {
         Route::get('/', 'index')->name('index');
+        
         Route::get('/{user}/logs', 'showLog')->name('show.log');
+        
         Route::get('/{user}/assessment', 'assessmentRedirect')->name('assessment.redirect');
+        Route::get('/{user}/assessment/empty', 'assessmentEmpty')->name('assessment.empty');
         Route::get('/{user}/assessment/supervisor/{supervisor}', 'showAssessment')->name('show.assessment');
+        
         Route::get('/{user}/report', 'showReport')->name('show.report');
 
         Route::post('/{user}/report/summary', "summary")->name('summary');

@@ -7,7 +7,7 @@ export default function ScaleQuestion({
      value: number, 
      question: QuestionInterface, 
      setData: (value: string | number) => void, 
-     error: string,
+     error?: string,
      disabled?: boolean
 }) 
 {

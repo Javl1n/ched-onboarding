@@ -2,15 +2,17 @@ import CreateDepartment from "@/components/department/create";
 import CreateSupervisor from "@/components/supervisor/create";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import AppLayout from "@/layouts/app-layout";
-import supervisor from "@/routes/supervisor";
+import supervisor, { index } from "@/routes/supervisor";
+import show from "@/routes/supervisor/show";
 import { BreadcrumbItem, User } from "@/types";
+import { router } from "@inertiajs/core";
 import { Head } from "@inertiajs/react";
 import { ChevronRight } from "lucide-react";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Manage Supervisors',
-        href: supervisor.index().url,
+        href: index().url,
     },
 ];
 
@@ -38,7 +40,7 @@ export default function SuperVisorIndex({supervisors}: {supervisors: User[]}) {
                                    </TableHeader>
                                    <TableBody>
                                         {supervisors.map((supervisor, index) => (
-                                             <TableRow key={`supervisor-${index}`}>
+                                             <TableRow onClick={() => router.visit(show.all(supervisor.id))} key={`supervisor-${index}`}>
                                                   <TableCell className="font-medium">{supervisor.name}</TableCell>
                                                   <TableCell>{supervisor.department.name}</TableCell>
                                                   <TableCell>{supervisor.email}</TableCell>

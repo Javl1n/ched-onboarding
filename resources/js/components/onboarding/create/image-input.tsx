@@ -14,6 +14,7 @@ export default function ImageInput({isNew = true, value, ...props}: InputHTMLAtt
 
           const handleFileChange = () => {
                const file = input.files?.[0];
+               console.log(file);
                if (file) {
                     const image = URL.createObjectURL(file);
                     setPreviewUrl(image);

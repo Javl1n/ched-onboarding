@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\TraineeController;
+use App\Http\Controllers\TraineeProfilingController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -11,6 +13,9 @@ Route::middleware('auth')->group(function () {
     Route::get('settings/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::post('settings/profile/trainee', [TraineeProfilingController::class, 'update'])->name('profile.update.trainee')
+        ->middleware('role:trainee');
 
     Route::get('settings/password', [PasswordController::class, 'edit'])->name('password.edit');
 

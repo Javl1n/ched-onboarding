@@ -37,13 +37,20 @@ class TimeLogController extends Controller
 
         // dd($now->day(1)->hour(8)->minute(01)->format("Y-m-d H:i:s"));
         
-        // too early
-        if ($now->hour < 7)
-        {
+        // week ends
+        if ($now->isWeekend()) {
             return back()->withErrors([
-                "code" => "You're too early!"
+                "code" => "It's weekends."
             ]);
         }
+
+        // too early
+        // if ($now->hour < 7)
+        // {
+        //     return back()->withErrors([
+        //         "code" => "You're too early!"
+        //     ]);
+        // }
 
         // m
         if ($now->hour < 12) {
@@ -63,20 +70,27 @@ class TimeLogController extends Controller
         }
 
         // !mi && !m
-        if ($log->morning_in === null) {
-            return back()->withErrors([
-                "code" => "You've been recorded as absent today, your hours will not be counted."
-            ]);
-        }
+        // if ($log->morning_in === null) {
+        //     return back()->withErrors([
+        //         "code" => "You've been recorded as absent today, your hours will not be counted."
+        //     ]);
+        // }
 
         // n
         if ($now->hour == 12 && $now->minute < 46) {
+            if ($log->morning_in === null) {
+                return back()->withErrors([
+                    "code" => "You've been recorded as absent in the morning, wait for 12:46 pm to time in the afternoon."
+                ]);
+            }
+
             // mo
             if ($log->morning_out !== null) {
                 return back()->withErrors([
                     "code" => "You've already timed out this morning, wait for 12:46 pm to time in."
                 ]);
             }
+
             // !mo
             $log->update([
                 "morning_out" => $qrTime
@@ -99,13 +113,24 @@ class TimeLogController extends Controller
 
 
         // !mo && !n
-        if ($log->morning_out === null) {
+        if ($log->morning_out === null && $log->morning_in !== null) {
             $log->update([
                 "morning_out" => $qrTime
             ]);
+
+            $mi = $this->createDateObjectSQL($log->morning_in);
+            $mo = $this->createDateObjectSQL($log->morning_out);
+            $total = $log->total ?? 0;
+
+            if ($mi && $mo) {
+                $total += $mo->diffInHours($mi); // morning hours
+            }
+
+            $log->update([
+                "total" => round($total, 2)
+            ]);
         }
         
-
         // a
         if ($now->hour < 17) {
             // ai

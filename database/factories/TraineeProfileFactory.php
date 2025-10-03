@@ -25,7 +25,7 @@ class TraineeProfileFactory extends Factory
             "school" => fake()->word() . " ". fake()->randomElement(["school", "university", "college"]),
             "birth" => fake()->dateTimeBetween('-21 years', '-20 years'),
             "gender" => fake()->randomElement(["Male", "Female"]),
-            "contact" => fake('en_PH')->mobileNumber(),
+            "contact" => fake()->numberBetween(9000000000, 9999999999),
             "address" =>  $this->address(),
         ];
     }

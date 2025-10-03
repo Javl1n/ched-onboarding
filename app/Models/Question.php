@@ -18,4 +18,9 @@ class Question extends Model
         
         return;
     }
+
+    public function supervisorAssessments()
+    {   
+        return $this->hasMany(SupervisorAssessment::class, "");
+    }
 }

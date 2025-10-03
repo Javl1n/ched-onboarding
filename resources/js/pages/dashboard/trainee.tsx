@@ -1,6 +1,8 @@
 import LogCalendar from '@/components/timelog/trainee/log-calendar';
 import QrAttendance from '@/components/timelog/trainee/qr';
+import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/app-layout';
+import { totalHours } from '@/lib/utils';
 import dashboard from '@/routes/dashboard';
 import { SharedData, TimeLogInterface, type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
@@ -14,7 +16,16 @@ const breadcrumbs: BreadcrumbItem[] = [
      },
 ];
 
-export default function DashboardTrainee({logs, month, year, profile}: {logs: TimeLogInterface[], month: number, year: number, profile: string}) {
+export default function DashboardTrainee({
+     logs, month, year, profile, total: hours, totalThisMonth: hoursThisMonth
+}: {
+     logs: TimeLogInterface[], 
+     month: number, 
+     year: number, 
+     profile: string,
+     total: number,
+     totalThisMonth: number
+}) {
      const [date, setDate] = useState(() => {
           const now = new Date();
           const date = new Date(year, month - 1);
@@ -41,11 +52,25 @@ export default function DashboardTrainee({logs, month, year, profile}: {logs: Ti
                     <div className="flex flex-col md:flex-row gap-4">
                          <div className="flex-2 flex gap-4 overflow-hidden rounded-xl p-4 border border-sidebar-border/70 dark:border-sidebar-border">
                               <img className='w-30 rounded-lg md:block hidden' src={`/private/${profile}`} alt="" />
-                              <div className="">
-                                   <div className='text-sm text-neutral-400 font-bold'>Welcome</div>
-                                   <div className='md:text-4xl font-black text-3xl'>{user.name}</div>
-                                   <div className='mt-4 flex gap-4'>
-                                        <QrAttendance />
+                              <div className="h-full flex-1 flex flex-col justify-between">
+                                   <div className="">
+                                        <div className='text-sm text-neutral-400 font-bold'>Welcome</div>
+                                        <div className='md:text-4xl font-black text-3xl'>{user.name}</div>
+                                   </div>
+                                   <div className='flex justify-between'>
+                                        <div className="flex gap-2">
+                                             <QrAttendance />
+                                        </div>
+                                        {/* <Separator orientation='vertical' className='' /> */}
+                                        <div className="flex gap-2">
+                                             <div className='my-auto text-sm text-secondary-foreground'>
+                                                  Total Hours: <span className='font-bold'>{totalHours(hours)}</span>
+                                             </div>
+                                             <Separator orientation='vertical' className='' />
+                                             <div className='my-auto text-sm text-secondary-foreground'>
+                                                  This Month: <span className='font-bold'>{totalHours(hoursThisMonth)}</span>
+                                             </div>
+                                        </div>
                                    </div>
                               </div>
                          </div>

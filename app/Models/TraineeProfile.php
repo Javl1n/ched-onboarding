@@ -39,4 +39,9 @@ class TraineeProfile extends Model
     {
         return $this->hasMany(TraineeReport::class, "trainee_id");
     }
+
+    public function supervisorAssessments()
+    {
+        return $this->hasMany(SupervisorAssessment::class, 'trainee_id');
+    }
 }

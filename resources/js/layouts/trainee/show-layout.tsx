@@ -58,7 +58,7 @@ export default function TraineeShowLayout({children, action}: {children?: ReactN
                          </div>
                          <div className="flex gap-2">
                               <Phone className="size-5 my-auto" /> 
-                              <div className="my-auto">{trainee.profile?.contact}</div>
+                              <div className="my-auto">+63{trainee.profile?.contact}</div>
                          </div>
                          <div className="flex gap-2">
                               <Contact className="size-5 my-auto" /> 

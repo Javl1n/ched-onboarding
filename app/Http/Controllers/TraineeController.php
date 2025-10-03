@@ -68,9 +68,24 @@ class TraineeController extends Controller
 
     public function assessmentRedirect(User $user)
     {
-        return redirect()->route('trainees.show.assessment', [
+        $supervisor = $user->department->users()->where('role', 'supervisor')->first();
+
+        if ($supervisor) {
+            return redirect()->route('trainees.show.assessment', [
+                "user" => $user,
+                "supervisor" => $user->department->users()->where('role', 'supervisor')->first()
+            ]);
+        }
+
+        return redirect()->route('trainees.assessment.empty', [
             "user" => $user,
-            "supervisor" => $user->department->users()->where('role', 'supervisor')->first()
+        ]);
+    }
+
+    public function assessmentEmpty(User $user)
+    {
+        return inertia()->render('trainee/show/assessment-empty', [
+            'trainee' => $user->load(['department']),
         ]);
     }
 
@@ -87,9 +102,12 @@ class TraineeController extends Controller
 
     public function showReport(User $user)
     {
+        $reports = $user->profile->reports->mapWithKeys(fn($report) => [$report->id => $report->created_at->isoFormat('MMMM D, Y')]);
+
         return inertia()->render('trainee/show/reports', [
             'trainee' => $user->load(['department', 'profile']),
             'assessments' => $user->profile->assessments->load(['question']),
+            'reports' => $reports->isEmpty() ? null : $reports,
             'logs' => $user->profile->logs,
         ]);
     }
@@ -157,14 +175,6 @@ class TraineeController extends Controller
                 // usleep(10 * 1000);
                 yield $chunk->text;
             }
-
-            // sleep(5);
-
-            // foreach (explode(' ', $prompt) as $chunk) {
-            //     usleep(100 * 1000);
-            //     yield $chunk . ' ';
-            // }
-
         }, 200, [
             // 'Cache-Control' => 'no-cache',
             // 'Content-Type'  => 'text/event-stream', // or text/plain depending on frontend
@@ -172,15 +182,16 @@ class TraineeController extends Controller
         ]);
     }
 
-    public function savedReport (User $user)
+    public function savedReport (User $user, Request $request)
     {
-        $id = request()->input("report", $user->profile->reports()->latest()->first()?->id);
 
-        $report = TraineeReport::where('id', $id)->first()?->content ?? "";
-        
+        $report = TraineeReport::where('id', $request->id)->first()?->content ?? "";
+
+        sleep(1);
+
         return response()->stream(function () use ($report) {
             foreach (str_split($report, 10) as $chunk) {
-                usleep( 25 * 1000 );
+                usleep( 10 * 1000 );
                 yield $chunk;
             }
 
@@ -234,9 +245,9 @@ class TraineeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        
     }
 
     /**

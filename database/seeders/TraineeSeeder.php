@@ -17,10 +17,10 @@ class TraineeSeeder extends Seeder
     {
         User::factory()
         ->has(TraineeProfile::factory(state: [
-            "gender" => "Male"
+            "gender" => "Female"
         ]), 'profile')
         ->create([
-            'name' => 'Frank Leimbergh D. Armodia',
+            'name' => 'Kaye C. Ambrosio',
             'email' => 'trainee@gmail.com',
             'role' => "trainee",
             "department_id" => Department::where('name', 'HEMIS')->first()->id,

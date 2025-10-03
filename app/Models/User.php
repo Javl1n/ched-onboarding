@@ -68,4 +68,14 @@ class User extends Authenticatable
     {
         return $this->role === $role;
     }
+
+    public function traineeAssessments()
+    {
+        return $this->hasMany(TraineeAssessment::class, 'supervisor_id');
+    }
+
+    public function supervisorAssessments()
+    {
+        return $this->hasMany(SupervisorAssessment::class, 'supervisor_id');
+    }
 }

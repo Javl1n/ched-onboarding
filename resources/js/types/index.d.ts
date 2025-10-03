@@ -98,6 +98,7 @@ export interface QuestionInterface {
 export interface AssessmentInterface {
     id: string | number;
     question: QuestionInterface;
+    // question_id: string | number;
     supervisor: User;
     trainee: TraineeProfileInterface;
     value: string;

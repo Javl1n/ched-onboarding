@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
+use App\Models\SupervisorAssessment;
 use App\Models\TraineeAssessment;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,7 +15,15 @@ class SupervisorAssessmentController extends Controller
      */
     public function index()
     {
-        return inertia()->render('assessment/supervisor/index');
+        $supervisor = auth()->user()->department->users()->where('role', 'supervisor')->first();
+
+        if ($supervisor) {
+            return redirect()->route('assessments.supervisor.show', [
+                "supervisor" => $supervisor
+            ]);
+        }
+
+        return inertia()->render('assessment/supervisor/empty');
     }
 
     /**
@@ -27,23 +37,23 @@ class SupervisorAssessmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(User $trainee, User $supervisor, Request $request)
+    public function store(User $supervisor, Request $request)
     {
-        if (auth()->user()->id != $supervisor->id) {
-            abort(403, 'Unauthorized action.');
-        };
-
         $request->validate([
             'questions.*' => 'required'
+        ], messages: [
+            "questions.*" => [
+                "required" => "This field is required."
+            ]
         ]);
 
         $questions = $request->questions;
 
         foreach ($questions as $id => $value) {
-            TraineeAssessment::updateOrCreate([
-                'trainee_id' => $trainee->profile->id,
+            SupervisorAssessment ::updateOrCreate([
+                'trainee_id' => auth()->user()->profile->id,
                 'question_id' => $id,
-                'supervisor_id' => auth()->user()->id,
+                'supervisor_id' => $supervisor->id,
             ], [
                 'value' => $value,
             ]); 
@@ -57,7 +67,18 @@ class SupervisorAssessmentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $supervisors = auth()->user()->department->users()->where('role', 'supervisor')->get();
+
+        $questions = Question::where('for', "trainee")->get();
+        
+        $assessments = $supervisors->find($id)->supervisorAssessments()->with('question')->where('trainee_id', auth()->user()->profile->id)->get();
+
+        return inertia()->render('assessment/supervisor/show', [
+            "supervisors" => $supervisors,
+            "supervisor" => $supervisors->find($id),
+            "questions" => $questions,
+            "assessments" => $assessments
+        ]);
     }
 
     /**

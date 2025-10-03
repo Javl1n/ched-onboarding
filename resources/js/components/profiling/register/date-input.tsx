@@ -17,7 +17,7 @@ export default function DateInput ({date, setDate}: {date: Date, setDate: (date:
                          {date ? format(date, "PPP") : <span>Pick a date</span>}
                     </Button>
                </PopoverTrigger>
-               <PopoverContent className="w-auto" align="start">
+               <PopoverContent className="w-auto p-0" align="start">
                     <Calendar classNames={{
                          today: `bg-neutral-800 rounded`,
                          selected: `rounded-md`,

@@ -11,13 +11,18 @@ import { FormDataError, FormDataErrors } from "@inertiajs/core";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import useToast from "@/hooks/use-toast";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
 export default function ReportSummary() {
-     const {trainee} = usePage<{trainee: User}>().props;
+     const {trainee, reports} = usePage<{trainee: User, reports: {
+          [key: string | number]: string
+     } | null}>().props;
 
      const [summary, setSummary] = useState("");
 
      const [error, setError] = useState('');
+
+     const [report, setReport] = useState<string | undefined>(reports ? Object.keys(reports)[0] : undefined);
 
      const { data: formData, setData, errors, post } = useForm<{summary: string}>({
           summary: '',
@@ -28,7 +33,6 @@ export default function ReportSummary() {
                setSummary(prev => prev + data);
           },
           onFinish: () => {
-               console.log(initialData);
                setData("summary", streamData);
           },
           onError: (error) => {
@@ -36,12 +40,11 @@ export default function ReportSummary() {
           }
      });
 
-     const { data: initialData, send: sendInitial } = useStream(saved(trainee).url, {
+     const { data: savedData, send: sendSaved, isFetching: isFetchingSaved } = useStream(saved(trainee).url, {
           onData: (data: string) => {
                setSummary(prev => prev + data);
           },
           onFinish: () => {
-               console.log(initialData);
                // setData("summary", streamData);
           },
           onError: (error) => {
@@ -50,7 +53,8 @@ export default function ReportSummary() {
      });
 
      useEffect(() => {
-          sendInitial({});
+          if (!reports) return;
+          sendSaved({id: Object.keys(reports)[0]});
      }, []);
 
      const save = () => {
@@ -77,20 +81,48 @@ export default function ReportSummary() {
 
      return (
           <div className="h-[calc(100vh-16rem)] flex flex-col p-4 border rounded-lg gap-4">
-               <h1 className="text-lg font-bold">Summary</h1>
-               <div className="flex-1 overflow-auto rounded-lg dark:bg-neutral-900 p-4">
+               <div className="flex justify-between">
+                    <h1 className="text-lg font-bold my-auto">Summary</h1>
+                    <div className="">
+                         <Select disabled={isFetching || isFetchingSaved} value={report} onValueChange={(value) => {
+                              setReport(value);
+                              setSummary('');
+                              setData('summary', '');
+                              sendSaved({id: value});
+                         }}>
+                              <SelectTrigger>
+                                   <SelectValue placeholder="Select Date" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                   <SelectGroup>
+                                        <SelectLabel className='text-xs text-neutral-600'>
+                                             Saved Summaries
+                                        </SelectLabel>
+                                        {reports ? Object.keys(reports).map((id) => (
+                                             <SelectItem key={`reports-${id}`} value={id}>
+                                                  {reports[id]}
+                                             </SelectItem>
+                                        )): null}
+                                   </SelectGroup>
+                              </SelectContent>
+                         </Select>
+                    </div>
+               </div>
+               <div className="flex-1 overflow-auto rounded-lg dark:bg-secondary p-4">
                     <div className="prose prose-neutral dark:prose-inverse dark:prose-strong:text-white dark:text-white dark:prose-h2:text-white prose-h2:mt-0 prose-section:mb-10" dangerouslySetInnerHTML={{ __html: summary }} />
-                    {isFetching && <div className="flex flex-wrap gap-2">
+                    {(isFetching || isFetchingSaved) && <div className="flex flex-wrap gap-2">
                          {[...Array(20)].map((_, index) => 
-                              <Skeleton key={index} className="h-4" style={{
+                              <Skeleton key={`skeleton-${index}`} className="h-4" style={{
                                    width: Math.floor((Math.random() * 200) + 100)
                               }} />
                          )}
                     </div>}
                </div>
                <div className="flex gap-4">
-                    <Button onClick={() => {
+                    <Button disabled={isFetching || isFetchingSaved} onClick={() => {
                          setSummary("");
+                         setReport(undefined);
+                         setData("summary", "");
                          send({});
                     }}>Generate Summary</Button>
                     <Button disabled={formData.summary == ""} variant={"secondary"} onClick={() => save()}>Save</Button>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Department;
+use App\Models\Question;
+use App\Models\TraineeProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -58,9 +60,36 @@ class SupervisorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $supervisor)
     {
-        //
+
+        $questions = Question::where('for', 'trainee')->where('type', 'scale')->get();
+
+        $assessments = $questions->mapWithKeys(function ($question) use ($supervisor) {
+            $assessment = $supervisor->supervisorAssessments()->where('question_id', $question->id)->get();
+
+            return [$question->id => (int) round($assessment->sum('value') / ($assessment->count() > 0 ? $assessment->count() : 1))];
+        });
+
+        return inertia()->render('supervisor/show', [
+            "supervisor" => $supervisor,
+            "assessments" => $assessments,
+            "questions" => $questions,
+            "trainees" => $supervisor->department->users()->where('role', 'trainee')->get()
+        ]);
+    }
+
+    public function showTrainee(User $supervisor, User $trainee) 
+    {
+        $questions = Question::where('for', 'trainee')->get();
+
+        return inertia()->render('supervisor/show-trainee', [
+            "supervisor" => $supervisor,
+            "trainee" => $trainee,
+            "questions" => $questions,
+            "assessments" => $supervisor->supervisorAssessments()->where('trainee_id', $trainee->profile->id)->with('question')->get(),
+            "trainees" => $supervisor->department->users()->where('role', 'trainee')->get(),
+        ]);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TraineeAssessment;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TraineeAssessmentController extends Controller
@@ -25,9 +27,33 @@ class TraineeAssessmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(User $trainee, User $supervisor, Request $request)
     {
-        //
+        if (auth()->user()->id != $supervisor->id) {
+            abort(403, 'Unauthorized action.');
+        };
+
+        $request->validate([
+            'questions.*' => 'required'
+        ], messages: [
+            "questions.*" => [
+                "required" => "This field is required."
+            ]
+        ]);
+
+        $questions = $request->questions;
+
+        foreach ($questions as $id => $value) {
+            TraineeAssessment::updateOrCreate([
+                'trainee_id' => $trainee->profile->id,
+                'question_id' => $id,
+                'supervisor_id' => auth()->user()->id,
+            ], [
+                'value' => $value,
+            ]); 
+        }
+
+        return back();
     }
 
     /**

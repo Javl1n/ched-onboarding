@@ -24,7 +24,7 @@ class DashboardController extends Controller
     public function admin()
     {
         $date = request()->input('date', Carbon::now()->setTimezone('Asia/Manila')->format("Y-m-d"));
-        $logs = TimeLog::with(['trainee.user'])->where('date', $date)->get();
+        $logs = TimeLog::with(['trainee.user.department'])->where('date', $date)->get();
             
         return inertia()->render('dashboard/admin', [
             "logs" => $logs,
@@ -65,6 +65,8 @@ class DashboardController extends Controller
             "month" => $month,
             "year" => $year,
             "profile" => auth()->user()->profile->profile,
+            "total" => auth()->user()->profile->logs->sum(fn ($log) => $log->hours),
+            "totalThisMonth" => $logs->sum(fn($log) => $log->hours)
         ]);
     }
 }

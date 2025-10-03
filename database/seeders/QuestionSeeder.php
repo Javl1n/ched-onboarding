@@ -93,5 +93,91 @@ class QuestionSeeder extends Seeder
                 'category' => 'General',
             ]);
         }
+
+        $scales = [
+            "Communication" => [
+                "The supervisor clearly explained my tasks and responsibilities.",
+
+                "The supervisor gave instructions that were easy to understand.",
+                
+                "The supervisor encouraged me to ask questions when I was unsure.",
+
+                "The supervisor listened to my concerns and suggestions.",
+
+                "The supervisor communicated in a respectful and professional manner."
+            ],
+
+            "Guidance & Support" => [
+                "The supervisor provided adequate guidance to complete my tasks.",
+
+                "The supervisor was approachable when I needed help.",
+
+                "The supervisor was available when I needed clarification.",
+
+                "The supervisor supported my learning and growth as a trainee.",
+
+                "The supervisor encouraged me to improve and learn new skills.",
+            ],
+
+            "Feedback & Evaluation" => [
+                "The supervisor provided timely feedback on my work.",
+
+                "The supervisor gave constructive criticism that helped me improve.",
+
+                "The supervisor recognized my achievements and contributions.",
+
+                "The supervisor's feedback was fair and objective.",
+
+                "The supervisor set clear performance expectations for me.",
+            ],
+
+            "Professionalism & Work Ethics" => [
+                "The supervisor treated me and others with respect.",
+                
+                "The supervisor demonstrated professionalism in the workplace.",
+
+                "The supervisor served as a good role model in terms of work ethics.",
+
+                "The supervisor maintained fairness in dealing with trainees.",
+
+                "The supervisor encouraged discipline and responsibility."
+            ],
+
+            "Overall Experience" => [
+                "I felt motivated under the supervisor's guidance.",
+                
+                "I am satisfied with how the supervisor handled my training.",
+
+                "Overall, the supervisor had a positive impact on my OJT experience.",
+            ]
+        ];
+
+        $text = [
+            "What did you appreciate most about the supervisor's way of handling you as a trainee?",
+
+            "In what areas do you think your supervisor can improve?",
+
+            "Do you have any additional comments or suggestions for your supervisor?",
+        ];
+
+        foreach ($scales as $category => $questions) {
+            foreach ($questions as $question) {
+                \App\Models\Question::create([
+                    'content' => $question,
+                    'for' => 'trainee',
+                    'type' => 'scale',
+                    'category' => $category,
+                ]);
+            }
+        }
+
+        foreach ($text as $question) {
+            \App\Models\Question::create([
+                'content' => $question,
+                'for' => 'trainee',
+                'type' => 'text',
+                'category' => 'General',
+            ]);
+        }
     }
 }

@@ -10,6 +10,7 @@ import onboarding from '@/routes/onboarding';
 import supervisor from '@/routes/supervisor';
 import dashboard from '@/routes/dashboard';
 import trainees from '@/routes/trainees';
+import assessments from '@/routes/assessments';
 
 const traineeNavItems: NavItem[] = [
     {
@@ -21,6 +22,11 @@ const traineeNavItems: NavItem[] = [
         title: 'About CHED',
         href: onboarding.index(),
         icon: FileUser,
+    },
+    {
+        title: 'Supervisor Assessments',
+        href: assessments.supervisor.index(),
+        icon: ClipboardCheck,
     },
 ];
 
@@ -114,6 +120,17 @@ export function AppSidebar() {
 
             <SidebarFooter className=''>
                 <NavFooter items={footerNavItems} className="mt-auto" />
+                {/* <SidebarMenuItem>
+                    <SidebarMenuButton
+                        asChild
+                        className=""
+                    >
+                        <a className='' href="" target="_blank" rel="noopener noreferrer">
+                            <img className='size-5' src={`/private/bp-logo.PNG`} alt="" />
+                            <span>Bagong Pilipinas</span>
+                        </a>
+                    </SidebarMenuButton>
+                </SidebarMenuItem> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>
