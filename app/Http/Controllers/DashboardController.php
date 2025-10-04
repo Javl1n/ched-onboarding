@@ -37,7 +37,7 @@ class DashboardController extends Controller
         $date = request()->input('date', Carbon::now()->format("Y-m-d"));
 
         $departmentId = auth()->user()->department_id;
-        $logs = TimeLog::with(['trainee.user'])->whereHas('trainee.user', function ($query) use ($departmentId) {
+        $logs = TimeLog::with(['trainee.user.department'])->whereHas('trainee.user', function ($query) use ($departmentId) {
             // $query->whereHas('user', function ($query) use ($departmentId) {
                 $query->where('department_id', $departmentId);
             // });
