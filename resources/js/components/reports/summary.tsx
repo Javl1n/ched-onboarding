@@ -108,7 +108,7 @@ export default function ReportSummary() {
                          </Select>
                     </div>
                </div>
-               <div className="flex-1 overflow-auto rounded-lg dark:bg-secondary p-4">
+               <div className="flex-1 overflow-auto rounded-lg p-4 border">
                     <div className="prose prose-neutral dark:prose-inverse dark:prose-strong:text-white dark:text-white dark:prose-h2:text-white prose-h2:mt-0 prose-section:mb-10" dangerouslySetInnerHTML={{ __html: summary }} />
                     {(isFetching || isFetchingSaved) && <div className="flex flex-wrap gap-2">
                          {[...Array(20)].map((_, index) => 

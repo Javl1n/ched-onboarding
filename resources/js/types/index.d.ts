@@ -47,7 +47,6 @@ export interface OnboardingPageInterface {
     id: number;
     title: string;
     slug: string;
-    department: DepartmentInterface,
     blocks: PageBlockInterface[],
     published: boolean,
 }
@@ -73,6 +72,10 @@ export interface TraineeProfileInterface {
     gender: "Male" | "Female";
     contact: string;
     address: string;
+    status: 'active' | 'inactive';
+    deactivated_at?: string | null;
+    ojt_start_date?: string | null;
+    ojt_duration_in_days?: number | null;
     logs: TimeLogInterface[];
     assessments: AssessmentInterface[];
 }
@@ -102,4 +105,19 @@ export interface AssessmentInterface {
     supervisor: User;
     trainee: TraineeProfileInterface;
     value: string;
+}
+
+export interface PaginatedData<T> {
+    data: T[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+    from: number;
+    to: number;
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
 }

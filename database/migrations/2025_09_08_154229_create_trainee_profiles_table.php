@@ -20,6 +20,8 @@ return new class extends Migration
             $table->enum('gender', ['Male', 'Female']);
             $table->string('contact');
             $table->string('address');
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->timestamp('deactivated_at')->nullable();
             $table->timestamps();
         });
     }

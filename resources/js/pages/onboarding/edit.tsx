@@ -1,6 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
 
-import { DepartmentInterface, OnboardingPageInterface, PageBlockInterface, type BreadcrumbItem } from '@/types';
+import { OnboardingPageInterface, PageBlockInterface, type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/app-layout';
 import OnboardingLayout from '@/layouts/onboarding/layout';
@@ -21,7 +21,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import AddBlock from '@/components/onboarding/create/add-block';
 import { update } from '@/routes/password';
 import BlockLayout from '@/components/onboarding/create/block-layout';
-import SelectDepartment from '@/components/onboarding/create/select-department';
 
 const blocks: any = {
      paragraph: ParagraphInput,
@@ -41,11 +40,10 @@ interface EditFormDataInterface {
           isNew: boolean,
           id?: number | string
      }>,
-     deleted: (string | number)[],
-     department: string
+     deleted: (string | number)[]
 }
 
-export default function OnboardingCreate({item, departments} : {item: OnboardingPageInterface, departments: DepartmentInterface[]}) {
+export default function OnboardingCreate({item} : {item: OnboardingPageInterface}) {
      const breadcrumbs: BreadcrumbItem[] = [
           {
                title: item.title,
@@ -57,7 +55,7 @@ export default function OnboardingCreate({item, departments} : {item: Onboarding
           },
      ];
 
-     
+
      const {data, setData, post, errors} = useForm<EditFormDataInterface>({
           title: item.title,
           blocks: [
@@ -69,7 +67,6 @@ export default function OnboardingCreate({item, departments} : {item: Onboarding
                }))
           ],
           deleted: [],
-          department: item.department.id as string,
      });
 
      const addBlock = (type: string) => {
@@ -154,10 +151,7 @@ export default function OnboardingCreate({item, departments} : {item: Onboarding
                                    <div className='h-12 w-5 border-l-2 border-b-2 rounded-bl-2xl mb-[calc(var(--spacing)*4-1px)]' />
                                    <div className="flex-1 flex flex-col justify-end">
                                         <div className="flex justify-between">
-                                             <div className="flex gap-2">
-                                                  <AddBlock addBlock={addBlock} />
-                                                  <SelectDepartment value={data.department} onValueChange={(value) => setData('department', value)}  />
-                                             </div>
+                                             <AddBlock addBlock={addBlock} />
                                              <div className="flex gap-4">
                                                   <Button onClick={(e) => submit(e, false)} variant={'outline'}>
                                                        Save as Draft
@@ -168,8 +162,7 @@ export default function OnboardingCreate({item, departments} : {item: Onboarding
                                              </div>
                                         </div>
                                    </div>
-                              </div>
-                              <InputError message={errors.department} className='md:ms-7' />                                                   
+                              </div>                                                   
                               
                          </div>
                     </div>

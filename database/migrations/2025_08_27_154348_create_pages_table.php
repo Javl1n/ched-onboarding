@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->foreignId('department_id')->constrained();
             $table->boolean('published')->default(false);
             $table->timestamps();
         });

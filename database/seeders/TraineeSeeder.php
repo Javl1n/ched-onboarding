@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Department;
 use App\Models\TraineeProfile;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TraineeSeeder extends Seeder
@@ -16,16 +15,16 @@ class TraineeSeeder extends Seeder
     public function run(): void
     {
         User::factory()
-        ->has(TraineeProfile::factory(state: [
-            "gender" => "Female"
-        ]), 'profile')
-        ->create([
-            'name' => 'Kaye C. Ambrosio',
-            'email' => 'trainee@gmail.com',
-            'role' => "trainee",
-            "department_id" => Department::where('name', 'HEMIS')->first()->id,
-        ]);
-        
+            ->has(TraineeProfile::factory(state: [
+                'gender' => 'Female',
+            ]), 'profile')
+            ->create([
+                'name' => 'Kaye C. Ambrosio',
+                'email' => 'trainee@gmail.com',
+                'role' => 'trainee',
+                'department_id' => Department::where('name', 'HEMIS Unit')->first()->id,
+            ]);
+
         TraineeProfile::factory(30)->create();
     }
 }

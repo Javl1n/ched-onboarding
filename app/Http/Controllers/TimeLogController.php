@@ -3,44 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Models\TraineeProfile;
-use App\Models\User;
-use DateTime;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 
 class TimeLogController extends Controller
 {
     public function store(Request $request)
     {
         $code = str($request->code)->explode('|');
-        
+
         $trainee = TraineeProfile::find($code[0]);
-        $qrTime = $this->createDateObjectISO($code[1])->setTimezone("Asia/Manila");
+        $qrTime = $this->createDateObjectISO($code[1])->setTimezone('Asia/Manila');
         $now = now('Asia/Manila');
 
         // validate qr code
-        if ($trainee == null || !$qrTime) {
+        if ($trainee == null || ! $qrTime) {
             return back()->withErrors([
-                "code" => "Invalid QR Code"
+                'code' => 'Invalid QR Code',
+            ]);
+        }
+
+        // Check if trainee is inactive
+        if ($trainee->status === 'inactive') {
+            return back()->withErrors([
+                'code' => 'Your training period has ended. You can no longer log time.',
             ]);
         }
 
         // validate time
         if ($qrTime->diffInSeconds($now) > 60) {
             return back()->withErrors([
-                "code" => "QR Code Expired",
+                'code' => 'QR Code Expired',
             ]);
         }
 
         $log = $trainee->logToday();
 
         // dd($now->day(1)->hour(8)->minute(01)->format("Y-m-d H:i:s"));
-        
+
         // week ends
         if ($now->isWeekend()) {
             return back()->withErrors([
-                "code" => "It's weekends."
+                'code' => "It's weekends.",
             ]);
         }
 
@@ -57,13 +61,13 @@ class TimeLogController extends Controller
             // mi
             if ($log->morning_in !== null) {
                 return back()->withErrors([
-                    "code" => "You've  already timed in for this morning, wait for 12:01 pm to time out."
+                    'code' => "You've  already timed in for this morning, wait for 12:01 pm to time out.",
                 ]);
             }
 
             // !mi
             $log->update([
-                "morning_in" => $qrTime
+                'morning_in' => $qrTime,
             ]);
 
             return response(status: 200);
@@ -80,20 +84,20 @@ class TimeLogController extends Controller
         if ($now->hour == 12 && $now->minute < 46) {
             if ($log->morning_in === null) {
                 return back()->withErrors([
-                    "code" => "You've been recorded as absent in the morning, wait for 12:46 pm to time in the afternoon."
+                    'code' => "You've been recorded as absent in the morning, wait for 12:46 pm to time in the afternoon.",
                 ]);
             }
 
             // mo
             if ($log->morning_out !== null) {
                 return back()->withErrors([
-                    "code" => "You've already timed out this morning, wait for 12:46 pm to time in."
+                    'code' => "You've already timed out this morning, wait for 12:46 pm to time in.",
                 ]);
             }
 
             // !mo
             $log->update([
-                "morning_out" => $qrTime
+                'morning_out' => $qrTime,
             ]);
 
             $mi = $this->createDateObjectSQL($log->morning_in);
@@ -105,17 +109,16 @@ class TimeLogController extends Controller
             }
 
             $log->update([
-                "total" => round($total, 2)
+                'total' => round($total, 2),
             ]);
 
             return response(status: 200);
         }
 
-
         // !mo && !n
         if ($log->morning_out === null && $log->morning_in !== null) {
             $log->update([
-                "morning_out" => $qrTime
+                'morning_out' => $qrTime,
             ]);
 
             $mi = $this->createDateObjectSQL($log->morning_in);
@@ -127,31 +130,31 @@ class TimeLogController extends Controller
             }
 
             $log->update([
-                "total" => round($total, 2)
+                'total' => round($total, 2),
             ]);
         }
-        
+
         // a
         if ($now->hour < 17) {
             // ai
             if ($log->afternoon_in !== null) {
                 return back()->withErrors([
-                    "code" => "You've already timed in this afternoon, wait for 5:00 pm to time out."
+                    'code' => "You've already timed in this afternoon, wait for 5:00 pm to time out.",
                 ]);
             }
 
             // !ai
             $log->update([
-                "afternoon_in" => $qrTime,
+                'afternoon_in' => $qrTime,
             ]);
 
             return response(status: 200);
         }
-        
+
         // !a && !ai
         if ($log->afternoon_in === null) {
             return back()->withErrors([
-                "code" => "You've been recorded as absent this afternoon.",
+                'code' => "You've been recorded as absent this afternoon.",
             ]);
         }
 
@@ -159,9 +162,8 @@ class TimeLogController extends Controller
         // !ao
         if ($log->afternoon_out === null) {
             $log->update([
-                "afternoon_out" => $qrTime,
+                'afternoon_out' => $qrTime,
             ]);
-
 
             // total time:
             $ai = $this->createDateObjectSQL($log->afternoon_in);
@@ -173,14 +175,14 @@ class TimeLogController extends Controller
             }
 
             $log->update([
-                "total" => round($total, 2)
+                'total' => round($total, 2),
             ]);
-            
+
             return response(status: 200);
         }
 
         return back()->withErrors([
-            "code" => "You've already timed out for today, enjoy your evening",
+            'code' => "You've already timed out for today, enjoy your evening",
         ]);
     }
 

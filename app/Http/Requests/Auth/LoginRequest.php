@@ -48,6 +48,16 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        // Check if trainee is inactive
+        $user = Auth::user();
+        if ($user->role === 'trainee' && $user->profile && $user->profile->status === 'inactive') {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'Your training period has ended. Please contact the administrator.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 

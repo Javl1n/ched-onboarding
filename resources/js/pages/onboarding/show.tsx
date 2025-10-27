@@ -37,13 +37,12 @@ export default function OnboardingShow({item}: {item: OnboardingPageInterface}) 
                <Head title={item.title} />
                <OnboardingLayout>
                     <div className="space-y-6">
-                         <div className="">
+                         <div className="space-y-2">
                               <div className="flex justify-between">
                                    <div className="text-4xl font-black">
                                         {item.title}
                                    </div>
-                                   {(user.role === "admin" ||
-                                   (user.role === "supervisor" && item.department.id === user.department.id)) && 
+                                   {user.role === "admin" && 
                                         <Button asChild className="my-auto">
                                              <Link href={onboarding.edit({page: item.slug})}>
                                                   Edit
@@ -51,12 +50,15 @@ export default function OnboardingShow({item}: {item: OnboardingPageInterface}) 
                                         </Button>
                                    }
                               </div>
-                              {user.role !== 'trainee' ? 
-                                   <div className="flex gap-1">
-                                        <div className="text-xs border px-2 py-1 rounded dark:text-neutral-300 dark:border-neutral-600/70 text-neutral-500">{item.department.name} Department</div>
+                              <div className="flex gap-1">
+                                   
+                                   {/* <div className="text-xs border px-2 py-1 rounded dark:text-neutral-300 dark:border-neutral-600/70 text-neutral-500">{item.department.name} Department</div> */}
+                                   
+                                   {user.role == 'admin' ? 
                                         <div className={`text-xs border px-2 py-1 rounded ${item.published ? 'text-green-500 border-green-700' : 'text-yellow-500/80 border-yellow-500/60'}`}>{item.published ? 'Published' : 'Drafted'}</div>
-                                   </div>
-                              : null}
+                                   : null}
+                                   
+                              </div>
                          </div>
                          
                          {item.blocks.sort((a, b) => a.order - b.order).map((block, index) => {

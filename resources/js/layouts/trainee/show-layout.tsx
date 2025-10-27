@@ -1,4 +1,14 @@
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+     Dialog,
+     DialogContent,
+     DialogDescription,
+     DialogFooter,
+     DialogHeader,
+     DialogTitle,
+     DialogTrigger,
+} from "@/components/ui/dialog";
 import {
      Tooltip,
      TooltipContent,
@@ -7,17 +17,50 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import show from "@/routes/trainees/show";
+import trainees from "@/routes/trainees";
 import { NavItem, User } from "@/types";
-import { Link, usePage } from "@inertiajs/react";
-import { format } from "date-fns";
-import { BookText, Cake, Calendar, ClipboardList, Contact, House, Mail, Mars, Phone, School, Venus } from "lucide-react";
-import { ReactNode } from "react";
+import { Link, router, usePage } from "@inertiajs/react";
+import { format, formatDistanceToNow } from "date-fns";
+import { BookText, Cake, Calendar, ClipboardList, Clock, Contact, House, Mail, Mars, Phone, School, Venus } from "lucide-react";
+import { ReactNode, useState } from "react";
 import { useSidebar } from "@/components/ui/sidebar";
 import assessment from "@/routes/trainees/assessment";
+import { toast } from 'sonner';
+import { format as formatDate } from 'date-fns';
 
 export default function TraineeShowLayout({children, action}: {children?: ReactNode, action?: ReactNode}) {
-     const {trainee} = usePage<{trainee: User}>().props;
-     const sidebar = useSidebar();
+    const {trainee, auth} = usePage<{trainee: User, auth: { user: User }}>().props;
+    const sidebar = useSidebar();
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleToggleStatus = () => {
+        const isActive = trainee.profile?.status === 'active';
+
+        toast.promise(
+            new Promise((resolve, reject) => {
+                router.patch(
+                    trainees.toggleStatus(trainee).url,
+                    {},
+                    {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            setDialogOpen(false);
+                            resolve(isActive ? 'Trainee marked as inactive.' : 'Trainee reactivated.');
+                        },
+                        onError: () => {
+                            reject('Something went wrong.');
+                        }
+                    }
+                );
+            }),
+            {
+                loading: isActive ? 'Marking trainee as inactive...' : 'Reactivating trainee...',
+                success: (msg) => msg as string,
+                error: (msg) => msg as string,
+                description: `${formatDate(new Date(), "EEEE, MMMM dd, y 'at' hh:mm a")}`
+            }
+        );
+    };
 
      const sidebarNavItems: NavItem[] = [
           {
@@ -48,20 +91,38 @@ export default function TraineeShowLayout({children, action}: {children?: ReactN
                               <div className="flex gap-2">
                                    <div className={`${sidebar.open ? 'md:text-4xl' : 'md:text-5xl'} font-black text-3xl`}>{trainee.name}</div>
                                    {trainee.profile?.gender == "Male" ? <Mars className="my-auto text-blue-500 size-8" /> : <Venus className="my-auto text-pink-400 size-8" />}
+                                   <Badge
+                                        variant={trainee.profile?.status === 'active' ? 'default' : 'secondary'}
+                                        className="my-auto h-fit"
+                                   >
+                                        {trainee.profile?.status === 'active' ? 'Active' : 'Inactive'}
+                                   </Badge>
                               </div>
+                              {trainee.profile?.ojt_start_date && (
+                                   <div className="text-sm text-muted-foreground mt-1 flex gap-1.5 items-center">
+                                        <Clock className="size-4" />
+                                        <span>Started on {format(new Date(trainee.profile.ojt_start_date), 'MMMM dd, yyyy')}</span>
+                                        <span>({formatDistanceToNow(new Date(trainee.profile.ojt_start_date), { addSuffix: true })})</span>
+                                   </div>
+                              )}
+                              {trainee.profile?.status === 'inactive' && trainee.profile?.deactivated_at && (
+                                   <div className="text-sm text-muted-foreground mt-1">
+                                        Training ended on {format(new Date(trainee.profile.deactivated_at), 'MMMM dd, yyyy')}
+                                   </div>
+                              )}
                          </div>
                     </div>
                     <div className='overflow-hidden rounded-xl p-4 border border-sidebar-border/70 dark:border-sidebar-border gap-4 grid grid-cols-2'>
                          <div className="flex gap-2">
-                              <Mail className="size-5 my-auto" /> 
+                              <Mail className="size-5 my-auto" />
                               <div className="my-auto">{trainee.email}</div>
                          </div>
                          <div className="flex gap-2">
-                              <Phone className="size-5 my-auto" /> 
+                              <Phone className="size-5 my-auto" />
                               <div className="my-auto">+63{trainee.profile?.contact}</div>
                          </div>
                          <div className="flex gap-2">
-                              <Contact className="size-5 my-auto" /> 
+                              <Contact className="size-5 my-auto" />
                               <div className="my-auto">{trainee.department.name} Department</div>
                          </div>
                          <div className="flex gap-2">
@@ -71,13 +132,13 @@ export default function TraineeShowLayout({children, action}: {children?: ReactN
                               </div>
                          </div>
                          <div className="flex gap-2">
-                              <Cake className="size-5 my-auto" /> 
+                              <Cake className="size-5 my-auto" />
                               <div className="my-auto">
                                    {format(new Date(trainee.profile?.birth ?? ''), 'MMMM dd, y')}
                               </div>
                          </div>
                          <div className="flex gap-2">
-                              <House className="size-5 my-auto" /> 
+                              <House className="size-5 my-auto" />
                               <div className="my-auto">
                                    <InfoTooltip content={trainee.profile?.address} />
                               </div>
@@ -104,6 +165,42 @@ export default function TraineeShowLayout({children, action}: {children?: ReactN
                                    </Button>
                               ))}
                               <div className="mt-4">
+                                   {auth?.user?.role === 'admin' && (
+                                        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                                             <DialogTrigger asChild>
+                                                  <Button
+                                                       variant={trainee.profile?.status === 'active' ? 'destructive' : 'default'}
+                                                       className="w-full"
+                                                  >
+                                                       {trainee.profile?.status === 'active' ? 'Mark as Inactive' : 'Reactivate Trainee'}
+                                                  </Button>
+                                             </DialogTrigger>
+                                             <DialogContent>
+                                                  <DialogHeader>
+                                                       <DialogTitle>
+                                                            {trainee.profile?.status === 'active' ? 'Mark Trainee as Inactive?' : 'Reactivate Trainee?'}
+                                                       </DialogTitle>
+                                                       <DialogDescription>
+                                                            {trainee.profile?.status === 'active'
+                                                                 ? `This will mark ${trainee.name} as inactive. They will no longer be able to log in or record time logs. Their historical data will be preserved.`
+                                                                 : `This will reactivate ${trainee.name}. They will be able to log in and record time logs again.`
+                                                            }
+                                                       </DialogDescription>
+                                                  </DialogHeader>
+                                                  <DialogFooter>
+                                                       <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                                                            Cancel
+                                                       </Button>
+                                                       <Button
+                                                            variant={trainee.profile?.status === 'active' ? 'destructive' : 'default'}
+                                                            onClick={handleToggleStatus}
+                                                       >
+                                                            {trainee.profile?.status === 'active' ? 'Mark as Inactive' : 'Reactivate'}
+                                                       </Button>
+                                                  </DialogFooter>
+                                             </DialogContent>
+                                        </Dialog>
+                                   )}
                                    {action}
                               </div>
                          </nav>

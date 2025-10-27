@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, ClipboardCheck, File, FileUser, Folder, LayoutGrid, UserRoundCog } from 'lucide-react';
+import { BookOpen, ClipboardCheck, File, FileUser, Folder, LayoutGrid, UserRoundCog, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 import onboarding from '@/routes/onboarding';
 import supervisor from '@/routes/supervisor';
@@ -49,7 +49,7 @@ const supervisorNavItems: NavItem[] = [
     {
         title: 'Trainees',
         href: trainees.index(),
-        icon: ClipboardCheck,
+        icon: Users,
     },
 ];
 
@@ -63,6 +63,11 @@ const adminNavItems: NavItem[] = [
         title: 'Onboarding',
         href: onboarding.index(),
         icon: FileUser,
+    },
+    {
+        title: 'Trainees',
+        href: trainees.index(),
+        icon: Users,
     },
     {
         title: 'Supervisors',

@@ -56,6 +56,7 @@ export default function DashboardTrainee({
                                    <div className="">
                                         <div className='text-sm text-neutral-400 font-bold'>Welcome</div>
                                         <div className='md:text-4xl font-black text-3xl'>{user.name}</div>
+                                        <div className="text-sm text-muted-foreground capitalize">{user.role}</div>
                                    </div>
                                    <div className='flex justify-between'>
                                         <div className="flex gap-2">

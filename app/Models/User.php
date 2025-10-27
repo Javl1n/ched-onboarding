@@ -21,8 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        "department_id",
-        "role",
+        'department_id',
+        'role',
     ];
 
     /**
@@ -34,9 +34,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    
+
     protected $with = [
-        'profile'
+        'profile',
     ];
 
     /**
@@ -61,7 +61,7 @@ class User extends Authenticatable
     {
         // if ($this->role !== "trainee") {return};
 
-        return $this->hasOne(TraineeProfile::class); 
+        return $this->hasOne(TraineeProfile::class);
     }
 
     public function roleIs($role)
@@ -77,5 +77,15 @@ class User extends Authenticatable
     public function supervisorAssessments()
     {
         return $this->hasMany(SupervisorAssessment::class, 'supervisor_id');
+    }
+
+    /**
+     * Check if the user is an active trainee.
+     */
+    public function isActiveTrainee(): bool
+    {
+        return $this->role === 'trainee'
+            && $this->profile
+            && $this->profile->status === 'active';
     }
 }

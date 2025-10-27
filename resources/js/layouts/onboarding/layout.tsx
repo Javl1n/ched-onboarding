@@ -21,12 +21,8 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
 
      const currentPath = window.location.pathname;
 
-     const canEdit = (item: OnboardingPageInterface) => {
+     const canEdit = () => {
           if (user.role === 'admin') {
-               return true;
-          }
-
-          if (user.role === 'supervisor' && user.department.id === item.department.id) {
                return true;
           }
 
@@ -53,14 +49,14 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
                                                   <div className="truncate flex-1">
                                                        {item.title}
                                                   </div>
-                                                  {canEdit(item) ? 
+                                                  {canEdit() ? 
                                                        <div className={`h-1 w-1 rounded-full my-auto ${item.published ? 'bg-green-500' : 'bg-yellow-500'}`} /> 
                                                   : null}
                                              </div>
                                         </Link>
                                    </Button>
                               ))}
-                              {user.role != 'trainee' ? <Button
+                              {user.role === 'admin' ? <Button
                                    key={`page-create`}
                                    size="sm"
                                    variant="ghost"

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Department;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DepartmentSeeder extends Seeder
@@ -14,39 +13,39 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
         Department::create([
-            'name' => "Admin"
+            'name' => 'Admin',
         ]);
 
         Department::create([
-            'name' => "Administration",
+            'name' => 'Unifast Region XII',
         ]);
 
         Department::create([
-            'name' => "Unifast Region 12",
+            'name' => 'Unifast XII BARMM',
         ]);
 
         Department::create([
-            'name' => "Unifast BARMM"
+            'name' => 'Office of the Regional Director',
         ]);
 
         Department::create([
-            'name' => "HR"
+            'name' => 'Accounting Office',
         ]);
 
         Department::create([
-            'name' => "HEMIS"
+            'name' => 'HEMIS Unit',
         ]);
 
         Department::create([
-            'name' => "Accounting"
-        ]);
-        
-        Department::create([
-            'name' => "Regional Director"
+            'name' => 'Administrative Division',
         ]);
 
         Department::create([
-            'name' => "Technical"
+            'name' => 'Technical Division',
+        ]);
+
+        Department::create([
+            'name' => 'Human Resource Office',
         ]);
     }
 }

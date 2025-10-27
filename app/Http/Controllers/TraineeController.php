@@ -3,39 +3,71 @@
 namespace App\Http\Controllers;
 
 use App\Models\Question;
-use App\Models\TraineeAssessment;
 use App\Models\TraineeReport;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Validator;
-use PhpParser\Node\Stmt\Return_;
-use Prism\Prism\Enums\Provider;
 use Prism\Prism\Prism;
 
 class TraineeController extends Controller
 {
-    protected function trainees() {
-        if (auth()->user()->role === "admin") {
-            return User::where('role', 'trainee')->with(['department', 'profile'])->get();
+    protected function trainees(?string $search = null, ?string $status = null)
+    {
+        $query = User::where('role', 'trainee');
+
+        // Role-based filtering
+        if (auth()->user()->role === 'supervisor') {
+            $query->where('department_id', auth()->user()->department_id);
         }
 
-        if (auth()->user()->role === "supervisor") {
-            return User::where('role', 'trainee')
-                ->where('department_id', auth()->user()->department_id)
-                ->with(['department', 'profile'])
-                ->get();
+        // Status filtering
+        if ($status === 'inactive') {
+            $query->whereHas('profile', function ($query) {
+                $query->where('status', 'inactive');
+            });
+        } elseif ($status === 'all') {
+            // Show both active and inactive
+            $query->whereHas('profile');
+        } else {
+            // Default to active only
+            $query->whereHas('profile', function ($query) {
+                $query->where('status', 'active');
+            });
         }
+
+        // Search filtering
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('department', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('profile', function ($q) use ($search) {
+                        $q->where('school', 'like', "%{$search}%")
+                            ->orWhere('contact', 'like', "%{$search}%")
+                            ->orWhere('gender', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        return $query->with(['department', 'profile'])->paginate(15);
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return inertia()->render('trainee/index', [
-            'trainees' => $this->trainees()
+            'trainees' => $this->trainees(
+                $request->input('search'),
+                $request->input('status', 'active')
+            ),
+            'filters' => [
+                'search' => $request->input('search'),
+                'status' => $request->input('status', 'active'),
+            ],
         ]);
     }
 
@@ -54,12 +86,12 @@ class TraineeController extends Controller
     {
         $month = request()->input('month', now()->month);
         $year = request()->input('year', now()->year);
-        
+
         return inertia()->render('trainee/show/log', [
             'trainee' => $user->load(['department', 'profile.logs']),
-            "month" => $month,
-            "year" => $year,
-            "logs" => $user->profile->logs()
+            'month' => $month,
+            'year' => $year,
+            'logs' => $user->profile->logs()
                 ->whereMonth('date', $month)
                 ->whereYear('date', $year)
                 ->get(),
@@ -72,13 +104,13 @@ class TraineeController extends Controller
 
         if ($supervisor) {
             return redirect()->route('trainees.show.assessment', [
-                "user" => $user,
-                "supervisor" => $user->department->users()->where('role', 'supervisor')->first()
+                'user' => $user,
+                'supervisor' => $user->department->users()->where('role', 'supervisor')->first(),
             ]);
         }
 
         return redirect()->route('trainees.assessment.empty', [
-            "user" => $user,
+            'user' => $user,
         ]);
     }
 
@@ -93,16 +125,16 @@ class TraineeController extends Controller
     {
         return inertia()->render('trainee/show/assessment', [
             'trainee' => $user->load(['department']),
-            "questions" => Question::where('for', 'supervisor')->get(),
-            "supervisor" => $supervisor,
-            "assessments" => $user->profile->assessments()->with('question')->where('supervisor_id', $supervisor->id)->get(),
-            'supervisors' => $user->department->users()->where('role', 'supervisor')->get()
+            'questions' => Question::where('for', 'supervisor')->get(),
+            'supervisor' => $supervisor,
+            'assessments' => $user->profile->assessments()->with('question')->where('supervisor_id', $supervisor->id)->get(),
+            'supervisors' => $user->department->users()->where('role', 'supervisor')->get(),
         ]);
     }
 
     public function showReport(User $user)
     {
-        $reports = $user->profile->reports->mapWithKeys(fn($report) => [$report->id => $report->created_at->isoFormat('MMMM D, Y')]);
+        $reports = $user->profile->reports->mapWithKeys(fn ($report) => [$report->id => $report->created_at->isoFormat('MMMM D, Y')]);
 
         return inertia()->render('trainee/show/reports', [
             'trainee' => $user->load(['department', 'profile']),
@@ -112,7 +144,7 @@ class TraineeController extends Controller
         ]);
     }
 
-    public function summary (User $user)
+    public function summary(User $user)
     {
         // $key = "summary:" . $user->id;
 
@@ -127,15 +159,15 @@ class TraineeController extends Controller
         $totalHours = $timelogs->sum('hours');
         $daysPresent = $timelogs->count();
         $averageHours = $daysPresent ? round($totalHours / $daysPresent, 2) : 0;
-        
+
         $responses = $user->profile->assessments->load(['question']);
 
         $assessmentSummary = $responses->groupBy('supervisor.name')->map(function ($responses, $key) {
-            return "supervisor: {$key}\nresponses: {\n" .
+            return "supervisor: {$key}\nresponses: {\n".
                 $responses->map(function ($response) {
-                    return $response->question->content . ": " . $response->value;
+                    return $response->question->content.': '.$response->value;
                 })->implode("\n")
-            . "}";
+            .'}';
         })->implode("\n");
 
         $prompt = "
@@ -147,13 +179,12 @@ class TraineeController extends Controller
             Days Present: {$daysPresent}\n
             Average Daily Hours: {$averageHours}\n
             Detailed Logs:
-            " . $timelogs->map(fn($log) => 
-                "{$log->date}: {$log->hours} hrs (In: {$log->morning_in} / Out: {$log->afternoon_out})"
-            )->implode("\n") . "
+            ".$timelogs->map(fn ($log) => "{$log->date}: {$log->hours} hrs (In: {$log->morning_in} / Out: {$log->afternoon_out})"
+        )->implode("\n")."
             
             --- Supervisor Assessmennt ---
             {$assessmentSummary}
-        "; 
+        ";
 
         return response()->stream(function () use ($prompt) {
 
@@ -168,7 +199,7 @@ class TraineeController extends Controller
                               <h2>Supervisor Assessment</h2>
                               <h2>Overall Impression</h2>')
                 ->withPrompt($prompt)
-                ->withMaxTokens(10000)               
+                ->withMaxTokens(10000)
                 ->asStream();
 
             foreach ($stream as $chunk) {
@@ -182,16 +213,16 @@ class TraineeController extends Controller
         ]);
     }
 
-    public function savedReport (User $user, Request $request)
+    public function savedReport(User $user, Request $request)
     {
 
-        $report = TraineeReport::where('id', $request->id)->first()?->content ?? "";
+        $report = TraineeReport::where('id', $request->id)->first()?->content ?? '';
 
         sleep(1);
 
         return response()->stream(function () use ($report) {
             foreach (str_split($report, 10) as $chunk) {
-                usleep( 10 * 1000 );
+                usleep(10 * 1000);
                 yield $chunk;
             }
 
@@ -203,7 +234,7 @@ class TraineeController extends Controller
     }
 
     public function storeReport(User $user, Request $request)
-    {   
+    {
         $latest = $user->profile->reports()->latest()->first();
 
         // if ($latest && $latest->created_at->isToday()) {
@@ -214,7 +245,7 @@ class TraineeController extends Controller
 
         if ($request->summary == '') {
             return back()->withErrors([
-                "summary" => "Please Enter a Prompt first."
+                'summary' => 'Please Enter a Prompt first.',
             ]);
         }
 
@@ -226,9 +257,8 @@ class TraineeController extends Controller
             return back();
         }
 
-
         $user->profile->reports()->updateOrCreate([
-            "content" => $request->summary,
+            'content' => $request->summary,
         ]);
 
         return back();
@@ -245,10 +275,7 @@ class TraineeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
-    {
-        
-    }
+    public function update(Request $request) {}
 
     /**
      * Remove the specified resource from storage.
@@ -256,5 +283,27 @@ class TraineeController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Toggle trainee status between active and inactive.
+     */
+    public function toggleStatus(User $user)
+    {
+        // Ensure the user is a trainee
+        if ($user->role !== 'trainee' || ! $user->profile) {
+            abort(404, 'Trainee not found.');
+        }
+
+        // Toggle status
+        if ($user->profile->status === 'active') {
+            $user->profile->deactivate();
+            $message = 'Trainee marked as inactive.';
+        } else {
+            $user->profile->reactivate();
+            $message = 'Trainee reactivated.';
+        }
+
+        return back()->with('success', $message);
     }
 }

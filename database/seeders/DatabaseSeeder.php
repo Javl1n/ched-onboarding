@@ -23,26 +23,25 @@ class DatabaseSeeder extends Seeder
             DepartmentSeeder::class,
         ]);
 
-
         User::factory()->create([
             'name' => 'Maria Theresa N. Magdolot',
             'email' => 'admin@gmail.com',
-            'role' => "admin",
-            "department_id" => Department::where('name', 'Admin')->first()->id,
+            'role' => 'admin',
+            'department_id' => Department::where('name', 'Admin')->first()->id,
         ]);
 
         User::factory()->create([
             'name' => 'Angelie Basilango',
             'email' => 'supervisor@gmail.com',
-            'role' => "supervisor",
-            "department_id" => Department::where('name', 'HEMIS')->first()->id,
+            'role' => 'supervisor',
+            'department_id' => Department::where('name', 'HEMIS Unit')->first()->id,
         ]);
 
         $this->call([
             TraineeSeeder::class,
             TimeLogSeeder::class,
             QuestionSeeder::class,
-            PageSeeder::class
+            PageSeeder::class,
         ]);
     }
 }

@@ -22,7 +22,7 @@ export default function SupervisorAssessmentLayout({ children, actions }: PropsW
                          <nav className="space-y-3 space-x-0">
                               <div className="space-y-1">
                                    <div className="text-sm font-bold text-muted-foreground">Supervisors</div>
-                                   {supervisors.map((supervisor, index) => (
+                                   {supervisors?.map((supervisor, index) => (
                                         <Button
                                              key={`supervisor-link-${index}`}
                                              size="sm"

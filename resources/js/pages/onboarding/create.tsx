@@ -1,6 +1,6 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
 
-import { DepartmentInterface, SharedData, type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/app-layout';
 import OnboardingLayout from '@/layouts/onboarding/layout';
@@ -21,7 +21,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import AddBlock from '@/components/onboarding/create/add-block';
 import { update } from '@/routes/password';
 import BlockLayout from '@/components/onboarding/create/block-layout';
-import SelectDepartment from '@/components/onboarding/create/select-department';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 
@@ -46,18 +45,13 @@ const blocks: any = {
      // file: FileInput,
 }
 
-export default function OnboardingCreate({departments} : {departments: DepartmentInterface[]}) {
-     const {auth: {user}} = usePage<SharedData>().props;
-
-     console.log(user);
-
+export default function OnboardingCreate() {
      const {data, setData, post, errors} = useForm<{
           title: string,
           blocks: Array<{
                type: 'paragraph' | 'header_one' | 'header_two' | 'header_three' | 'image' | 'video' | 'file' | string,
                content: string | undefined | File
-          }>,
-          department: string
+          }>
      }>({
           title: '',
           blocks: [
@@ -66,7 +60,6 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                     content: '',
                },
           ],
-          department: user.role === 'admin' ? '' : (user.department ? user.department.id as string : ''),
      });
 
      const addBlock = (type: string) => {
@@ -144,10 +137,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                                    <div className='h-12 w-5 border-l-2 border-b-2 rounded-bl-2xl mb-[calc(var(--spacing)*4-1px)]' />
                                    <div className="flex-1 flex flex-col justify-end">
                                         <div className="flex justify-between">
-                                             <div className="flex gap-2">
-                                                  <AddBlock addBlock={addBlock} />
-                                                  <SelectDepartment disabled={user.role !== 'admin'} value={data.department} onValueChange={(value) => setData('department', value)} />
-                                             </div>
+                                             <AddBlock addBlock={addBlock} />
                                              <div className="flex gap-4">
                                                   <Button onClick={(e) => submit(e, false)} variant={'outline'}>
                                                        Save as Draft
@@ -158,8 +148,7 @@ export default function OnboardingCreate({departments} : {departments: Departmen
                                              </div>
                                         </div>
                                    </div>
-                              </div>
-                              <InputError message={errors.department} className='md:ms-7' />                                                   
+                              </div>                                                   
                               
                          </div>
                     </div>

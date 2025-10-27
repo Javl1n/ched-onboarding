@@ -1,4 +1,4 @@
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, RadialBarChart } from "recharts";
+import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import { AssessmentInterface } from "@/types";
 import { usePage } from "@inertiajs/react";
@@ -35,12 +35,12 @@ export default function AssessmentChart() {
 
      const data = [
           ...Object.keys(assessmentScores).map((category) => ({
-               category: category, 
+               category: category,
                score: assessmentScores[category].value / assessmentScores[category].count,
                fullMark: 5
           }))
      ]
-     
+
      return (
           <ChartContainer config={chartConfig}>
                <RadarChart data={data}>

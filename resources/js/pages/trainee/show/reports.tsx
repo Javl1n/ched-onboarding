@@ -63,7 +63,19 @@ export default function TraineeShowReports({
                                    </div>
                               </div>
                               <div className="flex-1 border rounded-lg p-4 space-y-5">
-                                   <h1 className="font-bold">Assessment Score</h1>
+                                   <div className="flex justify-between items-center">
+                                        <h1 className="font-bold">Assessment Score</h1>
+                                        <div className="text-right">
+                                             <div className="text-xs text-neutral-500 dark:text-neutral-400">Total Average</div>
+                                             <div className="text-2xl font-bold">{(() => {
+                                                  const scaleAssessments = assessments.filter(a => a.question.type === "scale");
+                                                  if (scaleAssessments.length === 0) return "N/A";
+                                                  const total = scaleAssessments.reduce((sum, a) => sum + parseInt(a.value), 0);
+                                                  const average = total / scaleAssessments.length;
+                                                  return average.toFixed(2);
+                                             })()}<span className="text-sm text-neutral-500 dark:text-neutral-400">/5</span></div>
+                                        </div>
+                                   </div>
                                    <div>
                                         <AssessmentChart />
                                    </div>
