@@ -24,14 +24,14 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::factory()->create([
-            'name' => 'Maria Theresa N. Magdolot',
+            'name' => 'Keshia Jane P. Pabilona',
             'email' => 'admin@gmail.com',
             'role' => 'admin',
             'department_id' => Department::where('name', 'Admin')->first()->id,
         ]);
 
         User::factory()->create([
-            'name' => 'Angelie Basilango',
+            'name' => 'Maria Theresa N. Magdolot',
             'email' => 'supervisor@gmail.com',
             'role' => 'supervisor',
             'department_id' => Department::where('name', 'HEMIS Unit')->first()->id,
