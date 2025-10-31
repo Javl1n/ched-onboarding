@@ -109,9 +109,14 @@ export default function ReportSummary() {
                     </div>
                </div>
                <div className="flex-1 overflow-auto rounded-lg p-4 border">
-                    <div className="prose prose-neutral dark:prose-inverse dark:prose-strong:text-white dark:text-white dark:prose-h2:text-white prose-h2:mt-0 prose-section:mb-10" dangerouslySetInnerHTML={{ __html: summary }} />
+                    {!summary && !isFetching && !isFetchingSaved && (
+                         <div className="flex items-center justify-center h-full text-muted-foreground">
+                              <p className="text-center">No summary available. Click "Generate Summary" to create one.</p>
+                         </div>
+                    )}
+                    {summary && <div className="prose prose-neutral dark:prose-inverse dark:prose-strong:text-white dark:text-white dark:prose-h2:text-white prose-h2:mt-0 prose-section:mb-10" dangerouslySetInnerHTML={{ __html: summary }} />}
                     {(isFetching || isFetchingSaved) && <div className="flex flex-wrap gap-2">
-                         {[...Array(20)].map((_, index) => 
+                         {[...Array(20)].map((_, index) =>
                               <Skeleton key={`skeleton-${index}`} className="h-4" style={{
                                    width: Math.floor((Math.random() * 200) + 100)
                               }} />

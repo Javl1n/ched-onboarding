@@ -1,4 +1,4 @@
-import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from "recharts";
+import { Bar, BarChart, PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, XAxis, YAxis } from "recharts";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
 import { AssessmentInterface } from "@/types";
 import { usePage } from "@inertiajs/react";
@@ -41,20 +41,23 @@ export default function AssessmentChart() {
           }))
      ]
 
+     console.log(data);
+
      return (
           <ChartContainer config={chartConfig}>
-               <RadarChart data={data}>
-                    <PolarAngleAxis dataKey="category" tickFormatter={(value) => value.split(" ")[0]} />
-                    <PolarGrid />
-                    <PolarRadiusAxis type="number" angle={90} axisLine={false} hide={true} domain={[0, 5]}/>
+               <BarChart data={data}>
+                    {/* <PolarAngleAxis dataKey="category" tickFormatter={(value) => value.split(" ")[0]} /> */}
+                    {/* <PolarGrid /> */}
+                    {/* <PolarRadiusAxis type="number" angle={90} axisLine={false} hide={true} domain={[0, 5]}/> */}
+                    <XAxis dataKey="category" />
+                    <YAxis />
                     <ChartTooltip content={<ChartTooltipContent/>} />
-                    <Radar
-                         dot
+                    <Bar
                          dataKey="score"
                          fill="var(--color-score)"
-                         fillOpacity={0.6}
+                         // fillOpacity={0.6}
                     />
-               </RadarChart>
+               </BarChart>
           </ChartContainer>
      )
 }
