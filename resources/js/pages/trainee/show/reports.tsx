@@ -58,7 +58,7 @@ export default function TraineeShowReports({
                                              <span className="text-4xl font-bold my-auto">{totalHours()}</span>
                                         </div>
                                    </div>
-                                   <div className="">
+                                   <div className="my-auto">
                                         <TimeChart />
                                    </div>
                               </div>

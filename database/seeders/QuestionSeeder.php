@@ -95,69 +95,70 @@ class QuestionSeeder extends Seeder
         }
 
         $scales = [
-            "Communication" => [
-                "The supervisor clearly explained my tasks and responsibilities.",
+            "Quality of Supervision" => [
+                "The supervisor provides clear and complete instructions for assigned tasks.",
 
-                "The supervisor gave instructions that were easy to understand.",
+                "The supervisor offers proper guidance, shares practical knowledge, and provides support whenever I encounter challenges during my training.",
                 
-                "The supervisor encouraged me to ask questions when I was unsure.",
+                "The supervisor gives constructive feedback that helps me improve my performance.",
 
-                "The supervisor listened to my concerns and suggestions.",
+                "The supervisor monitors my progress and provides helpful assistance when needed.",
 
-                "The supervisor communicated in a respectful and professional manner."
+                "The supervisor encourages me to perform tasks confidently and to the best of my ability."
             ],
 
-            "Guidance & Support" => [
-                "The supervisor provided adequate guidance to complete my tasks.",
+            "Productivity and Support" => [
+                "The supervisor effectively organizes and delegates work assignments.",
 
-                "The supervisor was approachable when I needed help.",
+                "The supervisor uses time efficiently when supervising trainees.",
 
-                "The supervisor was available when I needed clarification.",
+                "The supervisor responds promptly to questions or concerns raised by trainees.",
 
-                "The supervisor supported my learning and growth as a trainee.",
+                "The supervisor encourages trainees to be productive and self-reliant.",
 
-                "The supervisor encouraged me to improve and learn new skills.",
+                "The supervisor ensures a supportive learning environment that helps trainees accomplish their goals efficiently.",
             ],
 
-            "Feedback & Evaluation" => [
-                "The supervisor provided timely feedback on my work.",
 
-                "The supervisor gave constructive criticism that helped me improve.",
+            "Work Habits, Talents & Skills" => [
+                "The supervisor displays strong work ethics, reliability, and consistent commitment to quality performance.",
 
-                "The supervisor recognized my achievements and contributions.",
+                "The supervisor acts as a positive role model through good work attitude and ethics.",
 
-                "The supervisor's feedback was fair and objective.",
+                "The supervisor shows enthusiasm and willingness to train OJT students.",
 
-                "The supervisor set clear performance expectations for me.",
+                "The supervisor remains fair, patient, and understanding in dealing with trainees.",
+
+                "The supervisor modifies training  style according to the trainees learning needs.",
             ],
 
-            "Professionalism & Work Ethics" => [
-                "The supervisor treated me and others with respect.",
-                
-                "The supervisor demonstrated professionalism in the workplace.",
+            "Interpersonal Relationship" => [
+                "The supervisor maintains professionalism and respect toward trainees.",
 
-                "The supervisor served as a good role model in terms of work ethics.",
+                "The supervisor promotes a positive and motivating work atmosphere.",
 
-                "The supervisor maintained fairness in dealing with trainees.",
+                "The supervisor communicates openly and effectively with OJT students regarding tasks and performance.",
 
-                "The supervisor encouraged discipline and responsibility."
+                "The supervisor treats all trainees equally and without bias.",
+
+                "The supervisor builds rapport and trust with trainees by showing empathy, approachability, and genuine concern for their personal and professional development.",
             ],
-
-            "Overall Experience" => [
-                "I felt motivated under the supervisor's guidance.",
-                
-                "I am satisfied with how the supervisor handled my training.",
-
-                "Overall, the supervisor had a positive impact on my OJT experience.",
-            ]
         ];
 
         $text = [
-            "What did you appreciate most about the supervisor's way of handling you as a trainee?",
+            "How would you describe your overall experience working under your supervisor’s guidance?",
 
-            "In what areas do you think your supervisor can improve?",
+            "What do you think your supervisor could improve on to better assist future trainees?",
 
-            "Do you have any additional comments or suggestions for your supervisor?",
+            "What qualities or actions of your supervisor helped you learn and perform better during your OJT?",
+
+            "In what ways did your supervisor make you feel supported or motivated in completing your tasks?",
+
+            "How did your supervisor contribute to your personal and professional growth during your training?",
+
+            "What specific lessons or values have you learned from your supervisor that you will apply in your future career?",
+
+            "Do you have any suggestions or messages of appreciation for your supervisor?",
         ];
 
         foreach ($scales as $category => $questions) {

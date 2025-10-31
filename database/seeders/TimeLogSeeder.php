@@ -44,14 +44,18 @@ class TimeLogSeeder extends Seeder
 
             if ($day->isWeekday()) {
                 $profiles->map(function ($profile) use ($day) {
-                    return $profile->logs()->create([
-                        "date" => $day->format("Y-m-d"),
-                        "morning_in" => $day->copy()->hour(8)->minute(0),
-                        "morning_out" => $day->copy()->hour(12)->minute(1),
-                        "afternoon_in" => $day->copy()->hour(12)->minute(46),
-                        "afternoon_out" => $day->copy()->hour(17)->minute(0),
-                        "hours" => round(495 / 60, 2)
-                    ]);
+                    return $profile->logs()->updateOrCreate(
+                        [
+                            "date" => $day->format("Y-m-d"),
+                        ],
+                        [
+                            "morning_in" => $day->copy()->hour(8)->minute(0),
+                            "morning_out" => $day->copy()->hour(12)->minute(1),
+                            "afternoon_in" => $day->copy()->hour(12)->minute(46),
+                            "afternoon_out" => $day->copy()->hour(17)->minute(0),
+                            "hours" => round(495 / 60, 2)
+                        ]
+                    );
                 });
             }
         }
@@ -62,14 +66,18 @@ class TimeLogSeeder extends Seeder
 
             if ($day->isWeekday()) {
                 $profiles->map(function ($profile) use ($day) {
-                    return $profile->logs()->create([
-                        "date" => $day->format("Y-m-d"),
-                        "morning_in" => $day->copy()->hour(8)->minute(0),
-                        "morning_out" => $day->copy()->hour(12)->minute(1),
-                        "afternoon_in" => $day->copy()->hour(12)->minute(46),
-                        "afternoon_out" => $day->copy()->hour(17)->minute(0),
-                        "hours" => round(495 / 60, 2)
-                    ]);
+                    return $profile->logs()->updateOrCreate(
+                        [
+                            "date" => $day->format("Y-m-d"),
+                        ],
+                        [
+                            "morning_in" => $day->copy()->hour(8)->minute(0),
+                            "morning_out" => $day->copy()->hour(12)->minute(1),
+                            "afternoon_in" => $day->copy()->hour(12)->minute(46),
+                            "afternoon_out" => $day->copy()->hour(17)->minute(0),
+                            "hours" => round(495 / 60, 2)
+                        ]
+                    );
                 });
             }
         }

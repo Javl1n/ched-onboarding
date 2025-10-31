@@ -95,7 +95,7 @@ export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
                             <TableRow>
                                 <TableHead className="">Name</TableHead>
                                 <TableHead className="text-center">Department</TableHead>
-                                <TableHead>School</TableHead>
+                                <TableHead>Higher Educaiton Institution</TableHead>
                                 <TableHead className="">Contact</TableHead>
                                 <TableHead className="">Gender</TableHead>
                                 <TableHead className="">OJT Started</TableHead>

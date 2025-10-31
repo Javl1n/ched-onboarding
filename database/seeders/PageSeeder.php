@@ -18,7 +18,7 @@ class PageSeeder extends Seeder
         $page = Page::create([
             "title" => "Commission on Higher Education",
             "slug" => Str::slug("Commission on Higher Education"),
-            "department_id" => Department::where('name', 'Admin')->first()->id,
+            // "department_id" => Department::where('name', 'Admin')->first()->id,
             "published" => true,
         ]);
 
