@@ -36,7 +36,14 @@ export default function ReportSummary() {
                setData("summary", streamData);
           },
           onError: (error) => {
-               setError(error.message);
+               if (error.message.includes('419') || error.message.toLowerCase().includes('csrf') || error.message.toLowerCase().includes('page expired')) {
+                    setError('Your session has expired. Please refresh the page and try again.');
+                    toast.error('Session Expired', {
+                         description: 'Please refresh the page and try again.'
+                    });
+               } else {
+                    setError(error.message);
+               }
           }
      });
 
@@ -48,7 +55,14 @@ export default function ReportSummary() {
                // setData("summary", streamData);
           },
           onError: (error) => {
-               setError(error.message);
+               if (error.message.includes('419') || error.message.toLowerCase().includes('csrf') || error.message.toLowerCase().includes('page expired')) {
+                    setError('Your session has expired. Please refresh the page and try again.');
+                    toast.error('Session Expired', {
+                         description: 'Please refresh the page and try again.'
+                    });
+               } else {
+                    setError(error.message);
+               }
           }
      });
 
@@ -63,8 +77,13 @@ export default function ReportSummary() {
                     post(store(trainee.id).url, {
                          onSuccess: () => resolve("Assessment Saved!"),
                          onError: (error: {summary?: string}) => {
-                              reject("Something went wrong.");
-                              setError(error.summary as string);
+                              if (error.summary?.includes('419') || error.summary?.toLowerCase().includes('csrf') || error.summary?.toLowerCase().includes('page expired')) {
+                                   reject("Session expired. Please refresh the page.");
+                                   setError('Your session has expired. Please refresh the page and try again.');
+                              } else {
+                                   reject("Something went wrong.");
+                                   setError(error.summary as string);
+                              }
                          },
                     });
                }),
@@ -76,7 +95,7 @@ export default function ReportSummary() {
                }
           );
 
-          
+
      }
 
      return (

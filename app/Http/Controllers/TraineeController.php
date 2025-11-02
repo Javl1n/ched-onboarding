@@ -227,8 +227,8 @@ class TraineeController extends Controller
             }
 
         }, 200, [
-            // 'Cache-Control' => 'no-cache',
-            // 'Content-Type'  => 'text/event-stream', // or text/plain depending on frontend
+            'Cache-Control' => 'no-cache',
+            'Content-Type' => 'text/event-stream', // or text/plain depending on frontend
             // 'X-Accel-Buffering' => 'no',
         ]);
     }

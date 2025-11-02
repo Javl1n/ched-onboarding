@@ -9,6 +9,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Session\TokenMismatchException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -32,5 +33,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->renderable(fn (TokenMismatchException $e) => response()->json([
+            'message' => 'Your session has expired. Please refresh the page and try again.',
+            'error' => 'CSRF token mismatch',
+        ], 419));
     })->create();
