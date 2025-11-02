@@ -99,10 +99,10 @@ export default function ReportSummary() {
      }
 
      return (
-          <div className="h-[calc(100vh-16rem)] flex flex-col p-4 border rounded-lg gap-4">
-               <div className="flex justify-between">
+          <div className="h-auto lg:h-[calc(100vh-16rem)] flex flex-col p-4 border rounded-lg gap-4">
+               <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
                     <h1 className="text-lg font-bold my-auto">Summary</h1>
-                    <div className="">
+                    <div className="w-full sm:w-auto">
                          <Select disabled={isFetching || isFetchingSaved} value={report} onValueChange={(value) => {
                               setReport(value);
                               setSummary('');
@@ -127,13 +127,13 @@ export default function ReportSummary() {
                          </Select>
                     </div>
                </div>
-               <div className="flex-1 overflow-auto rounded-lg p-4 border">
+               <div className="flex-1 min-h-[20rem] overflow-auto rounded-lg p-4 border">
                     {!summary && !isFetching && !isFetchingSaved && (
                          <div className="flex items-center justify-center h-full text-muted-foreground">
                               <p className="text-center">No summary available. Click "Generate Summary" to create one.</p>
                          </div>
                     )}
-                    {summary && <div className="prose prose-neutral dark:prose-inverse dark:prose-strong:text-white dark:text-white dark:prose-h2:text-white prose-h2:mt-0 prose-section:mb-10" dangerouslySetInnerHTML={{ __html: summary }} />}
+                    {summary && <div className="prose prose-sm sm:prose prose-neutral dark:prose-inverse dark:prose-strong:text-white dark:text-white dark:prose-h2:text-white prose-h2:mt-0 prose-section:mb-10 max-w-none" dangerouslySetInnerHTML={{ __html: summary }} />}
                     {(isFetching || isFetchingSaved) && <div className="flex flex-wrap gap-2">
                          {[...Array(20)].map((_, index) =>
                               <Skeleton key={`skeleton-${index}`} className="h-4" style={{
@@ -142,14 +142,14 @@ export default function ReportSummary() {
                          )}
                     </div>}
                </div>
-               <div className="flex gap-4">
-                    <Button disabled={isFetching || isFetchingSaved} onClick={() => {
+               <div className="flex flex-col sm:flex-row gap-4">
+                    <Button className="w-full sm:w-auto" disabled={isFetching || isFetchingSaved} onClick={() => {
                          setSummary("");
                          setReport(undefined);
                          setData("summary", "");
                          send({});
                     }}>Generate Summary</Button>
-                    <Button disabled={formData.summary == ""} variant={"secondary"} onClick={() => save()}>Save</Button>
+                    <Button className="w-full sm:w-auto" disabled={formData.summary == ""} variant={"secondary"} onClick={() => save()}>Save</Button>
                     <InputError className="my-auto" message={error} />
                </div>
           </div>
