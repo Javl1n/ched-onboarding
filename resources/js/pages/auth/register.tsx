@@ -4,13 +4,12 @@ import { Head, useForm } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 
 import InputError from '@/components/input-error';
+import SelectDepartment from '@/components/onboarding/create/select-department';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
-import SelectDepartment from '@/components/onboarding/create/select-department';
-import { FormEvent } from 'react';
 
 interface RegisterProps {
     name: string;
@@ -21,31 +20,32 @@ interface RegisterProps {
 }
 
 export default function Register() {
-    const {data, setData, errors, processing, post} = useForm<RegisterProps>({
+    const { data, setData, errors, processing, post } = useForm<RegisterProps>({
         name: '',
         email: '',
         password: '',
         password_confirmation: '',
-        department: ''
+        department: '',
     });
 
     const submit = () => {
-
-        post(RegisteredUserController.store().url, )
-    }
-
+        post(RegisteredUserController.store().url);
+    };
 
     return (
         <AuthLayout title="Create an account" description="Enter your details below to create your account">
             <Head title="Register" />
-            
+
             <div className="grid gap-6">
                 <div className="grid gap-2">
                     <Label>Department</Label>
-                    <SelectDepartment value={data.department} onValueChange={(value) => {
-                        console.log(data.department);
-                        setData('department', value);
-                    }} />
+                    <SelectDepartment
+                        value={data.department}
+                        onValueChange={(value) => {
+                            console.log(data.department);
+                            setData('department', value);
+                        }}
+                    />
                     <InputError message={errors.department} className="mt-2" />
                 </div>
                 <div className="grid gap-2">

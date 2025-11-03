@@ -47,8 +47,8 @@ export interface OnboardingPageInterface {
     id: number;
     title: string;
     slug: string;
-    blocks: PageBlockInterface[],
-    published: boolean,
+    blocks: PageBlockInterface[];
+    published: boolean;
 }
 
 export interface PageBlockInterface {
@@ -69,7 +69,7 @@ export interface TraineeProfileInterface {
     profile: string;
     school: school;
     birth: string;
-    gender: "Male" | "Female";
+    gender: 'Male' | 'Female';
     contact: string;
     address: string;
     status: 'active' | 'inactive';
@@ -92,9 +92,9 @@ export interface TimeLogInterface {
 
 export interface QuestionInterface {
     id: string | number;
-    for: "supervisor" | "trainee";
+    for: 'supervisor' | 'trainee';
     content: string;
-    type: "text" | "scale";
+    type: 'text' | 'scale';
     category: string;
 }
 

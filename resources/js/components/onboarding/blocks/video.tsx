@@ -1,9 +1,5 @@
-import { PageBlockInterface } from "@/types";
+import { PageBlockInterface } from '@/types';
 
-export default function VideoBlock({block}: {block: PageBlockInterface}) {
-     return (
-          <iframe className="w-full aspect-video"
-               src={`${block.content}`}>
-          </iframe> 
-     )
+export default function VideoBlock({ block }: { block: PageBlockInterface }) {
+    return <iframe className="aspect-video w-full" src={`${block.content}`}></iframe>;
 }

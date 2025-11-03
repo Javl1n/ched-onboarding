@@ -1,9 +1,5 @@
-import { PageBlockInterface } from "@/types";
+import { PageBlockInterface } from '@/types';
 
-export default function HeaderOneBlock({block}: {block: PageBlockInterface}) {
-     return (
-          <div className="text-3xl font-bold">
-               {block.content}
-          </div>
-     )
+export default function HeaderOneBlock({ block }: { block: PageBlockInterface }) {
+    return <div className="text-3xl font-bold">{block.content}</div>;
 }

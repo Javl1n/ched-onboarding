@@ -1,60 +1,67 @@
-import { InputHTMLAttributes, useEffect, useRef, useState } from "react";
-import BlockLayout, { BlockAttributes, OnboardingInputAttributes } from "./block-layout";
-import { CloudUpload } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/ui/input';
+import { CloudUpload } from 'lucide-react';
+import { InputHTMLAttributes, useEffect, useRef, useState } from 'react';
+import { BlockAttributes } from './block-layout';
 
-export default function ImageInput({isNew = true, value, ...props}: InputHTMLAttributes<HTMLInputElement> & BlockAttributes) {
-     const fileInputRef = useRef<HTMLInputElement | null>(null);
-     const [previewUrl, setPreviewUrl] = useState<string | null>(!isNew ? `/private/${value as string}` : null);
+export default function ImageInput({ isNew = true, value, ...props }: InputHTMLAttributes<HTMLInputElement> & BlockAttributes) {
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(!isNew ? `/private/${value as string}` : null);
 
-     useEffect(() => {
-          const input = fileInputRef.current;
+    useEffect(() => {
+        const input = fileInputRef.current;
 
-          if (!input) return;
+        if (!input) return;
 
-          const handleFileChange = () => {
-               const file = input.files?.[0];
-               console.log(file);
-               if (file) {
-                    const image = URL.createObjectURL(file);
-                    setPreviewUrl(image);
-               }
-          }
+        const handleFileChange = () => {
+            const file = input.files?.[0];
+            console.log(file);
+            if (file) {
+                const image = URL.createObjectURL(file);
+                setPreviewUrl(image);
+            }
+        };
 
-          input.addEventListener('change', handleFileChange);
+        input.addEventListener('change', handleFileChange);
 
-          return () => {
-               input.removeEventListener('change', handleFileChange);
-               if (previewUrl) URL.revokeObjectURL(previewUrl);
-          }
-     }, []);
+        return () => {
+            input.removeEventListener('change', handleFileChange);
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
+        };
+    }, []);
 
-     const handleClick = () => {
-          fileInputRef.current?.click();
-     }
+    const handleClick = () => {
+        fileInputRef.current?.click();
+    };
 
-     return (
-          <>
-               {previewUrl === null 
-               ? <div className="flex items-center justify-center">
-                    <label onClick={handleClick} className="flex flex-col items-center justify-center w-full h-64 border-2 border-neutral-300 border-dashed rounded-lg cursor-pointer bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:border-neutral-800 dark:hover:border-neutral-700 dark:hover:bg-neutral-800/80">
-                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                              {/* <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+    return (
+        <>
+            {previewUrl === null ? (
+                <div className="flex items-center justify-center">
+                    <label
+                        onClick={handleClick}
+                        className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-neutral-300 bg-white hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-neutral-700 dark:hover:bg-neutral-800/80"
+                    >
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            {/* <svg className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
                               </svg> */}
-                              <CloudUpload className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"/>
-                              <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">PNG or JPG(MAX. 800x400px)</p>
-                         </div>
+                            <CloudUpload className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400" />
+                            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                <span className="font-semibold">Click to upload</span> or drag and drop
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">PNG or JPG(MAX. 800x400px)</p>
+                        </div>
                     </label>
-               </div>
-               : <div className="flex">
+                </div>
+            ) : (
+                <div className="flex">
                     <label onClick={handleClick} className="cursor-pointer">
-                         <img src={previewUrl} className="rounded max-h-120" alt="" />
+                        <img src={previewUrl} className="max-h-120 rounded" alt="" />
                     </label>
-               </div>}
-               
-               <Input type="file" ref={fileInputRef} className="hidden" {...props} />
-          </>
-     )
+                </div>
+            )}
+
+            <Input type="file" ref={fileInputRef} className="hidden" {...props} />
+        </>
+    );
 }

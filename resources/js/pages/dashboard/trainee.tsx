@@ -10,93 +10,101 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
-     {
+    {
         title: 'Dashboard',
         href: dashboard.trainee().url,
-     },
+    },
 ];
 
 export default function DashboardTrainee({
-     logs, month, year, profile, total: hours, totalThisMonth: hoursThisMonth
+    logs,
+    month,
+    year,
+    profile,
+    total: hours,
+    totalThisMonth: hoursThisMonth,
 }: {
-     logs: TimeLogInterface[], 
-     month: number, 
-     year: number, 
-     profile: string,
-     total: number,
-     totalThisMonth: number
+    logs: TimeLogInterface[];
+    month: number;
+    year: number;
+    profile: string;
+    total: number;
+    totalThisMonth: number;
 }) {
-     const [date, setDate] = useState(() => {
-          const now = new Date();
-          const date = new Date(year, month - 1);
+    const [date, setDate] = useState(() => {
+        const now = new Date();
+        const date = new Date(year, month - 1);
 
-          return now.getMonth() === (month - 1) && now.getFullYear() === year ? now : date;
-     });
+        return now.getMonth() === month - 1 && now.getFullYear() === year ? now : date;
+    });
 
-     const {auth: {user}} = usePage<SharedData>().props;
+    const {
+        auth: { user },
+    } = usePage<SharedData>().props;
 
-     const time = (time: string | undefined) => {
-          console.log(time);
-          return time ? format(time, "hh:mm aaa") : '--:-- --';
-     }
+    const time = (time: string | undefined) => {
+        console.log(time);
+        return time ? format(time, 'hh:mm aaa') : '--:-- --';
+    };
 
-     const total = (log: TimeLogInterface) => {
-          return `${Math.floor(log.hours)} hr ${((log.hours % 1) * 60)} min`
-     }
+    const total = (log: TimeLogInterface) => {
+        return `${Math.floor(log.hours)} hr ${(log.hours % 1) * 60} min`;
+    };
 
-
-     return (
-          <AppLayout breadcrumbs={breadcrumbs}>
-               <Head title="Dashboard" />
-               <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
-                    <div className="flex flex-col md:flex-row gap-4">
-                         <div className="flex-2 flex gap-4 overflow-hidden rounded-xl p-4 border border-sidebar-border/70 dark:border-sidebar-border">
-                              <img className='w-30 rounded-lg md:block hidden' src={`/private/${profile}`} alt="" />
-                              <div className="h-full flex-1 flex flex-col justify-between">
-                                   <div className="">
-                                        <div className='text-sm text-neutral-400 font-bold'>Welcome</div>
-                                        <div className='md:text-4xl font-black text-3xl'>{user.name}</div>
-                                        <div className="text-sm text-muted-foreground capitalize">{user.role}</div>
-                                   </div>
-                                   <div className='flex justify-between'>
-                                        <div className="flex gap-2">
-                                             <QrAttendance />
-                                        </div>
-                                        {/* <Separator orientation='vertical' className='' /> */}
-                                        <div className="flex gap-2">
-                                             <div className='my-auto text-sm text-secondary-foreground'>
-                                                  Total Hours: <span className='font-bold'>{totalHours(hours)}</span>
-                                             </div>
-                                             <Separator orientation='vertical' className='' />
-                                             <div className='my-auto text-sm text-secondary-foreground'>
-                                                  This Month: <span className='font-bold'>{totalHours(hoursThisMonth)}</span>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-                         </div>
-                         <div className='flex-1 flex flex-col justify-between md:overflow-hidden rounded-xl p-4 border border-sidebar-border/70 dark:border-sidebar-border'>
-                              <div className="font-bold text-lg">{format(date, "MMMM dd, yyyy")}</div>
-                              <div className='text-sm'>
-                                   <div className=''>
-                                        <span className='font-bold'>Morning: </span>
-                                        {time(logs.find((log) => log.date === format(date, "yyyy-MM-dd"))?.morning_in)} - {time(logs.find((log) => log.date === format(date, "yyyy-MM-dd"))?.morning_out)}
-                                   </div>
-                                   <div className=''>
-                                        <span className='font-bold'>Afternoon: </span>
-                                        {time(logs.find((log) => log.date === format(date, "yyyy-MM-dd"))?.afternoon_in)} - {time(logs.find((log) => log.date === format(date, "yyyy-MM-dd"))?.afternoon_out)}
-                                   </div>
-                                   <div className=''>
-                                        <span className='font-bold'>Total: </span>
-                                        {total(logs.find((log) => log.date === format(date, "yyyy-MM-dd")) ?? {hours: 0} as TimeLogInterface)}
-                                   </div>
-                              </div>
-                         </div>
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Dashboard" />
+            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+                <div className="flex flex-col gap-4 md:flex-row">
+                    <div className="flex flex-2 gap-4 overflow-hidden rounded-xl border border-sidebar-border/70 p-4 dark:border-sidebar-border">
+                        <img className="hidden w-30 rounded-lg md:block" src={`/private/${profile}`} alt="" />
+                        <div className="flex h-full flex-1 flex-col justify-between">
+                            <div className="">
+                                <div className="text-sm font-bold text-neutral-400">Welcome</div>
+                                <div className="text-3xl font-black md:text-4xl">{user.name}</div>
+                                <div className="text-sm text-muted-foreground capitalize">{user.role}</div>
+                            </div>
+                            <div className="flex justify-between">
+                                <div className="flex gap-2">
+                                    <QrAttendance />
+                                </div>
+                                {/* <Separator orientation='vertical' className='' /> */}
+                                <div className="flex gap-2">
+                                    <div className="my-auto text-sm text-secondary-foreground">
+                                        Total Hours: <span className="font-bold">{totalHours(hours)}</span>
+                                    </div>
+                                    <Separator orientation="vertical" className="" />
+                                    <div className="my-auto text-sm text-secondary-foreground">
+                                        This Month: <span className="font-bold">{totalHours(hoursThisMonth)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <LogCalendar date={date} setDate={setDate} />
-               </div>
-          </AppLayout>
-     );
+                    <div className="flex flex-1 flex-col justify-between rounded-xl border border-sidebar-border/70 p-4 md:overflow-hidden dark:border-sidebar-border">
+                        <div className="text-lg font-bold">{format(date, 'MMMM dd, yyyy')}</div>
+                        <div className="text-sm">
+                            <div className="">
+                                <span className="font-bold">Morning: </span>
+                                {time(logs.find((log) => log.date === format(date, 'yyyy-MM-dd'))?.morning_in)} -{' '}
+                                {time(logs.find((log) => log.date === format(date, 'yyyy-MM-dd'))?.morning_out)}
+                            </div>
+                            <div className="">
+                                <span className="font-bold">Afternoon: </span>
+                                {time(logs.find((log) => log.date === format(date, 'yyyy-MM-dd'))?.afternoon_in)} -{' '}
+                                {time(logs.find((log) => log.date === format(date, 'yyyy-MM-dd'))?.afternoon_out)}
+                            </div>
+                            <div className="">
+                                <span className="font-bold">Total: </span>
+                                {total(logs.find((log) => log.date === format(date, 'yyyy-MM-dd')) ?? ({ hours: 0 } as TimeLogInterface))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <LogCalendar date={date} setDate={setDate} />
+            </div>
+        </AppLayout>
+    );
 }
 
 // function MobileHeader() {

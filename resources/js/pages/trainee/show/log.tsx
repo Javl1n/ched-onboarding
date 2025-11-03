@@ -1,35 +1,34 @@
-import LogCalendar from "@/components/timelog/admin/log-calendar";
-import AppLayout from "@/layouts/app-layout";
-import TraineeShowLayout from "@/layouts/trainee/show-layout";
-import { index } from "@/routes/trainees";
-import show from "@/routes/trainees/show";
-import { BreadcrumbItem, User } from "@/types";
-import { Head } from "@inertiajs/react";
+import LogCalendar from '@/components/timelog/admin/log-calendar';
+import AppLayout from '@/layouts/app-layout';
+import TraineeShowLayout from '@/layouts/trainee/show-layout';
+import { index } from '@/routes/trainees';
+import show from '@/routes/trainees/show';
+import { BreadcrumbItem, User } from '@/types';
+import { Head } from '@inertiajs/react';
 
-export default function TraineeShowLog({trainee}: {trainee: User}) {
-     const breadcrumbs: BreadcrumbItem[] = [
-          {
-               title: 'Trainees',
-               href: index().url,
-          },
-          {
-               title: trainee.name,
-               href: show.log(trainee).url,
-          },
-          {
-               title: "Logs",
-               href: show.log(trainee).url,
-          },
-     ];
+export default function TraineeShowLog({ trainee }: { trainee: User }) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Trainees',
+            href: index().url,
+        },
+        {
+            title: trainee.name,
+            href: show.log(trainee).url,
+        },
+        {
+            title: 'Logs',
+            href: show.log(trainee).url,
+        },
+    ];
 
-     return (
-          <AppLayout breadcrumbs={breadcrumbs}>
-               <Head title="Trainees" />
-               
-               <TraineeShowLayout>
-                    <LogCalendar />
-               </TraineeShowLayout>
-               
-          </AppLayout>
-     );
-} 
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Trainees" />
+
+            <TraineeShowLayout>
+                <LogCalendar />
+            </TraineeShowLayout>
+        </AppLayout>
+    );
+}

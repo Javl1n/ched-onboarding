@@ -190,7 +190,7 @@ class TraineeController extends Controller
 
             $stream = Prism::text()
                 ->using('openai', 'gpt-5-nano')
-                ->withSystemPrompt('You are an HR assistant summarizing trainee performance. 
+                ->withSystemPrompt('You are an HR assistant summarizing trainee performance.
                               Always write in a neutral, professional tone.
                               Format the response in valid HTML with semantic tags.
                               Use <h2> for section headers and <p> for details.
@@ -203,13 +203,14 @@ class TraineeController extends Controller
                 ->asStream();
 
             foreach ($stream as $chunk) {
-                // usleep(10 * 1000);
-                yield $chunk->text;
+                echo $chunk->text;
+                ob_flush();
+                flush();
             }
         }, 200, [
-            // 'Cache-Control' => 'no-cache',
-            // 'Content-Type'  => 'text/event-stream', // or text/plain depending on frontend
-            // 'X-Accel-Buffering' => 'no',
+            'Cache-Control' => 'no-cache',
+            'Content-Type' => 'text/event-stream',
+            'X-Accel-Buffering' => 'no',
         ]);
     }
 
@@ -222,14 +223,15 @@ class TraineeController extends Controller
 
         return response()->stream(function () use ($report) {
             foreach (str_split($report, 10) as $chunk) {
+                echo $chunk;
+                ob_flush();
+                flush();
                 usleep(10 * 1000);
-                yield $chunk;
             }
-
         }, 200, [
             'Cache-Control' => 'no-cache',
-            'Content-Type' => 'text/event-stream', // or text/plain depending on frontend
-            // 'X-Accel-Buffering' => 'no',
+            'Content-Type' => 'text/event-stream',
+            'X-Accel-Buffering' => 'no',
         ]);
     }
 

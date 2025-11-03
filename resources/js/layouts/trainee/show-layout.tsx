@@ -1,39 +1,26 @@
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-     Dialog,
-     DialogContent,
-     DialogDescription,
-     DialogFooter,
-     DialogHeader,
-     DialogTitle,
-     DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-     Tooltip,
-     TooltipContent,
-     TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import show from "@/routes/trainees/show";
-import trainees from "@/routes/trainees";
-import { NavItem, User } from "@/types";
-import { Link, router, usePage } from "@inertiajs/react";
-import { format, formatDistanceToNow } from "date-fns";
-import { BookText, Cake, Calendar, ClipboardList, Clock, Contact, House, Mail, Mars, Phone, School, Venus } from "lucide-react";
-import { ReactNode, useState } from "react";
-import { useSidebar } from "@/components/ui/sidebar";
-import assessment from "@/routes/trainees/assessment";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
+import { useSidebar } from '@/components/ui/sidebar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import trainees from '@/routes/trainees';
+import assessment from '@/routes/trainees/assessment';
+import show from '@/routes/trainees/show';
+import type { NavItem, User } from '@/types';
+import { Link, router, usePage } from '@inertiajs/react';
+import { format, formatDistanceToNow } from 'date-fns';
+import { BookText, Cake, Calendar, ClipboardList, Clock, Contact, House, Mail, Mars, Phone, School, Venus } from 'lucide-react';
+import React, { type ReactNode, useState } from 'react';
 import { toast } from 'sonner';
-import { format as formatDate } from 'date-fns';
 
-export default function TraineeShowLayout({children, action}: {children?: ReactNode, action?: ReactNode}) {
-    const {trainee, auth} = usePage<{trainee: User, auth: { user: User }}>().props;
+export default function TraineeShowLayout({ children, action }: { children?: ReactNode; action?: ReactNode }) {
+    const { trainee, auth } = usePage<{ trainee: User; auth: { user: User } }>().props;
     const sidebar = useSidebar();
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    const handleToggleStatus = () => {
+    const handleToggleStatus = (): void => {
         const isActive = trainee.profile?.status === 'active';
 
         toast.promise(
@@ -49,183 +36,270 @@ export default function TraineeShowLayout({children, action}: {children?: ReactN
                         },
                         onError: () => {
                             reject('Something went wrong.');
-                        }
-                    }
+                        },
+                    },
                 );
             }),
             {
                 loading: isActive ? 'Marking trainee as inactive...' : 'Reactivating trainee...',
                 success: (msg) => msg as string,
                 error: (msg) => msg as string,
-                description: `${formatDate(new Date(), "EEEE, MMMM dd, y 'at' hh:mm a")}`
-            }
+                description: `${format(new Date(), "EEEE, MMMM dd, y 'at' hh:mm a")}`,
+            },
         );
     };
 
-     const sidebarNavItems: NavItem[] = [
-          {
-               title: 'Logs',
-               href: show.log(trainee),
-               icon: Calendar,
-          },
-          {
-               title: 'Assessments',
-               href: assessment.redirect(trainee),
-               icon: ClipboardList,
-          },
-          {
-               title: 'Reports',
-               href: show.report(trainee),
-               icon: BookText,
-          },
-     ];
-     
-     const currentPath = window.location.pathname;
+    const sidebarNavItems: NavItem[] = [
+        {
+            title: 'Logs',
+            href: show.log(trainee),
+            icon: Calendar,
+        },
+        {
+            title: 'Assessments',
+            href: assessment.redirect(trainee),
+            icon: ClipboardList,
+        },
+        {
+            title: 'Reports',
+            href: show.report(trainee),
+            icon: BookText,
+        },
+    ];
 
-     return (
-          <div className="flex flex-1 flex-col gap-4 rounded-xl p-4">
-               <div className="flex flex-col md:flex-row gap-4">
-                    <div className="flex-2 flex gap-4 overflow-hidden rounded-xl p-4 border border-sidebar-border/70 dark:border-sidebar-border">
-                         <img className='w-30 rounded-lg md:block hidden' src={`/private/${trainee.profile?.profile}`} alt="" />
-                         <div className="my-auto">
-                              <div className="flex gap-2">
-                                   <div className={`${sidebar.open ? 'md:text-4xl' : 'md:text-5xl'} font-black text-3xl`}>{trainee.name}</div>
-                                   {trainee.profile?.gender == "Male" ? <Mars className="my-auto text-blue-500 size-8" /> : <Venus className="my-auto text-pink-400 size-8" />}
-                                   <Badge
-                                        variant={trainee.profile?.status === 'active' ? 'default' : 'secondary'}
-                                        className="my-auto h-fit"
-                                   >
-                                        {trainee.profile?.status === 'active' ? 'Active' : 'Inactive'}
-                                   </Badge>
-                              </div>
-                              {trainee.profile?.ojt_start_date && (
-                                   <div className="text-sm text-muted-foreground mt-1 flex gap-1.5 items-center">
-                                        <Clock className="size-4" />
-                                        <span>Started on {format(new Date(trainee.profile.ojt_start_date), 'MMMM dd, yyyy')}</span>
-                                        <span>({formatDistanceToNow(new Date(trainee.profile.ojt_start_date), { addSuffix: true })})</span>
-                                   </div>
-                              )}
-                              {trainee.profile?.status === 'inactive' && trainee.profile?.deactivated_at && (
-                                   <div className="text-sm text-muted-foreground mt-1">
-                                        Training ended on {format(new Date(trainee.profile.deactivated_at), 'MMMM dd, yyyy')}
-                                   </div>
-                              )}
-                         </div>
+    const currentPath = window.location.pathname;
+
+    return (
+        <div className="flex flex-1 flex-col gap-4 p-3 md:p-4">
+            {/* Header Section */}
+            <div className="group relative overflow-hidden rounded-xl border border-sidebar-border/50 bg-gradient-to-br from-card to-card/50 p-4 shadow-sm transition-shadow hover:shadow-md dark:border-sidebar-border/50">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+                    {/* Profile Section */}
+                    <div className="flex gap-4">
+                        <div className="relative">
+                            <img
+                                className="hidden h-20 w-20 rounded-xl object-cover ring-2 ring-sidebar-border/20 md:block"
+                                src={`/private/${trainee.profile?.profile}`}
+                                alt={`${trainee.name}'s profile`}
+                            />
+                            <div className="absolute -right-1 -bottom-1 hidden rounded-full bg-background p-1 shadow-sm md:block">
+                                {trainee.profile?.gender === 'Male' ? (
+                                    <Mars className="size-4 text-blue-500" aria-label="Male" />
+                                ) : (
+                                    <Venus className="size-4 text-pink-400" aria-label="Female" />
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="flex flex-1 flex-col justify-center gap-2">
+                            <div className="flex flex-wrap items-center gap-2">
+                                <h1 className={cn('font-extrabold tracking-tight', sidebar.open ? 'text-2xl md:text-3xl' : 'text-2xl md:text-4xl')}>
+                                    {trainee.name}
+                                </h1>
+                                <div className="md:hidden">
+                                    {trainee.profile?.gender === 'Male' ? (
+                                        <Mars className="size-5 text-blue-500" aria-label="Male" />
+                                    ) : (
+                                        <Venus className="size-5 text-pink-400" aria-label="Female" />
+                                    )}
+                                </div>
+                                <Badge
+                                    variant={trainee.profile?.status === 'active' ? 'default' : 'secondary'}
+                                    className={cn(
+                                        'h-fit px-2.5 py-0.5 text-xs font-medium',
+                                        trainee.profile?.status === 'active' &&
+                                            'bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-400',
+                                    )}
+                                >
+                                    {trainee.profile?.status === 'active' ? 'Active' : 'Inactive'}
+                                </Badge>
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                {trainee.profile?.ojt_start_date && (
+                                    <div className="flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
+                                        <Clock className="size-3.5 shrink-0" />
+                                        <span className="font-medium">
+                                            Started {format(new Date(trainee.profile.ojt_start_date), 'MMM dd, yyyy')}
+                                        </span>
+                                        <span className="hidden text-muted-foreground/70 sm:inline">
+                                            · {formatDistanceToNow(new Date(trainee.profile.ojt_start_date), { addSuffix: true })}
+                                        </span>
+                                    </div>
+                                )}
+
+                                {trainee.profile?.status === 'inactive' && trainee.profile?.deactivated_at && (
+                                    <div className="flex items-center gap-1.5 text-xs text-orange-600 dark:text-orange-400">
+                                        <Calendar className="size-3.5 shrink-0" />
+                                        <span className="font-medium">Ended {format(new Date(trainee.profile.deactivated_at), 'MMM dd, yyyy')}</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
-                    <div className='overflow-hidden rounded-xl p-4 border border-sidebar-border/70 dark:border-sidebar-border gap-4 grid grid-cols-2'>
-                         <div className="flex gap-2">
-                              <Mail className="size-5 my-auto" />
-                              <div className="my-auto">{trainee.email}</div>
-                         </div>
-                         <div className="flex gap-2">
-                              <Phone className="size-5 my-auto" />
-                              <div className="my-auto">+63{trainee.profile?.contact}</div>
-                         </div>
-                         <div className="flex gap-2">
-                              <Contact className="size-5 my-auto" />
-                              <div className="my-auto">{trainee.department.name} Department</div>
-                         </div>
-                         <div className="flex gap-2">
-                              <School className="size-5 my-auto" />
-                              <div className="my-auto">
-                                   <InfoTooltip content={trainee.profile?.school} />
-                              </div>
-                         </div>
-                         <div className="flex gap-2">
-                              <Cake className="size-5 my-auto" />
-                              <div className="my-auto">
-                                   {format(new Date(trainee.profile?.birth ?? ''), 'MMMM dd, y')}
-                              </div>
-                         </div>
-                         <div className="flex gap-2">
-                              <House className="size-5 my-auto" />
-                              <div className="my-auto">
-                                   <InfoTooltip content={trainee.profile?.address} />
-                              </div>
-                         </div>
+
+                    {/* Divider */}
+                    <Separator className="lg:hidden" />
+                    <Separator orientation="vertical" className="hidden h-16 lg:block" />
+
+                    {/* Contact Info Section */}
+                    <div className="grid flex-1 grid-cols-2 gap-1.5 lg:grid-cols-3">
+                        <InfoItem icon={Mail} label={trainee.email} />
+                        <InfoItem icon={Phone} label={`+63${trainee.profile?.contact}`} />
+                        <InfoItem icon={Contact} label={`${trainee.department.name} Department`} />
+                        <InfoItem icon={School} label={<InfoTooltip content={trainee.profile?.school} />} />
+                        <InfoItem icon={Cake} label={format(new Date(trainee.profile?.birth ?? ''), 'MMM dd, y')} />
+                        <InfoItem icon={House} label={<InfoTooltip content={trainee.profile?.address} />} />
                     </div>
-               </div>
-               <div className="flex-1 flex flex-col lg:flex-row lg:space-x-12">
-                    <aside className="w-full max-w-xl lg:w-48">
-                         <nav className="flex flex-col space-y-1 space-x-0">
-                              {sidebarNavItems.map((item, index) => (
-                                   <Button
-                                        key={`${typeof item.href === 'string' ? item.href : item.href.url}-${index}`}
-                                        size="sm"
-                                        variant="ghost"
-                                        asChild
-                                        className={cn('w-full justify-start', {
-                                             'bg-muted': currentPath.includes(typeof item.href === 'string' ? item.href : item.href.url),
-                                        })}
-                                   >
-                                        <Link href={item.href} prefetch>
-                                             {item.icon && <item.icon className="h-4 w-4" />}
-                                             {item.title}
-                                        </Link>
-                                   </Button>
-                              ))}
-                              <div className="mt-4">
-                                   {auth?.user?.role === 'admin' && (
-                                        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                                             <DialogTrigger asChild>
-                                                  <Button
-                                                       variant={trainee.profile?.status === 'active' ? 'destructive' : 'default'}
-                                                       className="w-full"
-                                                  >
-                                                       {trainee.profile?.status === 'active' ? 'Mark as Inactive' : 'Reactivate Trainee'}
-                                                  </Button>
-                                             </DialogTrigger>
-                                             <DialogContent>
-                                                  <DialogHeader>
-                                                       <DialogTitle>
-                                                            {trainee.profile?.status === 'active' ? 'Mark Trainee as Inactive?' : 'Reactivate Trainee?'}
-                                                       </DialogTitle>
-                                                       <DialogDescription>
-                                                            {trainee.profile?.status === 'active'
-                                                                 ? `This will mark ${trainee.name} as inactive. They will no longer be able to log in or record time logs. Their historical data will be preserved.`
-                                                                 : `This will reactivate ${trainee.name}. They will be able to log in and record time logs again.`
-                                                            }
-                                                       </DialogDescription>
-                                                  </DialogHeader>
-                                                  <DialogFooter>
-                                                       <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                                                            Cancel
-                                                       </Button>
-                                                       <Button
-                                                            variant={trainee.profile?.status === 'active' ? 'destructive' : 'default'}
-                                                            onClick={handleToggleStatus}
-                                                       >
-                                                            {trainee.profile?.status === 'active' ? 'Mark as Inactive' : 'Reactivate'}
-                                                       </Button>
-                                                  </DialogFooter>
-                                             </DialogContent>
-                                        </Dialog>
-                                   )}
-                                   {action}
-                              </div>
-                         </nav>
-                    </aside>
-                    <Separator className="my-6 lg:hidden" />
-                    <div className="flex-1">
-                         <section className="">{children}</section>
-                    </div>
-               </div>
-          </div>
-               
-     );
+                </div>
+            </div>
+
+            {/* Content Section */}
+            <div className="flex flex-1 flex-col gap-4 lg:flex-row">
+                {/* Sidebar Navigation */}
+                <aside className="w-full lg:w-52">
+                    <nav className="flex flex-col gap-1.5">
+                        {sidebarNavItems.map((item, index) => {
+                            const isActive = currentPath.includes(typeof item.href === 'string' ? item.href : item.href.url);
+                            return (
+                                <Button
+                                    key={`${typeof item.href === 'string' ? item.href : item.href.url}-${index}`}
+                                    size="sm"
+                                    variant="ghost"
+                                    asChild
+                                    className={cn(
+                                        'w-full justify-start gap-3 rounded-lg px-3 py-2 transition-all',
+                                        isActive
+                                            ? 'bg-primary/10 text-primary shadow-sm hover:bg-primary/15 hover:text-primary'
+                                            : 'hover:bg-muted/50',
+                                    )}
+                                >
+                                    <Link href={item.href} prefetch>
+                                        <div
+                                            className={cn(
+                                                'rounded-md p-1.5 transition-colors',
+                                                isActive ? 'bg-primary/10 text-primary' : 'bg-muted/50 text-muted-foreground',
+                                            )}
+                                        >
+                                            {item.icon && <item.icon className="h-4 w-4" />}
+                                        </div>
+                                        <span className={cn('font-medium', isActive && 'font-semibold')}>{item.title}</span>
+                                    </Link>
+                                </Button>
+                            );
+                        })}
+
+                        {(auth?.user?.role === 'admin' || action) && (
+                            <div className="mt-4 flex flex-col gap-2">
+                                {auth?.user?.role === 'admin' && (
+                                    <StatusToggleDialog
+                                        trainee={trainee}
+                                        isOpen={dialogOpen}
+                                        onOpenChange={setDialogOpen}
+                                        onToggle={handleToggleStatus}
+                                    />
+                                )}
+                                {action}
+                            </div>
+                        )}
+                    </nav>
+                </aside>
+
+                <Separator className="my-2 lg:hidden" />
+
+                {/* Main Content */}
+                <div className="min-w-0 flex-1">{children}</div>
+            </div>
+        </div>
+    );
 }
 
-function InfoTooltip({content}: {content?: string}) {
-     return (
-          <Tooltip>
-               <TooltipTrigger asChild>
-                    <div className="w-40 truncate">
-                         {content}
-                    </div>
-               </TooltipTrigger>
-               <TooltipContent>
-                    {content}
-               </TooltipContent>
-          </Tooltip>
-     )
+function InfoItem({ icon: Icon, label }: { icon: React.ElementType; label: React.ReactNode }) {
+    return (
+        <div className="group flex items-center gap-2 rounded-md p-1.5 transition-colors hover:bg-muted/50">
+            <div className="rounded-md bg-primary/5 p-1.5 transition-colors group-hover:bg-primary/10">
+                <Icon className="size-4 shrink-0 text-primary/70" aria-hidden="true" />
+            </div>
+            <div className="min-w-0 text-sm">{label}</div>
+        </div>
+    );
+}
+
+function InfoTooltip({ content }: { content?: string }) {
+    return (
+        <Tooltip>
+            <TooltipTrigger asChild>
+                <div className="max-w-[200px] cursor-help truncate underline decoration-dotted underline-offset-2">{content}</div>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="max-w-xs">
+                <p>{content}</p>
+            </TooltipContent>
+        </Tooltip>
+    );
+}
+
+function StatusToggleDialog({
+    trainee,
+    isOpen,
+    onOpenChange,
+    onToggle,
+}: {
+    trainee: User;
+    isOpen: boolean;
+    onOpenChange: (open: boolean) => void;
+    onToggle: () => void;
+}) {
+    const isActive = trainee.profile?.status === 'active';
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogTrigger asChild>
+                <Button variant={isActive ? 'destructive' : 'default'} size="sm" className="w-full shadow-sm transition-all hover:shadow">
+                    {isActive ? 'Mark as Inactive' : 'Reactivate Trainee'}
+                </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                        {isActive ? (
+                            <>
+                                <div className="rounded-full bg-destructive/10 p-2">
+                                    <Calendar className="size-4 text-destructive" />
+                                </div>
+                                Mark Trainee as Inactive?
+                            </>
+                        ) : (
+                            <>
+                                <div className="rounded-full bg-primary/10 p-2">
+                                    <Clock className="size-4 text-primary" />
+                                </div>
+                                Reactivate Trainee?
+                            </>
+                        )}
+                    </DialogTitle>
+                    <DialogDescription className="pt-2">
+                        {isActive ? (
+                            <>
+                                This will mark <span className="font-semibold text-foreground">{trainee.name}</span> as inactive. They will no longer
+                                be able to log in or record time logs. Their historical data will be preserved.
+                            </>
+                        ) : (
+                            <>
+                                This will reactivate <span className="font-semibold text-foreground">{trainee.name}</span>. They will be able to log
+                                in and record time logs again.
+                            </>
+                        )}
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="gap-2 sm:gap-0">
+                    <Button variant="outline" onClick={() => onOpenChange(false)} className="shadow-sm">
+                        Cancel
+                    </Button>
+                    <Button variant={isActive ? 'destructive' : 'default'} onClick={onToggle} className="shadow-sm">
+                        {isActive ? 'Mark as Inactive' : 'Reactivate'}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
 }

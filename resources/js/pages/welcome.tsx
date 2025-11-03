@@ -31,23 +31,13 @@ export default function Welcome() {
                     <div className="container flex flex-col items-center justify-center gap-12 py-12 text-center">
                         <div className="mx-auto flex max-w-3xl flex-col items-center gap-6">
                             <div className="mb-4 flex items-center gap-8">
-                                <img
-                                    src="/private/logo.png"
-                                    alt="CHED Logo"
-                                    className="h-24 w-24 object-contain"
-                                />
-                                <img
-                                    src="/private/bp-logo.PNG"
-                                    alt="BP Logo"
-                                    className="h-24 w-24 object-contain"
-                                />
+                                <img src="/private/logo.png" alt="CHED Logo" className="h-24 w-24 object-contain" />
+                                <img src="/private/bp-logo.PNG" alt="BP Logo" className="h-24 w-24 object-contain" />
                             </div>
-                            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                                Welcome to CHED OJT Onboarding System
-                            </h1>
+                            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">Welcome to CHED OJT Onboarding System</h1>
                             <p className="max-w-2xl text-lg text-muted-foreground">
-                                Streamline your on-the-job training experience with our comprehensive management platform. Track
-                                attendance, manage assessments, and monitor trainee progress all in one place.
+                                Streamline your on-the-job training experience with our comprehensive management platform. Track attendance, manage
+                                assessments, and monitor trainee progress all in one place.
                             </p>
                             <div className="flex flex-col gap-4 sm:flex-row">
                                 <Button asChild size="lg">

@@ -2,15 +2,15 @@ import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { SharedData, type NavItem } from '@/types';
-import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, ClipboardCheck, File, FileUser, Folder, LayoutGrid, UserRoundCog, Users } from 'lucide-react';
-import AppLogo from './app-logo';
+import assessments from '@/routes/assessments';
+import dashboard from '@/routes/dashboard';
 import onboarding from '@/routes/onboarding';
 import supervisor from '@/routes/supervisor';
-import dashboard from '@/routes/dashboard';
 import trainees from '@/routes/trainees';
-import assessments from '@/routes/assessments';
+import { SharedData, type NavItem } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
+import { ClipboardCheck, FileUser, LayoutGrid, UserRoundCog, Users } from 'lucide-react';
+import AppLogo from './app-logo';
 
 const traineeNavItems: NavItem[] = [
     {
@@ -90,10 +90,12 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
-    const {auth: { user }} = usePage<SharedData>().props;
+    const {
+        auth: { user },
+    } = usePage<SharedData>().props;
 
-    const mainNavItems = () : NavItem[] => {
-        switch(user.role) {
+    const mainNavItems = (): NavItem[] => {
+        switch (user.role) {
             case 'admin':
                 return adminNavItems;
             case 'supervisor':
@@ -102,11 +104,11 @@ export function AppSidebar() {
                 return traineeNavItems;
             default:
                 return [];
-        };
-    }
+        }
+    };
 
     return (
-        <Sidebar collapsible="icon" variant="sidebar" className=''>
+        <Sidebar collapsible="icon" variant="sidebar" className="">
             <SidebarHeader className="">
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -119,11 +121,11 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent className='' >
+            <SidebarContent className="">
                 <NavMain items={mainNavItems()} />
             </SidebarContent>
 
-            <SidebarFooter className=''>
+            <SidebarFooter className="">
                 <NavFooter items={footerNavItems} className="mt-auto" />
                 {/* <SidebarMenuItem>
                     <SidebarMenuButton

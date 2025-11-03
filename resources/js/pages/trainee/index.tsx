@@ -1,15 +1,6 @@
-import {
-     Table,
-     TableBody,
-     TableCaption,
-     TableCell,
-     TableHead,
-     TableHeader,
-     TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
     Pagination,
     PaginationContent,
@@ -18,21 +9,22 @@ import {
     PaginationLink,
     PaginationNext,
     PaginationPrevious,
-} from "@/components/ui/pagination"
-import AppLayout from "@/layouts/app-layout";
-import {index} from "@/routes/trainees";
-import show from "@/routes/trainees/show";
-import { BreadcrumbItem, PaginatedData, User } from "@/types";
-import { Head, router } from "@inertiajs/react";
-import { Search } from "lucide-react";
-import { useState, useEffect } from "react";
-import { format, formatDistanceToNow } from "date-fns";
+} from '@/components/ui/pagination';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import AppLayout from '@/layouts/app-layout';
+import { index } from '@/routes/trainees';
+import show from '@/routes/trainees/show';
+import { BreadcrumbItem, PaginatedData, User } from '@/types';
+import { Head, router } from '@inertiajs/react';
+import { format, formatDistanceToNow } from 'date-fns';
+import { Search } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
-     {
-          title: 'Trainees',
-          href: index().url,
-     },
+    {
+        title: 'Trainees',
+        href: index().url,
+    },
 ];
 
 interface TraineeIndexProps {
@@ -43,18 +35,14 @@ interface TraineeIndexProps {
     };
 }
 
-export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
+export default function TraineeIndex({ trainees, filters }: TraineeIndexProps) {
     const [searchQuery, setSearchQuery] = useState(filters.search || '');
     const [status, setStatus] = useState(filters.status);
 
     // Debounced search effect
     useEffect(() => {
         const timer = setTimeout(() => {
-            router.get(
-                index().url,
-                { search: searchQuery || undefined, status },
-                { preserveState: true, preserveScroll: true, replace: true }
-            );
+            router.get(index().url, { search: searchQuery || undefined, status }, { preserveState: true, preserveScroll: true, replace: true });
         }, 300);
 
         return () => clearTimeout(timer);
@@ -69,17 +57,14 @@ export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Trainees" />
             <div className="p-4">
-                <div className="flex justify-between items-center mb-4">
+                <div className="mb-4 flex items-center justify-between">
                     <h2 className="text-2xl font-bold">Trainees</h2>
-                    <Button
-                        variant="outline"
-                        onClick={handleToggleStatus}
-                    >
+                    <Button variant="outline" onClick={handleToggleStatus}>
                         {status === 'all' ? 'Hide Inactive Trainees' : 'Show All Trainees'}
                     </Button>
                 </div>
-                <div className="mb-4 relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <div className="relative mb-4">
+                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         type="text"
                         placeholder="Search trainees by name, department, school, contact, or gender..."
@@ -88,7 +73,7 @@ export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
                         className="pl-9"
                     />
                 </div>
-                <div className="border rounded-xl">
+                <div className="rounded-xl border">
                     <Table>
                         <TableCaption>List of all trainees in your department.</TableCaption>
                         <TableHeader>
@@ -107,7 +92,7 @@ export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
                                 <TableRow
                                     key={trainee.id}
                                     onClick={() => router.visit(show.log(trainee).url)}
-                                    className={trainee.profile?.status === 'inactive' ? 'opacity-50 cursor-pointer' : 'cursor-pointer'}
+                                    className={trainee.profile?.status === 'inactive' ? 'cursor-pointer opacity-50' : 'cursor-pointer'}
                                 >
                                     <TableCell className="">{trainee.name}</TableCell>
                                     <TableCell className="text-center">{trainee.department.name}</TableCell>
@@ -117,9 +102,7 @@ export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
                                     <TableCell className="">
                                         {trainee.profile?.ojt_start_date ? (
                                             <div className="flex flex-col">
-                                                <span className="text-sm">
-                                                    {format(new Date(trainee.profile.ojt_start_date), 'MMM dd, yyyy')}
-                                                </span>
+                                                <span className="text-sm">{format(new Date(trainee.profile.ojt_start_date), 'MMM dd, yyyy')}</span>
                                                 <span className="text-xs text-muted-foreground">
                                                     {formatDistanceToNow(new Date(trainee.profile.ojt_start_date), { addSuffix: true })}
                                                 </span>
@@ -154,10 +137,14 @@ export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
                                             size="default"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                router.get(trainees.links[0].url!, { search: searchQuery || undefined, status }, {
-                                                    preserveState: true,
-                                                    preserveScroll: true,
-                                                });
+                                                router.get(
+                                                    trainees.links[0].url!,
+                                                    { search: searchQuery || undefined, status },
+                                                    {
+                                                        preserveState: true,
+                                                        preserveScroll: true,
+                                                    },
+                                                );
                                             }}
                                         />
                                     </PaginationItem>
@@ -181,10 +168,14 @@ export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     if (link.url) {
-                                                        router.get(link.url, { search: searchQuery || undefined, status }, {
-                                                            preserveState: true,
-                                                            preserveScroll: true,
-                                                        });
+                                                        router.get(
+                                                            link.url,
+                                                            { search: searchQuery || undefined, status },
+                                                            {
+                                                                preserveState: true,
+                                                                preserveScroll: true,
+                                                            },
+                                                        );
                                                     }
                                                 }}
                                             >
@@ -201,10 +192,14 @@ export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
                                             size="default"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                router.get(trainees.links[trainees.links.length - 1].url!, { search: searchQuery || undefined, status }, {
-                                                    preserveState: true,
-                                                    preserveScroll: true,
-                                                });
+                                                router.get(
+                                                    trainees.links[trainees.links.length - 1].url!,
+                                                    { search: searchQuery || undefined, status },
+                                                    {
+                                                        preserveState: true,
+                                                        preserveScroll: true,
+                                                    },
+                                                );
                                             }}
                                         />
                                     </PaginationItem>
@@ -215,5 +210,5 @@ export default function TraineeIndex({trainees, filters}: TraineeIndexProps) {
                 )}
             </div>
         </AppLayout>
-    )
+    );
 }

@@ -10,7 +10,5 @@ export default function AppLogoIcon(props: SVGAttributes<SVGElement>) {
     //         />
     //     </svg>
     // );
-    return (
-        <img src="/private/logo.png" alt="" />
-    )
+    return <img src="/private/logo.png" alt="" />;
 }
