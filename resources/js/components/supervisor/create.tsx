@@ -1,9 +1,10 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import supervisor from '@/routes/supervisor';
 import { useForm } from '@inertiajs/react';
+import { useState } from 'react';
 import InputError from '../input-error';
 import SelectDepartment from '../onboarding/create/select-department';
 import { Button } from '../ui/button';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 
@@ -15,7 +16,8 @@ interface CreateSupervisor {
 }
 
 export default function CreateSupervisor() {
-    const { data, setData, post, errors, reset, wasSuccessful } = useForm<CreateSupervisor>({
+    const [open, setOpen] = useState(false);
+    const { data, setData, post, errors, reset, wasSuccessful, processing } = useForm<CreateSupervisor>({
         department: '',
         email: '',
         name: '',
@@ -26,19 +28,24 @@ export default function CreateSupervisor() {
         post(supervisor.store().url, {
             onSuccess: () => {
                 reset();
+                setOpen(false);
             },
         });
     };
 
     return (
-        <Card>
-            <CardHeader>
-                <CardTitle>Add Supervisor</CardTitle>
-                <CardDescription>Enter Supervisor Information Here</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="space-y-2">
-                    <div className="">
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button>Add Supervisor</Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Add Supervisor</DialogTitle>
+                    <DialogDescription>Enter supervisor information to create a new account.</DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                    <div>
                         <Label>Department</Label>
                         <SelectDepartment value={data.department} onValueChange={(value) => setData('department', value)} />
                         <InputError message={errors.department} />
@@ -63,22 +70,24 @@ export default function CreateSupervisor() {
                     <div>
                         <Label>Password</Label>
                         <Input placeholder="Enter password here" value={data.password} onChange={(e) => setData('password', e.target.value)} />
-                        <div className="text-xs text-neutral-500 dark:text-neutral-600">please change the password as soon as you log in</div>
+                        <p className="mt-1 text-xs text-muted-foreground">Please change the password as soon as you log in</p>
                         <InputError message={errors.password} />
                     </div>
                 </div>
-            </CardContent>
-            <CardFooter>
-                <div className="w-full space-y-1">
-                    <div className="flex w-full justify-end gap-2">
-                        <Button onClick={() => reset()} variant="outline">
-                            Reset
+
+                <DialogFooter className="gap-2">
+                    <DialogClose asChild>
+                        <Button variant="secondary" onClick={() => reset()}>
+                            Cancel
                         </Button>
-                        <Button onClick={submit}>Add</Button>
-                    </div>
-                    {wasSuccessful ? <div className="text-sm text-green-500">Supervisor added successfully!</div> : null}
-                </div>
-            </CardFooter>
-        </Card>
+                    </DialogClose>
+                    <Button onClick={submit} disabled={processing}>
+                        {processing ? 'Adding...' : 'Add Supervisor'}
+                    </Button>
+                </DialogFooter>
+
+                {wasSuccessful && <div className="text-sm text-green-600 dark:text-green-400">Supervisor added successfully!</div>}
+            </DialogContent>
+        </Dialog>
     );
 }

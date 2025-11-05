@@ -1,10 +1,9 @@
 import department from '@/routes/department';
 import { useForm } from '@inertiajs/react';
-import { DialogClose } from '@radix-ui/react-dialog';
+import { useState } from 'react';
 import InputError from '../input-error';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 
@@ -14,7 +13,8 @@ interface CreateDepartmentForm {
 }
 
 export default function CreateDepartment() {
-    const { data, setData, post, errors, reset, wasSuccessful } = useForm<CreateDepartmentForm>({
+    const [open, setOpen] = useState(false);
+    const { data, setData, post, errors, reset, wasSuccessful, processing } = useForm<CreateDepartmentForm>({
         name: '',
         password: '',
     });
@@ -23,65 +23,55 @@ export default function CreateDepartment() {
         post(department.store().url, {
             onSuccess: () => {
                 reset();
+                setOpen(false);
             },
         });
     };
 
     return (
-        <>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Add Department</CardTitle>
-                    <CardDescription>
-                        Add Department Here. {wasSuccessful ? <span className="text-green-500">Added Successfully</span> : null}
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Label>Department Name</Label>
-                    <Input placeholder="HR, Unifast, IT" value={data.name} onChange={(e) => setData('name', e.target.value)} />
-                    <InputError message={errors.name} />
-                    <InputError message={errors.password} />
-                </CardContent>
-                <CardFooter>
-                    <div className="flex w-full justify-end">
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <Button>Add</Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Are you sure?</DialogTitle>
-                                    <DialogDescription>
-                                        You won't be able to update or delete the department afterwards.
-                                        <br />
-                                        Enter Your password to confirm.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <div>
-                                    {/* <Label>Password</Label> */}
-                                    <Input
-                                        autoComplete="new-password"
-                                        type="password"
-                                        placeholder="Password"
-                                        value={data.password}
-                                        onChange={(e) => setData('password', e.target.value)}
-                                    />
-                                </div>
-                                <DialogFooter>
-                                    <DialogClose asChild>
-                                        <Button onClick={() => reset()} variant="outline">
-                                            Cancel
-                                        </Button>
-                                    </DialogClose>
-                                    <DialogClose asChild>
-                                        <Button onClick={submit}>Save</Button>
-                                    </DialogClose>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+                <Button variant="outline">Add Department</Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Add Department</DialogTitle>
+                    <DialogDescription>Create a new department. You won't be able to update or delete it afterwards.</DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-4">
+                    <div>
+                        <Label>Department Name</Label>
+                        <Input placeholder="HR, Unifast, IT" value={data.name} onChange={(e) => setData('name', e.target.value)} />
+                        <InputError message={errors.name} />
                     </div>
-                </CardFooter>
-            </Card>
-        </>
+                    <div>
+                        <Label>Your Password</Label>
+                        <Input
+                            autoComplete="current-password"
+                            type="password"
+                            placeholder="Enter your password to confirm"
+                            value={data.password}
+                            onChange={(e) => setData('password', e.target.value)}
+                        />
+                        <p className="mt-1 text-xs text-muted-foreground">Enter your password to confirm this action</p>
+                        <InputError message={errors.password} />
+                    </div>
+                </div>
+
+                <DialogFooter className="gap-2">
+                    <DialogClose asChild>
+                        <Button variant="secondary" onClick={() => reset()}>
+                            Cancel
+                        </Button>
+                    </DialogClose>
+                    <Button onClick={submit} disabled={processing}>
+                        {processing ? 'Adding...' : 'Add Department'}
+                    </Button>
+                </DialogFooter>
+
+                {wasSuccessful && <div className="text-sm text-green-600 dark:text-green-400">Department added successfully!</div>}
+            </DialogContent>
+        </Dialog>
     );
 }
