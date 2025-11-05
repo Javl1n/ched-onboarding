@@ -114,7 +114,7 @@ export default function SuperVisorIndex({ supervisors }: { supervisors: User[] }
                                         <TableCell className="font-medium">
                                             <div className="flex items-center gap-3">
                                                 <Avatar className="h-10 w-10">
-                                                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                                                    <AvatarFallback className="bg-primary/10 font-semibold text-primary">
                                                         {getInitials(supervisor.name)}
                                                     </AvatarFallback>
                                                 </Avatar>

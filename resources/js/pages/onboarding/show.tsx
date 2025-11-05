@@ -38,12 +38,10 @@ export default function OnboardingShow({ item }: { item: OnboardingPageInterface
             <OnboardingLayout>
                 <div>
                     {/* Enhanced Header Section */}
-                    <div className="space-y-3 mb-6">
+                    <div className="mb-6 space-y-3">
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                             <div className="space-y-3">
-                                <h1 className="text-4xl font-bold tracking-tight text-foreground lg:text-5xl">
-                                    {item.title}
-                                </h1>
+                                <h1 className="text-4xl font-bold tracking-tight text-foreground lg:text-5xl">{item.title}</h1>
                                 {user.role === 'admin' && (
                                     <div className="flex gap-2">
                                         <div
@@ -72,7 +70,7 @@ export default function OnboardingShow({ item }: { item: OnboardingPageInterface
 
                     {/* Content Blocks with Card Wrapper */}
                     <div className="rounded-lg bg-card px-6 pb-6 shadow-sm sm:px-8 sm:pb-8 lg:px-10 lg:pb-10">
-                        <div className="prose prose-lg mx-auto max-w-none dark:prose-invert">
+                        <div className="mx-auto prose prose-lg max-w-none dark:prose-invert">
                             <div className="space-y-8">
                                 {item.blocks
                                     .sort((a, b) => a.order - b.order)

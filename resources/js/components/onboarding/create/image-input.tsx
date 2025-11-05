@@ -41,7 +41,7 @@ export default function ImageInput({ isNew = true, value, ...props }: InputHTMLA
                         onClick={handleClick}
                         className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-card transition-colors hover:bg-muted"
                     >
-                        <div className="flex flex-col items-center justify-center pb-6 pt-5">
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <CloudUpload className="mb-4 h-8 w-8 text-muted-foreground" />
                             <p className="mb-2 text-sm text-muted-foreground">
                                 <span className="font-semibold">Click to upload</span> or drag and drop

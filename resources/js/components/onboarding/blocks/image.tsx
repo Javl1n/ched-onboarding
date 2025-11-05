@@ -1,5 +1,5 @@
 import { PageBlockInterface } from '@/types';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ImageBlock({ block }: { block: PageBlockInterface }) {
     const [isFullScreen, setIsFullScreen] = useState(false);
@@ -47,23 +47,12 @@ export default function ImageBlock({ block }: { block: PageBlockInterface }) {
                             onClick={(e) => e.stopPropagation()}
                         />
                         <button
-                            className="absolute right-4 top-4 rounded-full bg-muted/50 p-2 text-foreground backdrop-blur-sm transition-colors hover:bg-muted"
+                            className="absolute top-4 right-4 rounded-full bg-muted/50 p-2 text-foreground backdrop-blur-sm transition-colors hover:bg-muted"
                             onClick={() => setIsFullScreen(false)}
                             aria-label="Close fullscreen"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="size-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
+                            <svg xmlns="http://www.w3.org/2000/svg" className="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
                     </div>

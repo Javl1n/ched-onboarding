@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +18,7 @@ import show from '@/routes/trainees/show';
 import { BreadcrumbItem, PaginatedData, User } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { format, formatDistanceToNow } from 'date-fns';
-import { Search } from 'lucide-react';
+import { Calendar, ChevronRight, Phone, Search, Users } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -26,6 +27,24 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: index().url,
     },
 ];
+
+const getInitials = (name: string) => {
+    return name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+};
+
+const getDepartmentColor = (departmentName: string) => {
+    const colors = {
+        HR: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+        IT: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+        Unifast: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+    };
+    return colors[departmentName as keyof typeof colors] || 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+};
 
 interface TraineeIndexProps {
     trainees: PaginatedData<User>;
@@ -58,11 +77,18 @@ export default function TraineeIndex({ trainees, filters }: TraineeIndexProps) {
             <Head title="Trainees" />
             <div className="p-4">
                 <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-2xl font-bold">Trainees</h2>
+                    <div>
+                        <h2 className="text-2xl font-bold">Trainees</h2>
+                        <p className="text-sm text-muted-foreground">
+                            {trainees.total} {trainees.total === 1 ? 'trainee' : 'trainees'} total
+                            {status === 'active' && ' (active only)'}
+                        </p>
+                    </div>
                     <Button variant="outline" onClick={handleToggleStatus}>
                         {status === 'all' ? 'Hide Inactive Trainees' : 'Show All Trainees'}
                     </Button>
                 </div>
+
                 <div className="relative mb-4">
                     <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
@@ -73,54 +99,94 @@ export default function TraineeIndex({ trainees, filters }: TraineeIndexProps) {
                         className="pl-9"
                     />
                 </div>
-                <div className="rounded-xl border">
-                    <Table>
-                        <TableCaption>List of all trainees in your department.</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="">Name</TableHead>
-                                <TableHead className="text-center">Department</TableHead>
-                                <TableHead>Higher Educaiton Institution</TableHead>
-                                <TableHead className="">Contact</TableHead>
-                                <TableHead className="">Gender</TableHead>
-                                <TableHead className="">OJT Started</TableHead>
-                                <TableHead className="text-right">Status</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {trainees.data.map((trainee) => (
-                                <TableRow
-                                    key={trainee.id}
-                                    onClick={() => router.visit(show.log(trainee).url)}
-                                    className={trainee.profile?.status === 'inactive' ? 'cursor-pointer opacity-50' : 'cursor-pointer'}
-                                >
-                                    <TableCell className="">{trainee.name}</TableCell>
-                                    <TableCell className="text-center">{trainee.department.name}</TableCell>
-                                    <TableCell>{trainee.profile?.school}</TableCell>
-                                    <TableCell className="">+63{trainee.profile?.contact}</TableCell>
-                                    <TableCell className="">{trainee.profile?.gender}</TableCell>
-                                    <TableCell className="">
-                                        {trainee.profile?.ojt_start_date ? (
-                                            <div className="flex flex-col">
-                                                <span className="text-sm">{format(new Date(trainee.profile.ojt_start_date), 'MMM dd, yyyy')}</span>
-                                                <span className="text-xs text-muted-foreground">
-                                                    {formatDistanceToNow(new Date(trainee.profile.ojt_start_date), { addSuffix: true })}
-                                                </span>
-                                            </div>
-                                        ) : (
-                                            <span className="text-sm text-muted-foreground">No logs yet</span>
-                                        )}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <Badge variant={trainee.profile?.status === 'active' ? 'default' : 'secondary'}>
-                                            {trainee.profile?.status === 'active' ? 'Active' : 'Inactive'}
-                                        </Badge>
-                                    </TableCell>
+                {trainees.data.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-12 text-center">
+                        <Users className="mb-4 h-12 w-12 text-muted-foreground/50" />
+                        <h3 className="mb-2 text-lg font-semibold">No trainees found</h3>
+                        <p className="text-sm text-muted-foreground">
+                            {searchQuery ? 'Try adjusting your search criteria.' : 'No trainees available in your department.'}
+                        </p>
+                    </div>
+                ) : (
+                    <div className="rounded-xl border">
+                        <Table>
+                            <TableCaption>List of all trainees in your department.</TableCaption>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Trainee</TableHead>
+                                    <TableHead>Department</TableHead>
+                                    <TableHead>Higher Education Institution</TableHead>
+                                    <TableHead>Contact</TableHead>
+                                    <TableHead>OJT Started</TableHead>
+                                    <TableHead>Status</TableHead>
+                                    <TableHead className="w-12"></TableHead>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
+                            </TableHeader>
+                            <TableBody>
+                                {trainees.data.map((trainee) => (
+                                    <TableRow
+                                        key={trainee.id}
+                                        onClick={() => router.visit(show.log(trainee).url)}
+                                        className="group cursor-pointer transition-colors hover:bg-muted/50"
+                                    >
+                                        <TableCell className="font-medium">
+                                            <div className="flex items-center gap-3">
+                                                <Avatar className="h-10 w-10">
+                                                    <AvatarFallback className="bg-primary/10 font-semibold text-primary">
+                                                        {getInitials(trainee.name)}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium">{trainee.name}</span>
+                                                    <span className="text-xs text-muted-foreground capitalize">{trainee.profile?.gender}</span>
+                                                </div>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant="secondary" className={getDepartmentColor(trainee.department.name)}>
+                                                {trainee.department.name}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <span className="text-sm text-muted-foreground">{trainee.profile?.school || 'N/A'}</span>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2 text-muted-foreground">
+                                                <Phone className="h-4 w-4" />
+                                                <span className="text-sm">+63{trainee.profile?.contact}</span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            {trainee.profile?.ojt_start_date ? (
+                                                <div className="flex items-center gap-2">
+                                                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                                                    <div className="flex flex-col">
+                                                        <span className="text-sm font-medium">
+                                                            {format(new Date(trainee.profile.ojt_start_date), 'MMM dd, yyyy')}
+                                                        </span>
+                                                        <span className="text-xs text-muted-foreground">
+                                                            {formatDistanceToNow(new Date(trainee.profile.ojt_start_date), { addSuffix: true })}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <span className="text-sm text-muted-foreground">No logs yet</span>
+                                            )}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant={trainee.profile?.status === 'active' ? 'default' : 'secondary'}>
+                                                {trainee.profile?.status === 'active' ? 'Active' : 'Inactive'}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="w-12">
+                                            <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                )}
 
                 {/* Pagination Controls */}
                 {trainees.last_page > 1 && (

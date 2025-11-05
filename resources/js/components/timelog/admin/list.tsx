@@ -3,7 +3,7 @@ import show from '@/routes/trainees/show';
 import { TimeLogInterface } from '@/types';
 import { router, usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { Clock, User, Building2 } from 'lucide-react';
+import { Building2, Clock, User } from 'lucide-react';
 
 export default function LogList() {
     const { logs, date } = usePage<{ logs: TimeLogInterface[]; date: string }>().props;
@@ -33,9 +33,7 @@ export default function LogList() {
             <div className="rounded-xl border border-dashed border-sidebar-border/70 bg-muted/20 p-12 text-center dark:border-sidebar-border">
                 <Clock className="mx-auto mb-4 size-12 text-muted-foreground opacity-50" />
                 <h3 className="mb-2 text-lg font-semibold text-foreground">No Attendance Records</h3>
-                <p className="text-sm text-muted-foreground">
-                    No time logs found for {format(new Date(date), 'MMMM d, yyyy')}
-                </p>
+                <p className="text-sm text-muted-foreground">No time logs found for {format(new Date(date), 'MMMM d, yyyy')}</p>
             </div>
         );
     }
@@ -112,9 +110,7 @@ export default function LogList() {
                                         </span>
                                     </div>
                                     {log.afternoon_in && log.afternoon_out && (
-                                        <div className="text-xs text-muted-foreground">
-                                            {hours(log.afternoon_in, log.afternoon_out)}
-                                        </div>
+                                        <div className="text-xs text-muted-foreground">{hours(log.afternoon_in, log.afternoon_out)}</div>
                                     )}
                                 </div>
                             </TableCell>

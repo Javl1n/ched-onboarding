@@ -124,8 +124,7 @@ export default function SupervisorShow({
                                             key={`question-${question.id}`}
                                             disabled
                                             value={
-                                                assessments.find((assessment) => assessment.question.id === question.id)
-                                                    ?.value as unknown as string
+                                                assessments.find((assessment) => assessment.question.id === question.id)?.value as unknown as string
                                             }
                                             onChange={() => null}
                                             question={question}

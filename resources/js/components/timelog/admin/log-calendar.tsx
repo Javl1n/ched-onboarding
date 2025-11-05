@@ -53,7 +53,7 @@ export default function LogCalendar() {
                             <div
                                 key={`day-${day}`}
                                 className={cn(
-                                    'col-span-1 py-3 text-center text-xs font-semibold uppercase tracking-wide',
+                                    'col-span-1 py-3 text-center text-xs font-semibold tracking-wide uppercase',
                                     index === 0 || index === 6 ? 'text-muted-foreground/70' : 'text-muted-foreground',
                                 )}
                             >
@@ -64,7 +64,10 @@ export default function LogCalendar() {
                     </div>
                     <div className="grid flex-1 grid-cols-7">
                         {Array.from({ length: new Date(date.getFullYear(), date.getMonth(), 1).getDay() }).map((_, index) => (
-                            <div key={`day-before-${index}`} className="border border-sidebar-border/50 bg-muted/20 p-1 dark:border-sidebar-border/30" />
+                            <div
+                                key={`day-before-${index}`}
+                                className="border border-sidebar-border/50 bg-muted/20 p-1 dark:border-sidebar-border/30"
+                            />
                         ))}
                         {Array.from({ length: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() }, (_, index) => index + 1).map(
                             (day) => (
@@ -73,7 +76,10 @@ export default function LogCalendar() {
                         )}
 
                         {Array.from({ length: Math.abs(new Date(date.getFullYear(), date.getMonth() + 1, 1).getDay() - 7) % 7 }).map((_, index) => (
-                            <div key={`day-after-${index}`} className="h-15 border border-sidebar-border/50 bg-muted/20 p-1 dark:border-sidebar-border/30 md:h-30" />
+                            <div
+                                key={`day-after-${index}`}
+                                className="h-15 border border-sidebar-border/50 bg-muted/20 p-1 md:h-30 dark:border-sidebar-border/30"
+                            />
                         ))}
                     </div>
                 </div>
@@ -111,7 +117,7 @@ function LogDialog({ day }: { day: number }) {
             <DialogTrigger asChild>
                 <button
                     className={cn(
-                        'group relative flex h-15 flex-col justify-between border border-sidebar-border/50 p-2 text-left transition-all hover:z-10 hover:scale-105 hover:shadow-md dark:border-sidebar-border/30 md:h-30 md:p-3',
+                        'group relative flex h-15 flex-col justify-between border border-sidebar-border/50 p-2 text-left transition-all hover:z-10 hover:scale-105 hover:shadow-md md:h-30 md:p-3 dark:border-sidebar-border/30',
                         today && 'border-primary/50 bg-primary/5 dark:border-primary/30',
                         hasLog && !today && 'bg-green-50/50 hover:bg-green-50 dark:bg-green-950/20 dark:hover:bg-green-950/30',
                         !hasLog && !today && 'hover:bg-muted/50',
@@ -164,9 +170,7 @@ function LogDialog({ day }: { day: number }) {
                             {today && <Badge className="mt-1 w-fit">Today</Badge>}
                         </div>
                     </DialogTitle>
-                    <DialogDescription>
-                        {hasLog ? 'Time log details for this day' : 'No time log recorded for this day'}
-                    </DialogDescription>
+                    <DialogDescription>{hasLog ? 'Time log details for this day' : 'No time log recorded for this day'}</DialogDescription>
                 </DialogHeader>
 
                 {hasLog ? (

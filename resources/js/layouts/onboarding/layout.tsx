@@ -44,12 +44,9 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
                                     size="sm"
                                     variant="ghost"
                                     asChild
-                                    className={cn(
-                                        'h-auto w-full justify-start py-2.5 text-left font-normal transition-colors',
-                                        {
-                                            'bg-muted font-medium': currentPath === `/page/${item.slug}`,
-                                        },
-                                    )}
+                                    className={cn('h-auto w-full justify-start py-2.5 text-left font-normal transition-colors', {
+                                        'bg-muted font-medium': currentPath === `/page/${item.slug}`,
+                                    })}
                                 >
                                     <Link href={onboarding.show(item.slug)} prefetch>
                                         <div className="flex w-full items-center justify-between gap-3">
@@ -73,12 +70,9 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
                                         size="sm"
                                         variant="ghost"
                                         asChild
-                                        className={cn(
-                                            'h-auto w-full justify-start py-2.5 font-normal transition-colors',
-                                            {
-                                                'bg-muted': currentPath === onboarding.create().url,
-                                            },
-                                        )}
+                                        className={cn('h-auto w-full justify-start py-2.5 font-normal transition-colors', {
+                                            'bg-muted': currentPath === onboarding.create().url,
+                                        })}
                                     >
                                         <Link href={onboarding.create()} prefetch>
                                             <PlusCircle className="mr-2 h-4 w-4" />

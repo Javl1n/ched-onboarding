@@ -6,8 +6,8 @@ import dashboard from '@/routes/dashboard';
 import { SharedData, TimeLogInterface, type BreadcrumbItem } from '@/types';
 import { Head, usePage } from '@inertiajs/react';
 import { format } from 'date-fns';
+import { CalendarDays, Clock, Timer, TrendingUp } from 'lucide-react';
 import { useState } from 'react';
-import { Clock, CalendarDays, Timer, TrendingUp } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -58,7 +58,7 @@ export default function DashboardTrainee({
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 lg:p-6">
                 {/* Welcome Header with Profile */}
-                <div className="rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-background to-muted/20 p-6 shadow-sm dark:border-sidebar-border lg:p-8">
+                <div className="rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-background to-muted/20 p-6 shadow-sm lg:p-8 dark:border-sidebar-border">
                     <div className="flex gap-6">
                         <img
                             className="hidden size-20 rounded-xl border-2 border-primary/20 object-cover shadow-md md:block lg:size-24"
@@ -67,10 +67,10 @@ export default function DashboardTrainee({
                         />
                         <div className="flex flex-1 flex-col justify-between">
                             <div>
-                                <div className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Welcome Back</div>
+                                <div className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">Welcome Back</div>
                                 <div className="mt-1 text-3xl font-black lg:text-4xl">{user.name}</div>
                                 <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
-                                    <div className="rounded-full bg-primary/10 px-3 py-1 font-medium capitalize text-primary">{user.role}</div>
+                                    <div className="rounded-full bg-primary/10 px-3 py-1 font-medium text-primary capitalize">{user.role}</div>
                                 </div>
                             </div>
                             <div className="mt-4">
@@ -86,7 +86,7 @@ export default function DashboardTrainee({
                     <div className="group relative overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-blue-500/5 to-blue-500/10 p-5 shadow-sm transition-all hover:shadow-md dark:border-sidebar-border dark:from-blue-500/10 dark:to-blue-500/20">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
-                                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Total Hours</div>
+                                <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Total Hours</div>
                                 <div className="mt-1 text-3xl font-bold text-foreground">{totalHours(hours)}</div>
                                 <div className="mt-1 text-xs text-muted-foreground">All time</div>
                             </div>
@@ -100,7 +100,7 @@ export default function DashboardTrainee({
                     <div className="group relative overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-purple-500/5 to-purple-500/10 p-5 shadow-sm transition-all hover:shadow-md dark:border-sidebar-border dark:from-purple-500/10 dark:to-purple-500/20">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
-                                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">This Month</div>
+                                <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">This Month</div>
                                 <div className="mt-1 text-3xl font-bold text-foreground">{totalHours(hoursThisMonth)}</div>
                                 <div className="mt-1 text-xs text-muted-foreground">{format(date, 'MMMM yyyy')}</div>
                             </div>
@@ -111,11 +111,13 @@ export default function DashboardTrainee({
                     </div>
 
                     {/* Selected Day Hours Card */}
-                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-green-500/5 to-green-500/10 p-5 shadow-sm transition-all hover:shadow-md dark:border-sidebar-border dark:from-green-500/10 dark:to-green-500/20 sm:col-span-2 lg:col-span-1">
+                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-green-500/5 to-green-500/10 p-5 shadow-sm transition-all hover:shadow-md sm:col-span-2 lg:col-span-1 dark:border-sidebar-border dark:from-green-500/10 dark:to-green-500/20">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
-                                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Selected Day</div>
-                                <div className="mt-1 text-3xl font-bold text-foreground">{total(selectedLog ?? ({ hours: 0 } as TimeLogInterface))}</div>
+                                <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Selected Day</div>
+                                <div className="mt-1 text-3xl font-bold text-foreground">
+                                    {total(selectedLog ?? ({ hours: 0 } as TimeLogInterface))}
+                                </div>
                                 <div className="mt-1 text-xs text-muted-foreground">{format(date, 'MMMM dd, yyyy')}</div>
                             </div>
                             <div className="rounded-lg bg-green-500/10 p-2.5">
