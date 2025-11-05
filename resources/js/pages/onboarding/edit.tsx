@@ -110,14 +110,24 @@ export default function OnboardingCreate({ item }: { item: OnboardingPageInterfa
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create" />
+            <Head title="Edit" />
             <OnboardingLayout>
-                <div className="space-y-4">
-                    <div className="grid">
-                        <TitleInput value={data.title} onChange={(e) => setData('title', e.target.value)} autoFocus />
-                        <InputError message={errors.title} />
+                <div>
+                    {/* Enhanced Header Section */}
+                    <div className="mb-6 space-y-3">
+                        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                            <div className="flex-1 space-y-3">
+                                <div className="grid">
+                                    <TitleInput value={data.title} onChange={(e) => setData('title', e.target.value)} autoFocus />
+                                    <InputError message={errors.title} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="h-px bg-gradient-to-r from-border via-border/50 to-transparent" />
                     </div>
-                    <div className="">
+
+                    {/* Content Editor with Card Wrapper */}
+                    <div className="rounded-lg bg-card px-6 pb-6 shadow-sm sm:px-8 sm:pb-8 lg:px-10 lg:pb-10">
                         <div className="w-4 border" />
                         {data.blocks.map((block, index) => {
                             const BlockComponent = blocks[block.type];
@@ -157,13 +167,15 @@ export default function OnboardingCreate({ item }: { item: OnboardingPageInterfa
                         <div className="ms-[calc(var(--spacing)*2-1px)] flex">
                             <div className="mb-[calc(var(--spacing)*4-1px)] h-12 w-5 rounded-bl-2xl border-b-2 border-l-2" />
                             <div className="flex flex-1 flex-col justify-end">
-                                <div className="flex justify-between">
+                                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                     <AddBlock addBlock={addBlock} />
-                                    <div className="flex gap-4">
-                                        <Button onClick={(e) => submit(e, false)} variant={'outline'}>
+                                    <div className="flex gap-3">
+                                        <Button onClick={(e) => submit(e, false)} variant="outline" className="flex-1 sm:flex-initial">
                                             Save as Draft
                                         </Button>
-                                        <Button onClick={(e) => submit(e, true)}>Publish</Button>
+                                        <Button onClick={(e) => submit(e, true)} className="flex-1 sm:flex-initial">
+                                            Publish
+                                        </Button>
                                     </div>
                                 </div>
                             </div>

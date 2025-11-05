@@ -30,52 +30,72 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
 
     return (
         <div className="px-4 py-6">
-            <div className="flex flex-col lg:flex-row lg:space-x-12">
-                <aside className="w-full max-w-xl lg:w-64">
-                    <nav className="flex flex-col space-y-1 space-x-0">
-                        {pages?.map((item, index) => (
-                            <Button
-                                key={item.slug}
-                                size="sm"
-                                variant="ghost"
-                                asChild
-                                className={cn('w-full justify-start', {
-                                    'bg-muted': currentPath === `/page/${item.slug}`,
-                                })}
-                            >
-                                <Link href={onboarding.show(item.slug)} prefetch>
-                                    <div className="flex w-full justify-between gap-2">
-                                        <div className="flex-1 truncate">{item.title}</div>
-                                        {canEdit() ? (
-                                            <div className={`my-auto h-1 w-1 rounded-full ${item.published ? 'bg-green-500' : 'bg-yellow-500'}`} />
-                                        ) : null}
-                                    </div>
-                                </Link>
-                            </Button>
-                        ))}
-                        {user.role === 'admin' ? (
-                            <Button
-                                key={`page-create`}
-                                size="sm"
-                                variant="ghost"
-                                asChild
-                                className={cn('w-full justify-start', {
-                                    'bg-muted': currentPath === onboarding.create().url,
-                                })}
-                            >
-                                <Link href={onboarding.create()} prefetch>
-                                    <PlusCircle className="h-4 w-4" />
-                                    Add Page
-                                </Link>
-                            </Button>
-                        ) : null}
-                    </nav>
+            <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
+                {/* Enhanced Sidebar Navigation */}
+                <aside className="w-full lg:w-72 lg:shrink-0">
+                    <div className="lg:sticky lg:top-6">
+                        <div className="mb-3 px-3">
+                            <h2 className="text-sm font-semibold text-muted-foreground">Pages</h2>
+                        </div>
+                        <nav className="flex flex-col gap-1">
+                            {pages?.map((item) => (
+                                <Button
+                                    key={item.slug}
+                                    size="sm"
+                                    variant="ghost"
+                                    asChild
+                                    className={cn(
+                                        'h-auto w-full justify-start py-2.5 text-left font-normal transition-colors',
+                                        {
+                                            'bg-muted font-medium': currentPath === `/page/${item.slug}`,
+                                        },
+                                    )}
+                                >
+                                    <Link href={onboarding.show(item.slug)} prefetch>
+                                        <div className="flex w-full items-center justify-between gap-3">
+                                            <span className="flex-1 truncate">{item.title}</span>
+                                            {canEdit() && (
+                                                <div
+                                                    className={cn('h-1.5 w-1.5 shrink-0 rounded-full', {
+                                                        'bg-primary': item.published,
+                                                        'bg-accent-foreground': !item.published,
+                                                    })}
+                                                />
+                                            )}
+                                        </div>
+                                    </Link>
+                                </Button>
+                            ))}
+                            {user.role === 'admin' && (
+                                <>
+                                    <Separator className="my-2" />
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        asChild
+                                        className={cn(
+                                            'h-auto w-full justify-start py-2.5 font-normal transition-colors',
+                                            {
+                                                'bg-muted': currentPath === onboarding.create().url,
+                                            },
+                                        )}
+                                    >
+                                        <Link href={onboarding.create()} prefetch>
+                                            <PlusCircle className="mr-2 h-4 w-4" />
+                                            Add Page
+                                        </Link>
+                                    </Button>
+                                </>
+                            )}
+                        </nav>
+                    </div>
                 </aside>
 
-                <Separator className="my-6 lg:hidden" />
+                <Separator className="lg:hidden" />
 
-                <div className="flex-1">
-                    <section className="max-w-4xl space-y-12 2xl:max-w-7xl">{children}</section>
+                {/* Main Content Area */}
+                <div className="min-w-0 flex-1">
+                    <div className="max-w-4xl 2xl:max-w-5xl">{children}</div>
                 </div>
             </div>
         </div>

@@ -12,13 +12,13 @@ const addButtons: { [key: string]: LucideIcon } = {
 
 export default function AddBlock({ addBlock }: { addBlock: (Button: string) => void }) {
     return (
-        <div className="flex gap-1 rounded-lg border-2 p-1 dark:bg-neutral-950">
+        <div className="flex gap-1 rounded-lg border-2 border-border bg-card p-1">
             {Object.keys(addButtons).map((Button: string, idx: number) => {
                 const ButtonComponent = addButtons[Button];
                 return (
                     <div
                         onClick={() => addBlock(Button)}
-                        className="cursor-pointer rounded p-1 transition hover:bg-neutral-200/50 dark:hover:bg-neutral-500/50"
+                        className="cursor-pointer rounded p-1 text-foreground transition hover:bg-muted"
                         key={`button-${idx}`}
                     >
                         <ButtonComponent className="size-4" />
