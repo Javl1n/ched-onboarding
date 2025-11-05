@@ -1,5 +1,7 @@
 import CreateDepartment from '@/components/department/create';
 import CreateSupervisor from '@/components/supervisor/create';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
@@ -8,7 +10,7 @@ import show from '@/routes/supervisor/show';
 import { BreadcrumbItem, User } from '@/types';
 import { router } from '@inertiajs/core';
 import { Head } from '@inertiajs/react';
-import { ChevronRight, Search, UserCog } from 'lucide-react';
+import { ChevronRight, Mail, Search, UserCog } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -17,6 +19,24 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: index().url,
     },
 ];
+
+const getInitials = (name: string) => {
+    return name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+};
+
+const getDepartmentColor = (departmentName: string) => {
+    const colors = {
+        HR: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+        IT: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+        Unifast: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+    };
+    return colors[departmentName as keyof typeof colors] || 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400';
+};
 
 export default function SuperVisorIndex({ supervisors }: { supervisors: User[] }) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -78,7 +98,7 @@ export default function SuperVisorIndex({ supervisors }: { supervisors: User[] }
                             <TableCaption>A list of all supervisors in the system.</TableCaption>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Name</TableHead>
+                                    <TableHead>Supervisor</TableHead>
                                     <TableHead>Department</TableHead>
                                     <TableHead>Email</TableHead>
                                     <TableHead className="w-12"></TableHead>
@@ -89,13 +109,33 @@ export default function SuperVisorIndex({ supervisors }: { supervisors: User[] }
                                     <TableRow
                                         onClick={() => router.visit(show.all(supervisor.id))}
                                         key={`supervisor-${index}`}
-                                        className="cursor-pointer"
+                                        className="group cursor-pointer transition-colors hover:bg-muted/50"
                                     >
-                                        <TableCell className="font-medium">{supervisor.name}</TableCell>
-                                        <TableCell>{supervisor.department.name}</TableCell>
-                                        <TableCell>{supervisor.email}</TableCell>
+                                        <TableCell className="font-medium">
+                                            <div className="flex items-center gap-3">
+                                                <Avatar className="h-10 w-10">
+                                                    <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+                                                        {getInitials(supervisor.name)}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium">{supervisor.name}</span>
+                                                </div>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge variant="secondary" className={getDepartmentColor(supervisor.department.name)}>
+                                                {supervisor.department.name}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2 text-muted-foreground">
+                                                <Mail className="h-4 w-4" />
+                                                <span className="text-sm">{supervisor.email}</span>
+                                            </div>
+                                        </TableCell>
                                         <TableCell className="w-12">
-                                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                                            <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
                                         </TableCell>
                                     </TableRow>
                                 ))}
