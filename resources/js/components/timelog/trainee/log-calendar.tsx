@@ -25,57 +25,134 @@ export default function LogCalendar({ date, setDate }: { date: Date; setDate: (d
         return `${Math.floor(log.hours)} hr ${(log.hours % 1) * 60} min`;
     };
 
+    const today = new Date();
+    const isToday = (day: number) => {
+        return (
+            today.getDate() === day && today.getMonth() === date.getMonth() && today.getFullYear() === date.getFullYear()
+        );
+    };
+
     return (
-        <>
-            <div className="justify-between md:flex">
-                <div className="text-center text-2xl font-bold md:text-left">{format(date, 'MMMM yyyy')}</div>
+        <div className="space-y-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="text-xl font-bold md:text-2xl">{format(date, 'MMMM yyyy')}</div>
                 <MonthPagination />
             </div>
-            <div className="flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+
+            {/* Legend */}
+            <div className="flex flex-wrap items-center gap-4 rounded-lg bg-muted/30 p-3 text-xs dark:bg-muted/20">
+                <div className="flex items-center gap-2">
+                    <div className="size-4 rounded-full bg-primary" />
+                    <span className="text-muted-foreground">Today</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="size-4 rounded border-2 border-primary/30 bg-primary/10" />
+                    <span className="text-muted-foreground">Selected</span>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="size-4 rounded bg-green-500/10">
+                        <CalendarCheck2 className="size-4 text-green-600 dark:text-green-400" />
+                    </div>
+                    <span className="text-muted-foreground">Has Attendance</span>
+                </div>
+            </div>
+
+            <div className="overflow-hidden rounded-xl border border-sidebar-border/70 bg-background shadow-sm dark:border-sidebar-border">
                 <div className="flex h-full flex-col">
-                    <div className="grid grid-cols-7">
+                    {/* Week Day Headers */}
+                    <div className="grid grid-cols-7 border-b border-sidebar-border/50 bg-muted/30 dark:border-sidebar-border/30">
                         {weekDays.map((day) => (
-                            <div key={`day-${day}`} className="col-span-1 py-2 text-center text-sm text-neutral-400">
-                                <span className="hidden sm:inline">{day}</span>
+                            <div
+                                key={`day-${day}`}
+                                className="py-3 text-center text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                            >
+                                <span className="hidden sm:inline">{day.slice(0, 3)}</span>
                                 <span className="sm:hidden">{day.charAt(0)}</span>
                             </div>
                         ))}
                     </div>
+
+                    {/* Calendar Grid */}
                     <div className="grid flex-1 grid-cols-7">
+                        {/* Empty cells before first day of month */}
                         {Array.from({ length: new Date(date.getFullYear(), date.getMonth(), 1).getDay() }).map((_, index) => (
-                            <div key={`day-before-${index}`} className="border p-1" />
+                            <div
+                                key={`day-before-${index}`}
+                                className="h-20 border-b border-r border-sidebar-border/30 bg-muted/10 dark:border-sidebar-border/20 md:h-28"
+                            />
                         ))}
+
+                        {/* Days of the month */}
                         {Array.from({ length: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate() }, (_, index) => index + 1).map(
                             (day) => {
                                 const log = logs.find((log) => new Date(log.date).getDate() === day);
+                                const isSelected = date.getDate() === day;
+                                const isTodayDate = isToday(day);
 
                                 return (
-                                    <div
+                                    <button
+                                        type="button"
                                         onClick={() => setDate(new Date(date.getFullYear(), date.getMonth(), day))}
                                         key={`day-${day}`}
-                                        className={`flex h-15 flex-col justify-between border p-1 transition md:h-30 ${date.getDate() === day ? 'bg-accent/50' : ''}`}
+                                        className={`group relative flex h-20 flex-col justify-between border-b border-r border-sidebar-border/30 p-2 transition-all hover:bg-accent/50 focus:outline-none focus:ring-2 focus:ring-primary/20 dark:border-sidebar-border/20 md:h-28 md:p-3 ${
+                                            isSelected
+                                                ? 'bg-primary/10 ring-2 ring-primary/30 hover:bg-primary/15 dark:bg-primary/20'
+                                                : log
+                                                  ? 'bg-green-500/5 hover:bg-green-500/10 dark:bg-green-500/10'
+                                                  : 'bg-background'
+                                        }`}
                                     >
-                                        <div className="">{day}</div>
-
-                                        {log ? (
-                                            <>
-                                                <div className="hidden text-right text-sm font-bold md:block">{total(log)}</div>
-                                                <div className="flex justify-end md:hidden">
-                                                    <CalendarCheck2 className="size-4" />
+                                        {/* Day Number */}
+                                        <div className="flex items-start justify-between">
+                                            <span
+                                                className={`flex size-7 items-center justify-center rounded-full text-sm font-semibold transition-colors md:size-8 md:text-base ${
+                                                    isTodayDate
+                                                        ? 'bg-primary text-primary-foreground'
+                                                        : isSelected
+                                                          ? 'text-primary'
+                                                          : log
+                                                            ? 'text-green-600 dark:text-green-400'
+                                                            : 'text-foreground'
+                                                }`}
+                                            >
+                                                {day}
+                                            </span>
+                                            {log && !isSelected && (
+                                                <div className="rounded-full bg-green-500/20 p-1">
+                                                    <CalendarCheck2 className="size-3 text-green-600 dark:text-green-400 md:size-4" />
                                                 </div>
-                                            </>
-                                        ) : null}
-                                    </div>
+                                            )}
+                                        </div>
+
+                                        {/* Hours Display */}
+                                        {log && (
+                                            <div className="text-right">
+                                                <div className="hidden text-xs font-semibold text-foreground md:block">{total(log)}</div>
+                                                <div className="text-[10px] text-muted-foreground md:text-xs">
+                                                    {log.hours > 0 ? 'Logged' : 'Incomplete'}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Hover Effect Overlay */}
+                                        {!isSelected && (
+                                            <div className="pointer-events-none absolute inset-0 rounded-sm opacity-0 ring-1 ring-primary/30 transition-opacity group-hover:opacity-100" />
+                                        )}
+                                    </button>
                                 );
                             },
                         )}
 
+                        {/* Empty cells after last day of month */}
                         {Array.from({ length: Math.abs(new Date(date.getFullYear(), date.getMonth() + 1, 1).getDay() - 7) }).map((_, index) => (
-                            <div key={`day-after-${index}`} className="h-15 border p-1 md:h-30" />
+                            <div
+                                key={`day-after-${index}`}
+                                className="h-20 border-b border-r border-sidebar-border/30 bg-muted/10 dark:border-sidebar-border/20 md:h-28"
+                            />
                         ))}
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

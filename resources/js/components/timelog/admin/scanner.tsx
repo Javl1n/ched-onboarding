@@ -49,10 +49,10 @@ export default function AttendanceScanner() {
             }}
         >
             <AlertDialogTrigger asChild>
-                <div className="aspect-square overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <div className="flex h-full cursor-pointer flex-col justify-center">
-                        <Camera className="mx-auto size-20" />
-                        <div className="text-center text-sm font-bold text-neutral-300">QR Scanner</div>
+                <div className="group relative min-w-[180px] flex-1 cursor-pointer overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-background to-muted/20 p-4 shadow-sm transition-all hover:shadow-md dark:border-sidebar-border">
+                    <div className="flex h-full flex-col items-center justify-center gap-2">
+                        <Camera className="size-8 text-muted-foreground transition-colors group-hover:text-foreground" />
+                        <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">QR Scanner</div>
                     </div>
                 </div>
             </AlertDialogTrigger>
