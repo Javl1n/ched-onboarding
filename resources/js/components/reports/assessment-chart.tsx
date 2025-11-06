@@ -44,7 +44,7 @@ export default function AssessmentChart() {
     console.log(data);
 
     return (
-        <ChartContainer config={chartConfig}>
+        <ChartContainer config={chartConfig} className="h-full w-full">
             <BarChart data={data}>
                 {/* <PolarAngleAxis dataKey="category" tickFormatter={(value) => value.split(" ")[0]} /> */}
                 {/* <PolarGrid /> */}

@@ -100,24 +100,22 @@ export default function TraineeShowReports({
                         </div>
 
                         {/* Assessment Score Card */}
-                        <div className="rounded-xl border bg-gradient-to-br from-purple-50 to-white p-6 dark:from-purple-950/20 dark:to-background">
-                            <div className="flex flex-col gap-4">
-                                <div className="flex items-start justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-purple-500 shadow-lg dark:bg-purple-600">
-                                            <Award className="size-7 text-white" />
-                                        </div>
-                                        <div>
-                                            <div className="text-sm font-medium text-muted-foreground">Assessment Score</div>
-                                            <div className="flex items-baseline gap-1">
-                                                <span className="text-4xl font-bold text-foreground">{averageScore.value}</span>
-                                                {averageScore.isValid && <span className="text-xl text-muted-foreground">/5.00</span>}
-                                            </div>
+                        <div className="flex flex-col justify-center rounded-xl border bg-gradient-to-br from-purple-50 to-white p-6 dark:from-purple-950/20 dark:to-background">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-purple-500 shadow-lg dark:bg-purple-600">
+                                        <Award className="size-8 text-white" />
+                                    </div>
+                                    <div>
+                                        <div className="mb-1 text-sm font-medium text-muted-foreground">Assessment Score</div>
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-5xl font-bold text-foreground">{averageScore.value}</span>
+                                            {averageScore.isValid && <span className="text-2xl text-muted-foreground">/5.00</span>}
                                         </div>
                                     </div>
                                 </div>
                                 {averageScore.isValid && parseFloat(averageScore.value) >= 4 && (
-                                    <div className="flex items-center justify-center gap-1 rounded-full bg-green-100 px-3 py-1.5 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                                    <div className="flex items-center gap-1 rounded-full bg-green-100 px-4 py-2 text-sm font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
                                         <TrendingUp className="size-4" />
                                         <span>Excellent</span>
                                     </div>
@@ -129,12 +127,14 @@ export default function TraineeShowReports({
                     {/* Bottom Row - Chart and Summary */}
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                         {/* Assessment Chart Card */}
-                        <div className="rounded-xl border bg-card p-6">
+                        <div className="flex flex-col rounded-xl border bg-card p-6">
                             <div className="mb-4 flex items-center gap-2">
                                 <Award className="size-5 text-primary" />
                                 <h2 className="text-lg font-bold text-foreground">Performance by Category</h2>
                             </div>
-                            <AssessmentChart />
+                            <div className="flex-1">
+                                <AssessmentChart />
+                            </div>
                         </div>
 
                         {/* Summary Card */}
