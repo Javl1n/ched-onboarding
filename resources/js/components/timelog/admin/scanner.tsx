@@ -17,7 +17,8 @@ import { useState } from 'react';
 
 export default function AttendanceScanner() {
     const [message, setMessage] = useState<{
-        class: string;
+        bgClass: string;
+        textClass: string;
         content: string;
     } | null>(null);
 
@@ -30,12 +31,14 @@ export default function AttendanceScanner() {
             {
                 onError: (error) =>
                     setMessage({
-                        class: 'text-red-500',
+                        bgClass: 'bg-red-500/10',
+                        textClass: 'text-red-600 dark:text-red-400',
                         content: error.code,
                     }),
                 onSuccess: () =>
                     setMessage({
-                        class: 'text-green-500',
+                        bgClass: 'bg-green-500/10',
+                        textClass: 'text-green-600 dark:text-green-400',
                         content: 'Scan Complete',
                     }),
             },
@@ -49,7 +52,7 @@ export default function AttendanceScanner() {
             }}
         >
             <AlertDialogTrigger asChild>
-                <div className="group relative min-w-[180px] flex-1 cursor-pointer overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-background to-muted/20 p-4 shadow-sm transition-all hover:shadow-md dark:border-sidebar-border">
+                <div className="group relative min-w-[180px] flex-1 cursor-pointer overflow-hidden rounded-xl border border-sidebar-border bg-card p-4 shadow-sm transition-all hover:shadow-md">
                     <div className="flex h-full flex-col items-center justify-center gap-2">
                         <Camera className="size-8 text-muted-foreground transition-colors group-hover:text-foreground" />
                         <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">QR Scanner</div>
@@ -69,7 +72,8 @@ export default function AttendanceScanner() {
 
                         if (code.format !== 'qr_code') {
                             setMessage({
-                                class: 'text-red-500',
+                                bgClass: 'bg-red-500/10',
+                                textClass: 'text-red-600 dark:text-red-400',
                                 content: 'invalid QR code',
                             });
                             return;
@@ -78,7 +82,11 @@ export default function AttendanceScanner() {
                         save(code);
                     }}
                 />
-                <div className={`text-center text-sm ${message?.class}`}>{message?.content}</div>
+                {message && (
+                    <div className={`rounded-lg border p-4 text-center text-sm font-medium ${message.bgClass} ${message.textClass}`}>
+                        {message.content}
+                    </div>
+                )}
 
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>

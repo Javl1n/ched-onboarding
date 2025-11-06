@@ -30,7 +30,7 @@ export default function LogList() {
 
     if (logs.length === 0) {
         return (
-            <div className="rounded-xl border border-dashed border-sidebar-border/70 bg-muted/20 p-12 text-center dark:border-sidebar-border">
+            <div className="rounded-xl border border-dashed border-sidebar-border bg-muted/20 p-12 text-center">
                 <Clock className="mx-auto mb-4 size-12 text-muted-foreground opacity-50" />
                 <h3 className="mb-2 text-lg font-semibold text-foreground">No Attendance Records</h3>
                 <p className="text-sm text-muted-foreground">No time logs found for {format(new Date(date), 'MMMM d, yyyy')}</p>
@@ -39,10 +39,10 @@ export default function LogList() {
     }
 
     return (
-        <div className="overflow-hidden rounded-xl border border-sidebar-border/70 bg-background dark:border-sidebar-border">
+        <div className="overflow-hidden rounded-xl border border-sidebar-border bg-card">
             <Table>
                 <TableHeader>
-                    <TableRow className="bg-muted/50 hover:bg-muted/50">
+                    <TableRow className="bg-muted/30 hover:bg-muted/30">
                         <TableHead className="font-semibold">
                             <div className="flex items-center gap-2">
                                 <User className="size-4" />
@@ -70,7 +70,7 @@ export default function LogList() {
                         <TableRow
                             onClick={() => router.visit(show.log(log.trainee.user).url)}
                             key={index}
-                            className="cursor-pointer transition-colors hover:bg-muted/70"
+                            className="cursor-pointer transition-colors hover:bg-muted/50"
                         >
                             <TableCell className="font-semibold">
                                 <div className="flex items-center gap-3">

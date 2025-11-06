@@ -30,7 +30,7 @@ export default function DashboardSupervisor() {
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 lg:p-6">
                 {/* Welcome Header */}
-                <div className="rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-background to-muted/20 p-6 shadow-sm lg:p-8 dark:border-sidebar-border">
+                <div className="rounded-xl border border-sidebar-border bg-card p-6 shadow-sm lg:p-8">
                     <div className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">Welcome Back</div>
                     <div className="mt-1 text-3xl font-black lg:text-4xl">{user.name}</div>
                     <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
@@ -41,7 +41,7 @@ export default function DashboardSupervisor() {
                 {/* Stats Grid */}
                 <div className="flex flex-wrap gap-3">
                     {/* Present Today */}
-                    <div className="group relative min-w-[180px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-green-500/5 to-green-500/10 p-4 shadow-sm transition-all hover:shadow-md dark:border-sidebar-border dark:from-green-500/10 dark:to-green-500/20">
+                    <div className="group relative min-w-[180px] flex-1 overflow-hidden rounded-xl border border-sidebar-border bg-card p-4 shadow-sm transition-all hover:shadow-md">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
                                 <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Present Today</div>
@@ -57,7 +57,7 @@ export default function DashboardSupervisor() {
                     </div>
 
                     {/* Absent Today */}
-                    <div className="group relative min-w-[180px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-red-500/5 to-red-500/10 p-4 shadow-sm transition-all hover:shadow-md dark:border-sidebar-border dark:from-red-500/10 dark:to-red-500/20">
+                    <div className="group relative min-w-[180px] flex-1 overflow-hidden rounded-xl border border-sidebar-border bg-card p-4 shadow-sm transition-all hover:shadow-md">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
                                 <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Absent Today</div>
@@ -74,7 +74,7 @@ export default function DashboardSupervisor() {
                 </div>
 
                 {/* Attendance Section */}
-                <div className="rounded-xl border border-sidebar-border/70 bg-background p-6 shadow-sm dark:border-sidebar-border">
+                <div className="rounded-xl border border-sidebar-border bg-card p-6 shadow-sm">
                     <div className="mb-4 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                         <h2 className="text-2xl font-bold">Attendance Logs</h2>
                         <DatePagination />

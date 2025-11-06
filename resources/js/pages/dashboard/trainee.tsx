@@ -58,7 +58,7 @@ export default function DashboardTrainee({
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 lg:p-6">
                 {/* Welcome Header with Profile */}
-                <div className="rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-background to-muted/20 p-6 shadow-sm lg:p-8 dark:border-sidebar-border">
+                <div className="rounded-xl border border-sidebar-border bg-card p-6 shadow-sm lg:p-8">
                     <div className="flex gap-6">
                         <img
                             className="hidden size-20 rounded-xl border-2 border-primary/20 object-cover shadow-md md:block lg:size-24"
@@ -83,7 +83,7 @@ export default function DashboardTrainee({
                 {/* Stats Grid */}
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {/* Total Hours Card */}
-                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-blue-500/5 to-blue-500/10 p-5 shadow-sm transition-all hover:shadow-md dark:border-sidebar-border dark:from-blue-500/10 dark:to-blue-500/20">
+                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-card p-5 shadow-sm transition-all hover:shadow-md">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
                                 <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Total Hours</div>
@@ -97,7 +97,7 @@ export default function DashboardTrainee({
                     </div>
 
                     {/* This Month Card */}
-                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-purple-500/5 to-purple-500/10 p-5 shadow-sm transition-all hover:shadow-md dark:border-sidebar-border dark:from-purple-500/10 dark:to-purple-500/20">
+                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-card p-5 shadow-sm transition-all hover:shadow-md">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
                                 <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">This Month</div>
@@ -111,7 +111,7 @@ export default function DashboardTrainee({
                     </div>
 
                     {/* Selected Day Hours Card */}
-                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-green-500/5 to-green-500/10 p-5 shadow-sm transition-all hover:shadow-md sm:col-span-2 lg:col-span-1 dark:border-sidebar-border dark:from-green-500/10 dark:to-green-500/20">
+                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-card p-5 shadow-sm transition-all hover:shadow-md sm:col-span-2 lg:col-span-1">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
                                 <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Selected Day</div>
@@ -128,14 +128,14 @@ export default function DashboardTrainee({
                 </div>
 
                 {/* Today's Schedule Card */}
-                <div className="rounded-xl border border-sidebar-border/70 bg-background p-6 shadow-sm dark:border-sidebar-border">
+                <div className="rounded-xl border border-sidebar-border bg-card p-6 shadow-sm">
                     <div className="mb-5 flex items-center gap-2">
                         <CalendarDays className="size-5 text-muted-foreground" />
                         <h2 className="text-lg font-bold">{format(date, 'EEEE, MMMM dd, yyyy')}</h2>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
                         {/* Morning Session */}
-                        <div className="rounded-lg border border-sidebar-border/50 bg-gradient-to-br from-amber-500/5 to-orange-500/5 p-4 dark:border-sidebar-border/30">
+                        <div className="rounded-lg border border-sidebar-border bg-muted/30 p-4">
                             <div className="mb-3 flex items-center gap-2">
                                 <div className="rounded-md bg-amber-500/10 p-1.5">
                                     <Clock className="size-4 text-amber-600 dark:text-amber-400" />
@@ -155,7 +155,7 @@ export default function DashboardTrainee({
                         </div>
 
                         {/* Afternoon Session */}
-                        <div className="rounded-lg border border-sidebar-border/50 bg-gradient-to-br from-sky-500/5 to-blue-500/5 p-4 dark:border-sidebar-border/30">
+                        <div className="rounded-lg border border-sidebar-border bg-muted/30 p-4">
                             <div className="mb-3 flex items-center gap-2">
                                 <div className="rounded-md bg-sky-500/10 p-1.5">
                                     <Clock className="size-4 text-sky-600 dark:text-sky-400" />
@@ -177,7 +177,7 @@ export default function DashboardTrainee({
                 </div>
 
                 {/* Calendar Section */}
-                <div className="rounded-xl border border-sidebar-border/70 bg-background p-6 shadow-sm dark:border-sidebar-border">
+                <div className="rounded-xl border border-sidebar-border bg-card p-6 shadow-sm">
                     <h2 className="mb-4 text-2xl font-bold">Attendance Calendar</h2>
                     <LogCalendar date={date} setDate={setDate} />
                 </div>
