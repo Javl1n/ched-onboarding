@@ -108,7 +108,7 @@ export function AppSidebar() {
     };
 
     return (
-        <Sidebar collapsible="icon" variant="sidebar" className="">
+        <Sidebar collapsible="icon" variant="inset" className="bg-gradient-to-b from-sidebar to-sidebar/95">
             <SidebarHeader className="">
                 <SidebarMenu>
                     <SidebarMenuItem>

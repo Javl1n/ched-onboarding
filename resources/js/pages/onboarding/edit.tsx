@@ -112,9 +112,9 @@ export default function OnboardingCreate({ item }: { item: OnboardingPageInterfa
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Edit" />
             <OnboardingLayout>
-                <div>
+                <div className="space-y-6">
                     {/* Enhanced Header Section */}
-                    <div className="mb-6 space-y-3">
+                    <div className="overflow-hidden rounded-xl border border-sidebar-border bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 shadow-md dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-purple-950/30">
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                             <div className="flex-1 space-y-3">
                                 <div className="grid">
@@ -123,11 +123,10 @@ export default function OnboardingCreate({ item }: { item: OnboardingPageInterfa
                                 </div>
                             </div>
                         </div>
-                        <div className="h-px bg-gradient-to-r from-border via-border/50 to-transparent" />
                     </div>
 
                     {/* Content Editor with Card Wrapper */}
-                    <div className="rounded-lg bg-card px-6 pb-6 shadow-sm sm:px-8 sm:pb-8 lg:px-10 lg:pb-10">
+                    <div className="pt-10 rounded-xl border border-sidebar-border bg-gradient-to-br from-white via-blue-50/50 to-indigo-50/50 px-6 pb-6 shadow-md dark:from-card dark:via-blue-950/10 dark:to-indigo-950/10 sm:px-8 sm:pb-8 lg:px-10 lg:pb-10">
                         <div className="w-4 border" />
                         {data.blocks.map((block, index) => {
                             const BlockComponent = blocks[block.type];
@@ -170,7 +169,7 @@ export default function OnboardingCreate({ item }: { item: OnboardingPageInterfa
                                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                     <AddBlock addBlock={addBlock} />
                                     <div className="flex gap-3">
-                                        <Button onClick={(e) => submit(e, false)} variant="outline" className="flex-1 sm:flex-initial">
+                                        <Button onClick={(e) => submit(e, false)} variant="outline" className="bg-white flex-1 sm:flex-initial">
                                             Save as Draft
                                         </Button>
                                         <Button onClick={(e) => submit(e, true)} className="flex-1 sm:flex-initial">

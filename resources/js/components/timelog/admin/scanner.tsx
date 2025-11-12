@@ -52,10 +52,10 @@ export default function AttendanceScanner() {
             }}
         >
             <AlertDialogTrigger asChild>
-                <div className="group relative min-w-[180px] flex-1 cursor-pointer overflow-hidden rounded-xl border border-sidebar-border bg-card p-4 shadow-sm transition-all hover:shadow-md">
+                <div className="group relative min-w-[180px] flex-1 cursor-pointer overflow-hidden rounded-xl border border-sidebar-border bg-gradient-to-br from-purple-50 to-purple-100 p-4 shadow-sm transition-all hover:shadow-md dark:from-purple-950/30 dark:to-purple-900/30">
                     <div className="flex h-full flex-col items-center justify-center gap-2">
-                        <Camera className="size-8 text-muted-foreground transition-colors group-hover:text-foreground" />
-                        <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">QR Scanner</div>
+                        <Camera className="size-8 text-purple-700 transition-colors group-hover:text-purple-800 dark:text-purple-300 dark:group-hover:text-purple-200" />
+                        <div className="text-xs font-semibold tracking-wide text-purple-800 uppercase dark:text-purple-200">QR Scanner</div>
                     </div>
                 </div>
             </AlertDialogTrigger>

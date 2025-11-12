@@ -36,23 +36,23 @@ export default function OnboardingShow({ item }: { item: OnboardingPageInterface
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={item.title} />
             <OnboardingLayout>
-                <div>
+                <div className="space-y-6">
                     {/* Enhanced Header Section */}
-                    <div className="mb-6 space-y-3">
+                    <div className="overflow-hidden rounded-xl border border-sidebar-border bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-6 shadow-md dark:from-blue-950/30 dark:via-indigo-950/30 dark:to-purple-950/30">
                         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                             <div className="space-y-3">
                                 <h1 className="text-4xl font-bold tracking-tight text-foreground lg:text-5xl">{item.title}</h1>
                                 {user.role === 'admin' && (
                                     <div className="flex gap-2">
                                         <div
-                                            className={`inline-flex items-center rounded-md border px-3 py-1 text-xs font-medium transition-colors ${
+                                            className={`inline-flex items-center rounded-lg border px-3 py-1.5 text-xs font-semibold shadow-sm transition-colors ${
                                                 item.published
-                                                    ? 'border-primary/20 bg-primary/10 text-primary'
-                                                    : 'border-accent/50 bg-accent text-accent-foreground'
+                                                    ? 'border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-950/50 dark:text-green-300'
+                                                    : 'border-yellow-200 bg-yellow-50 text-yellow-700 dark:border-yellow-800 dark:bg-yellow-950/50 dark:text-yellow-300'
                                             }`}
                                         >
                                             <div
-                                                className={`mr-1.5 h-1.5 w-1.5 rounded-full ${item.published ? 'bg-primary' : 'bg-accent-foreground'}`}
+                                                className={`mr-1.5 h-2 w-2 rounded-full ${item.published ? 'bg-green-500 ring-2 ring-green-500/30' : 'bg-yellow-500 ring-2 ring-yellow-500/30'}`}
                                             />
                                             {item.published ? 'Published' : 'Draft'}
                                         </div>
@@ -60,17 +60,16 @@ export default function OnboardingShow({ item }: { item: OnboardingPageInterface
                                 )}
                             </div>
                             {user.role === 'admin' && (
-                                <Button asChild size="default" className="shrink-0">
+                                <Button asChild size="default" className="shrink-0 shadow-sm">
                                     <Link href={onboarding.edit({ page: item.slug })}>Edit Page</Link>
                                 </Button>
                             )}
                         </div>
-                        <div className="h-px bg-gradient-to-r from-border via-border/50 to-transparent" />
                     </div>
 
                     {/* Content Blocks with Card Wrapper */}
-                    <div className="rounded-lg bg-card px-6 pb-6 shadow-sm sm:px-8 sm:pb-8 lg:px-10 lg:pb-10">
-                        <div className="mx-auto prose prose-lg max-w-none dark:prose-invert">
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-white via-blue-50/50 to-indigo-50/50 px-6 pb-6 shadow-md dark:from-card dark:via-blue-950/10 dark:to-indigo-950/10 sm:px-8 sm:pb-8 lg:px-10 lg:pb-10">
+                        <div className="prose prose-lg mx-auto max-w-none dark:prose-invert">
                             <div className="space-y-8">
                                 {item.blocks
                                     .sort((a, b) => a.order - b.order)

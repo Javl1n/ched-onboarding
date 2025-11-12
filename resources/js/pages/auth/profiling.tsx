@@ -92,6 +92,7 @@ export default function Profiling() {
                         <Textarea
                             value={data.address}
                             onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setData('address', e.target.value)}
+                            className='bg-white'
                             placeholder="Enter your address here"
                         />
                         <InputError message={errors.address} />

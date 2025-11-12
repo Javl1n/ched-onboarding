@@ -55,10 +55,10 @@ export default function LogCalendar({ date, setDate }: { date: Date; setDate: (d
                 </div>
             </div>
 
-            <div className="overflow-hidden rounded-xl border border-sidebar-border/70 bg-background shadow-sm dark:border-sidebar-border">
+            <div className="overflow-hidden rounded-xl border border-sidebar-border/70 bg-gradient-to-br from-card via-primary/[0.02] to-purple/[0.03] shadow-sm dark:border-sidebar-border">
                 <div className="flex h-full flex-col">
                     {/* Week Day Headers */}
-                    <div className="grid grid-cols-7 border-b border-sidebar-border/50 bg-muted/30 dark:border-sidebar-border/30">
+                    <div className="grid grid-cols-7 border-b border-sidebar-border/50 bg-gradient-to-r from-primary/5 to-purple/5 dark:border-sidebar-border/30">
                         {weekDays.map((day) => (
                             <div key={`day-${day}`} className="py-3 text-center text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                 <span className="hidden sm:inline">{day.slice(0, 3)}</span>
@@ -73,7 +73,7 @@ export default function LogCalendar({ date, setDate }: { date: Date; setDate: (d
                         {Array.from({ length: new Date(date.getFullYear(), date.getMonth(), 1).getDay() }).map((_, index) => (
                             <div
                                 key={`day-before-${index}`}
-                                className="h-20 border-r border-b border-sidebar-border/30 bg-muted/10 md:h-28 dark:border-sidebar-border/20"
+                                className="h-20 border-r border-b border-sidebar-border/30 bg-gradient-to-br from-muted/5 to-muted/10 md:h-28 dark:border-sidebar-border/20"
                             />
                         ))}
 
@@ -91,10 +91,10 @@ export default function LogCalendar({ date, setDate }: { date: Date; setDate: (d
                                         key={`day-${day}`}
                                         className={`group relative flex h-20 flex-col justify-between border-r border-b border-sidebar-border/30 p-2 transition-all hover:bg-accent/50 focus:ring-2 focus:ring-primary/20 focus:outline-none md:h-28 md:p-3 dark:border-sidebar-border/20 ${
                                             isSelected
-                                                ? 'bg-primary/10 ring-2 ring-primary/30 hover:bg-primary/15 dark:bg-primary/20'
+                                                ? 'bg-gradient-to-br from-primary/10 to-primary/20 ring-2 ring-primary/30 hover:from-primary/15 hover:to-primary/25 dark:from-primary/20 dark:to-primary/30'
                                                 : log
-                                                  ? 'bg-green-500/5 hover:bg-green-500/10 dark:bg-green-500/10'
-                                                  : 'bg-background'
+                                                  ? 'bg-gradient-to-br from-green-50 to-green-100/50 hover:from-green-100 hover:to-green-100 dark:from-green-500/10 dark:to-green-500/20'
+                                                  : 'bg-gradient-to-br from-card to-muted/5 hover:from-muted/5 hover:to-muted/10'
                                         }`}
                                     >
                                         {/* Day Number */}
@@ -142,7 +142,7 @@ export default function LogCalendar({ date, setDate }: { date: Date; setDate: (d
                         {Array.from({ length: Math.abs(new Date(date.getFullYear(), date.getMonth() + 1, 1).getDay() - 7) }).map((_, index) => (
                             <div
                                 key={`day-after-${index}`}
-                                className="h-20 border-r border-b border-sidebar-border/30 bg-muted/10 md:h-28 dark:border-sidebar-border/20"
+                                className="h-20 border-r border-b border-sidebar-border/30 bg-gradient-to-br from-muted/5 to-muted/10 md:h-28 dark:border-sidebar-border/20"
                             />
                         ))}
                     </div>

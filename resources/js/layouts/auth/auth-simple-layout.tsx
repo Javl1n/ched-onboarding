@@ -1,4 +1,5 @@
 import AppLogoIcon from '@/components/app-logo-icon';
+import { Card } from '@/components/ui/card';
 import dashboard from '@/routes/dashboard';
 import { Link } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
@@ -12,23 +13,25 @@ interface AuthLayoutProps {
 export default function AuthSimpleLayout({ children, title, description }: PropsWithChildren<AuthLayoutProps>) {
     return (
         <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
-            <div className="w-full max-w-sm">
-                <div className="flex flex-col gap-8">
-                    <div className="flex flex-col items-center gap-4">
-                        <Link href={dashboard.index()} className="flex flex-col items-center gap-2 font-medium">
-                            <div className="mb-1 flex h-20 w-20 items-center justify-center rounded-md">
-                                <AppLogoIcon className="fill-current text-[var(--foreground)] dark:text-white" />
-                            </div>
-                            <span className="sr-only">{title}</span>
-                        </Link>
+            <div className="w-full max-w-md">
+                <Card className="bg-white dark:bg-card p-4">
+                    <div className="flex flex-col gap-8">
+                        <div className="flex flex-col items-center gap-4">
+                            <Link href={dashboard.index()} className="flex flex-col items-center gap-2 font-medium">
+                                <div className="mb-1 flex h-20 w-20 items-center justify-center rounded-md">
+                                    <AppLogoIcon className="fill-current text-[var(--foreground)] dark:text-white" />
+                                </div>
+                                <span className="sr-only">{title}</span>
+                            </Link>
 
-                        <div className="space-y-2 text-center">
-                            <h1 className="text-xl font-medium">{title}</h1>
-                            <p className="text-center text-sm text-muted-foreground">{description}</p>
+                            <div className="space-y-2 text-center">
+                                <h1 className="text-xl font-medium">{title}</h1>
+                                <p className="text-center text-sm text-muted-foreground">{description}</p>
+                            </div>
                         </div>
+                            {children}
                     </div>
-                    {children}
-                </div>
+                </Card>
             </div>
         </div>
     );

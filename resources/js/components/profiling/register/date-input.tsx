@@ -11,18 +11,19 @@ export default function DateInput({ date, setDate }: { date: Date; setDate: (dat
                 <Button
                     variant="outline"
                     data-empty={!date}
-                    className="w-full justify-start text-left font-normal data-[empty=true]:text-muted-foreground"
+                    className="bg-white w-full justify-start text-left font-normal data-[empty=true]:text-muted-foreground"
                 >
                     <CalendarIcon />
                     {date ? format(date, 'PPP') : <span>Pick a date</span>}
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
+            <PopoverContent className="w-auto border-0 p-0" align="start">
                 <Calendar
+                    className="rounded-xl text-white shadow-lg bg-gradient-to-br from-blue-100 to-blue-700"
                     classNames={{
-                        today: `bg-neutral-800 rounded`,
-                        selected: `rounded-md`,
-                        chevron: '',
+                        today: `bg-white/20 rounded text-white`,
+                        selected: `rounded-md bg text-blue-500 font-semibold`,
+                        chevron: 'text-white',
                     }}
                     mode="single"
                     selected={date}

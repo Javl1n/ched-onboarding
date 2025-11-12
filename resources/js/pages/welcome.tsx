@@ -9,8 +9,8 @@ export default function Welcome() {
     return (
         <>
             <Head title="Welcome" />
-            <div className="flex min-h-svh flex-col bg-background">
-                <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="flex min-h-svh flex-col bg-white dark:bg-background">
+                <header className="sticky top-0 z-50 w-full border-b bg-blue-500 backdrop-blur">
                     <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
                         <Link href="/" className="flex items-center gap-2 font-semibold">
                             <div className="flex h-8 w-8 items-center justify-center rounded-md">
@@ -43,7 +43,7 @@ export default function Welcome() {
                                 <Button asChild size="lg">
                                     <Link href={register()}>Get Started</Link>
                                 </Button>
-                                <Button asChild variant="outline" size="lg">
+                                <Button asChild variant="outline" className='bg-white' size="lg">
                                     <Link href={login()}>Log in</Link>
                                 </Button>
                             </div>

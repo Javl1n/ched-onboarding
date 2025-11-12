@@ -58,7 +58,7 @@ export default function DashboardTrainee({
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 lg:p-6">
                 {/* Welcome Header with Profile */}
-                <div className="rounded-xl border border-sidebar-border bg-card p-6 shadow-sm lg:p-8">
+                <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm lg:p-8">
                     <div className="flex gap-6">
                         <img
                             className="hidden size-20 rounded-xl border-2 border-primary/20 object-cover shadow-md md:block lg:size-24"
@@ -83,52 +83,52 @@ export default function DashboardTrainee({
                 {/* Stats Grid */}
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {/* Total Hours Card */}
-                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-card p-5 shadow-sm transition-all hover:shadow-md">
+                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-gradient-to-br from-blue-50 to-blue-100 p-5 shadow-sm transition-all hover:shadow-md dark:from-blue-950/30 dark:to-blue-900/30">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
-                                <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Total Hours</div>
-                                <div className="mt-1 text-3xl font-bold text-foreground">{totalHours(hours)}</div>
-                                <div className="mt-1 text-xs text-muted-foreground">All time</div>
+                                <div className="text-xs font-semibold tracking-wide text-blue-800 uppercase dark:text-blue-200">Total Hours</div>
+                                <div className="mt-1 text-3xl font-bold text-blue-950 dark:text-blue-50">{totalHours(hours)}</div>
+                                <div className="mt-1 text-xs text-blue-800 dark:text-blue-200">All time</div>
                             </div>
-                            <div className="rounded-lg bg-blue-500/10 p-2.5">
-                                <Clock className="size-6 text-blue-600 dark:text-blue-400" />
+                            <div className="rounded-lg bg-blue-500/20 p-2.5">
+                                <Clock className="size-6 text-blue-700 dark:text-blue-300" />
                             </div>
                         </div>
                     </div>
 
                     {/* This Month Card */}
-                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-card p-5 shadow-sm transition-all hover:shadow-md">
+                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-gradient-to-br from-purple-50 to-purple-100 p-5 shadow-sm transition-all hover:shadow-md dark:from-purple-950/30 dark:to-purple-900/30">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
-                                <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">This Month</div>
-                                <div className="mt-1 text-3xl font-bold text-foreground">{totalHours(hoursThisMonth)}</div>
-                                <div className="mt-1 text-xs text-muted-foreground">{format(date, 'MMMM yyyy')}</div>
+                                <div className="text-xs font-semibold tracking-wide text-purple-800 uppercase dark:text-purple-200">This Month</div>
+                                <div className="mt-1 text-3xl font-bold text-purple-950 dark:text-purple-50">{totalHours(hoursThisMonth)}</div>
+                                <div className="mt-1 text-xs text-purple-800 dark:text-purple-200">{format(date, 'MMMM yyyy')}</div>
                             </div>
-                            <div className="rounded-lg bg-purple-500/10 p-2.5">
-                                <TrendingUp className="size-6 text-purple-600 dark:text-purple-400" />
+                            <div className="rounded-lg bg-purple-500/20 p-2.5">
+                                <TrendingUp className="size-6 text-purple-700 dark:text-purple-300" />
                             </div>
                         </div>
                     </div>
 
                     {/* Selected Day Hours Card */}
-                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-card p-5 shadow-sm transition-all hover:shadow-md sm:col-span-2 lg:col-span-1">
+                    <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-gradient-to-br from-green-50 to-green-100 p-5 shadow-sm transition-all hover:shadow-md sm:col-span-2 lg:col-span-1 dark:from-green-950/30 dark:to-green-900/30">
                         <div className="flex items-start justify-between gap-3">
                             <div className="flex-1">
-                                <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Selected Day</div>
-                                <div className="mt-1 text-3xl font-bold text-foreground">
+                                <div className="text-xs font-semibold tracking-wide text-green-800 uppercase dark:text-green-200">Selected Day</div>
+                                <div className="mt-1 text-3xl font-bold text-green-950 dark:text-green-50">
                                     {total(selectedLog ?? ({ hours: 0 } as TimeLogInterface))}
                                 </div>
-                                <div className="mt-1 text-xs text-muted-foreground">{format(date, 'MMMM dd, yyyy')}</div>
+                                <div className="mt-1 text-xs text-green-800 dark:text-green-200">{format(date, 'MMMM dd, yyyy')}</div>
                             </div>
-                            <div className="rounded-lg bg-green-500/10 p-2.5">
-                                <Timer className="size-6 text-green-600 dark:text-green-400" />
+                            <div className="rounded-lg bg-green-500/20 p-2.5">
+                                <Timer className="size-6 text-green-700 dark:text-green-300" />
                             </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Today's Schedule Card */}
-                <div className="rounded-xl border border-sidebar-border bg-card p-6 shadow-sm">
+                <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
                     <div className="mb-5 flex items-center gap-2">
                         <CalendarDays className="size-5 text-muted-foreground" />
                         <h2 className="text-lg font-bold">{format(date, 'EEEE, MMMM dd, yyyy')}</h2>
@@ -177,7 +177,7 @@ export default function DashboardTrainee({
                 </div>
 
                 {/* Calendar Section */}
-                <div className="rounded-xl border border-sidebar-border bg-card p-6 shadow-sm">
+                <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
                     <h2 className="mb-4 text-2xl font-bold">Attendance Calendar</h2>
                     <LogCalendar date={date} setDate={setDate} />
                 </div>
