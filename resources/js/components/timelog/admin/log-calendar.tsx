@@ -22,31 +22,32 @@ export default function LogCalendar() {
     const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     return (
-        <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-                <div className="flex flex-col gap-1">
-                    <h2 className="text-2xl font-bold tracking-tight md:text-3xl">{format(date, 'MMMM yyyy')}</h2>
-                    <p className="text-sm text-muted-foreground">View and track time logs for the month</p>
+        <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
+            <div className="flex flex-col gap-6">
+                <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-1">
+                        <h2 className="text-2xl font-bold tracking-tight md:text-3xl">{format(date, 'MMMM yyyy')}</h2>
+                        <p className="text-sm text-muted-foreground">View and track time logs for the month</p>
+                    </div>
+                    <MonthPagination />
                 </div>
-                <MonthPagination />
-            </div>
 
-            <div className="flex flex-wrap items-center gap-4 rounded-lg border border-sidebar-border/50 bg-muted/20 p-3 dark:border-sidebar-border/30">
-                <div className="flex items-center gap-2 text-sm">
-                    <div className="h-3 w-3 rounded-full bg-green-500" />
-                    <span className="text-muted-foreground">Has logs</span>
+                <div className="flex flex-wrap items-center gap-4 rounded-lg border border-sidebar-border/50 bg-muted/20 p-3 dark:border-sidebar-border/30">
+                    <div className="flex items-center gap-2 text-sm">
+                        <div className="h-3 w-3 rounded-full bg-green-500" />
+                        <span className="text-muted-foreground">Has logs</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                        <div className="h-3 w-3 rounded-full bg-muted" />
+                        <span className="text-muted-foreground">No logs</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                        <div className="h-3 w-3 rounded-full bg-primary" />
+                        <span className="text-muted-foreground">Today</span>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
-                    <div className="h-3 w-3 rounded-full bg-muted" />
-                    <span className="text-muted-foreground">No logs</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                    <div className="h-3 w-3 rounded-full bg-primary" />
-                    <span className="text-muted-foreground">Today</span>
-                </div>
-            </div>
 
-            <div className="overflow-hidden rounded-xl border border-sidebar-border/70 bg-card shadow-sm dark:border-sidebar-border">
+                <div className="overflow-hidden rounded-xl border border-sidebar-border/70 bg-card shadow-sm dark:border-sidebar-border">
                 <div className="flex h-full flex-col">
                     <div className="grid grid-cols-7 border-b border-sidebar-border/70 bg-muted/30 dark:border-sidebar-border">
                         {weekDays.map((day, index) => (
@@ -82,6 +83,7 @@ export default function LogCalendar() {
                             />
                         ))}
                     </div>
+                </div>
                 </div>
             </div>
         </div>

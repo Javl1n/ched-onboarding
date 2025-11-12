@@ -70,19 +70,19 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
     const currentPath = window.location.pathname;
 
     return (
-        <div className="flex flex-1 flex-col gap-4 p-3 md:p-4">
+        <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 lg:p-6">
             {/* Header Section */}
-            <div className="group relative overflow-hidden rounded-xl border border-sidebar-border/50 bg-gradient-to-br from-card to-card/50 p-4 shadow-sm transition-shadow hover:shadow-md dark:border-sidebar-border/50">
+            <div className="group relative overflow-hidden rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm lg:p-8">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
                     {/* Profile Section */}
                     <div className="flex gap-4">
                         <div className="relative">
                             <img
-                                className="hidden h-20 w-20 rounded-xl object-cover ring-2 ring-sidebar-border/20 md:block"
+                                className="hidden size-20 rounded-xl border-2 border-primary/20 object-cover shadow-md md:block lg:size-24"
                                 src={`/private/${trainee.profile?.profile}`}
                                 alt={`${trainee.name}'s profile`}
                             />
-                            <div className="absolute -right-1 -bottom-1 hidden rounded-full bg-background p-1 shadow-sm md:block">
+                            <div className="absolute -right-1 -bottom-1 hidden rounded-full bg-background p-1.5 shadow-md md:block">
                                 {trainee.profile?.gender === 'Male' ? (
                                     <Mars className="size-4 text-blue-500" aria-label="Male" />
                                 ) : (
@@ -91,9 +91,9 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
                             </div>
                         </div>
 
-                        <div className="flex flex-1 flex-col justify-center gap-2">
+                        <div className="flex flex-1 flex-col justify-center gap-1">
                             <div className="flex flex-wrap items-center gap-2">
-                                <h1 className={cn('font-extrabold tracking-tight', sidebar.open ? 'text-2xl md:text-3xl' : 'text-2xl md:text-4xl')}>
+                                <h1 className={cn('text-2xl font-black tracking-tight lg:text-3xl', sidebar.open ? 'md:text-2xl' : 'md:text-3xl')}>
                                     {trainee.name}
                                 </h1>
                                 <div className="md:hidden">
@@ -106,7 +106,7 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
                                 <Badge
                                     variant={trainee.profile?.status === 'active' ? 'default' : 'secondary'}
                                     className={cn(
-                                        'h-fit px-2.5 py-0.5 text-xs font-medium',
+                                        'h-fit px-3 py-1 text-xs font-medium',
                                         trainee.profile?.status === 'active' &&
                                             'bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-400',
                                     )}
@@ -143,7 +143,7 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
                     <Separator orientation="vertical" className="hidden h-16 lg:block" />
 
                     {/* Contact Info Section */}
-                    <div className="grid flex-1 grid-cols-2 gap-1.5 lg:grid-cols-3">
+                    <div className="grid flex-1 grid-cols-2 gap-2 lg:grid-cols-3">
                         <InfoItem icon={Mail} label={trainee.email} />
                         <InfoItem icon={Phone} label={`+63${trainee.profile?.contact}`} />
                         <InfoItem icon={Contact} label={`${trainee.department.name} Department`} />
@@ -155,10 +155,11 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
             </div>
 
             {/* Content Section */}
-            <div className="flex flex-1 flex-col gap-4 lg:flex-row">
+            <div className="flex flex-1 flex-col gap-6 lg:flex-row">
                 {/* Sidebar Navigation */}
-                <aside className="w-full lg:w-52">
-                    <nav className="flex flex-col gap-1.5">
+                <aside className="w-full lg:w-56">
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-3 shadow-sm">
+                        <nav className="flex flex-col gap-1.5">
                         {sidebarNavItems.map((item, index) => {
                             const isActive = currentPath.includes(typeof item.href === 'string' ? item.href : item.href.url);
                             return (
@@ -203,6 +204,7 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
                             </div>
                         )}
                     </nav>
+                    </div>
                 </aside>
 
                 <Separator className="my-2 lg:hidden" />
@@ -216,11 +218,11 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
 
 function InfoItem({ icon: Icon, label }: { icon: React.ElementType; label: React.ReactNode }) {
     return (
-        <div className="group flex items-center gap-2 rounded-md p-1.5 transition-colors hover:bg-muted/50">
-            <div className="rounded-md bg-primary/5 p-1.5 transition-colors group-hover:bg-primary/10">
-                <Icon className="size-4 shrink-0 text-primary/70" aria-hidden="true" />
+        <div className="group flex items-center gap-2 rounded-lg p-2 transition-colors hover:bg-muted/30">
+            <div className="rounded-md bg-primary/10 p-2 transition-colors group-hover:bg-primary/20">
+                <Icon className="size-4 shrink-0 text-primary" aria-hidden="true" />
             </div>
-            <div className="min-w-0 text-sm">{label}</div>
+            <div className="min-w-0 text-sm font-medium">{label}</div>
         </div>
     );
 }
