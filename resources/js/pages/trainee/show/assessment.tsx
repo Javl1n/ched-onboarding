@@ -123,55 +123,57 @@ export default function TraineeShowAssessment({
 
             <TraineeShowLayout
                 action={
-                    <div className="space-y-6">
+                    <div className="space-y-4">
                         {supervisor.id === user.id && (
-                            <div className="rounded-lg border bg-card p-4 shadow-sm">
-                                <div className="mb-3 flex items-center justify-between">
-                                    <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                                        <ClipboardList className="size-4" />
+                            <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-5 shadow-sm">
+                                <div className="mb-4 flex items-center justify-between">
+                                    <h2 className="flex items-center gap-2 font-semibold text-foreground">
+                                        <div className="rounded-md bg-primary/10 p-1.5">
+                                            <ClipboardList className="size-4 text-primary" />
+                                        </div>
                                         Progress
                                     </h2>
-                                    <span className="text-xs font-medium text-muted-foreground">
+                                    <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
                                         {progress.answered}/{progress.total}
                                     </span>
                                 </div>
-                                <Progress value={progress.percentage} className="h-2" />
-                                <p className="mt-2 text-xs text-muted-foreground">
+                                <Progress value={progress.percentage} className="h-2.5" />
+                                <p className="mt-3 text-sm text-muted-foreground">
                                     {progress.percentage === 100 ? (
-                                        <span className="flex items-center gap-1 text-green-600 dark:text-green-400">
-                                            <CheckCircle2 className="size-3" />
+                                        <span className="flex items-center gap-1.5 font-medium text-green-600 dark:text-green-400">
+                                            <CheckCircle2 className="size-4" />
                                             All questions answered
                                         </span>
                                     ) : (
-                                        `${progress.percentage}% complete`
+                                        <span className="font-medium">{progress.percentage}% complete</span>
                                     )}
                                 </p>
                             </div>
                         )}
 
-                        <div className="space-y-3">
-                            <h2 className="text-sm font-semibold text-foreground">Supervisors</h2>
+                        <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-5 shadow-sm">
+                            <h2 className="mb-4 font-semibold text-foreground">Supervisors</h2>
                             <div className="space-y-1">
-                                {supervisors.map((sup) => (
+                                {supervisors.filter((sup) => user.role == 'admin' || sup.id == user.id).map((sup) => (
                                     <Button
                                         onClick={() => router.get(show.assessment({ user: trainee, supervisor: sup }))}
-                                        className={cn('w-full justify-start overflow-hidden text-wrap text-ellipsis', {
+                                        className={cn('h-auto min-h-9 w-full justify-start whitespace-normal text-left', {
                                             'bg-muted font-medium':
                                                 window.location.pathname === show.assessment({ user: trainee, supervisor: sup }).url,
                                         })}
                                         variant="ghost"
                                         key={`supervisor-${sup.id}`}
                                     >
-                                        {sup.name}
+                                        <span className="truncate">{sup.name}</span>
                                     </Button>
                                 ))}
                             </div>
                         </div>
 
                         {supervisor.id === user.id && (
-                            <div className="space-y-3">
-                                <h2 className="text-sm font-semibold text-foreground">Actions</h2>
-                                <Button disabled={supervisor.id !== user.id} className="w-full" onClick={save}>
+                            <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-5 shadow-sm">
+                                <h2 className="mb-4 font-semibold text-foreground">Actions</h2>
+                                <Button disabled={supervisor.id !== user.id} className="w-full shadow-sm" onClick={save}>
                                     Save Assessment
                                 </Button>
                             </div>
@@ -179,13 +181,14 @@ export default function TraineeShowAssessment({
                     </div>
                 }
             >
-                <div className="h-[calc(100vh-13.5rem)] overflow-auto px-4">
-                    <div className="mx-auto max-w-4xl space-y-12 py-6">
+                <div className="space-y-6">
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
+                        <div className="space-y-8 h-[calc(100vh-6rem)] overflow-auto">
                         {Object.keys(questions)
                             .filter((category) => category !== 'General')
                             .map((category) => (
                                 <div key={category} className="space-y-6">
-                                    <div className="sticky top-0 z-10 border-b bg-background/95 pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                                    <div className="border-b pb-4">
                                         <h2 className="text-2xl font-bold text-foreground">{category}</h2>
                                         <p className="mt-1 text-sm text-muted-foreground">
                                             {questions[category].length} {questions[category].length === 1 ? 'question' : 'questions'}
@@ -212,8 +215,8 @@ export default function TraineeShowAssessment({
                             ))}
 
                         {questions['General'] && (
-                            <div className="space-y-6 border-t pt-12">
-                                <div className="sticky top-0 z-10 border-b bg-background/95 pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                            <div className="space-y-6 border-t pt-8">
+                                <div className="pb-4">
                                     <h2 className="text-2xl font-bold text-foreground">Additional Feedback</h2>
                                     <p className="mt-1 text-sm text-muted-foreground">Provide detailed written feedback for the trainee</p>
                                 </div>
@@ -221,6 +224,7 @@ export default function TraineeShowAssessment({
                                     {questions['General'].map((question) => (
                                         <TextQuestion
                                             disabled={supervisor.id !== user.id}
+                                            
                                             value={data.questions[question.id] as string}
                                             onChange={(e) =>
                                                 setData('questions', {
@@ -236,6 +240,7 @@ export default function TraineeShowAssessment({
                                 </div>
                             </div>
                         )}
+                        </div>
                     </div>
                 </div>
             </TraineeShowLayout>

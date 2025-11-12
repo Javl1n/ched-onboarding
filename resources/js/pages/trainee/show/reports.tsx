@@ -60,15 +60,15 @@ export default function TraineeShowReports({
             <Head title={trainee.name} />
 
             <TraineeShowLayout>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-6">
                     {/* Top Row - Stats Cards */}
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {/* Total Hours Card */}
-                        <div className="rounded-xl border bg-gradient-to-br from-blue-50 to-white p-6 dark:from-blue-950/20 dark:to-background">
+                        <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-blue-50 via-blue-50/30 to-muted/20 p-6 shadow-sm dark:border-sidebar-border dark:from-blue-950/30 dark:via-blue-950/10 dark:to-muted/20">
                             <div className="mb-4 flex items-start justify-between">
                                 <div>
-                                    <div className="mb-1 text-sm font-medium text-muted-foreground">Total Hours Logged</div>
-                                    <div className="text-4xl font-bold text-foreground">{totalHours()}</div>
+                                    <div className="mb-1 text-sm font-semibold text-muted-foreground">Total Hours Logged</div>
+                                    <div className="text-4xl font-black text-foreground">{totalHours()}</div>
                                 </div>
                                 <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-blue-500 shadow-lg dark:bg-blue-600">
                                     <Clock className="size-7 text-white" />
@@ -76,13 +76,13 @@ export default function TraineeShowReports({
                             </div>
 
                             {/* Stats Row */}
-                            <div className="flex gap-4 border-t border-border/50 pt-4">
+                            <div className="flex gap-4 border-t border-sidebar-border/50 pt-4">
                                 <div className="flex-1">
-                                    <div className="mb-1 text-xs text-muted-foreground">Total Entries</div>
+                                    <div className="mb-1 text-xs font-medium text-muted-foreground">Total Entries</div>
                                     <div className="text-xl font-bold">{logs.length}</div>
                                 </div>
                                 <div className="flex-1">
-                                    <div className="mb-1 text-xs text-muted-foreground">Avg per Entry</div>
+                                    <div className="mb-1 text-xs font-medium text-muted-foreground">Avg per Entry</div>
                                     <div className="text-xl font-bold">
                                         {logs.length > 0 ? hourMinute(getTotalHoursNumber() / logs.length) : '0 hr 0 min'}
                                     </div>
@@ -91,26 +91,28 @@ export default function TraineeShowReports({
                         </div>
 
                         {/* Time Breakdown Card */}
-                        <div className="rounded-xl border bg-card p-6">
+                        <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
                             <div className="mb-4 flex items-center gap-2">
-                                <Calendar className="size-5 text-primary" />
-                                <h2 className="text-lg font-bold text-foreground">Monthly Breakdown</h2>
+                                <div className="rounded-md bg-primary/10 p-1.5">
+                                    <Calendar className="size-4 text-primary" />
+                                </div>
+                                <h2 className="font-semibold text-foreground">Monthly Breakdown</h2>
                             </div>
                             <TimeChart />
                         </div>
 
                         {/* Assessment Score Card */}
-                        <div className="flex flex-col justify-center rounded-xl border bg-gradient-to-br from-purple-50 to-white p-6 dark:from-purple-950/20 dark:to-background">
+                        <div className="flex flex-col justify-center rounded-xl border border-sidebar-border bg-gradient-to-br from-purple-50 via-purple-50/30 to-muted/20 p-6 shadow-sm dark:border-sidebar-border dark:from-purple-950/30 dark:via-purple-950/10 dark:to-muted/20">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
                                     <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-purple-500 shadow-lg dark:bg-purple-600">
                                         <Award className="size-8 text-white" />
                                     </div>
                                     <div>
-                                        <div className="mb-1 text-sm font-medium text-muted-foreground">Assessment Score</div>
+                                        <div className="mb-1 text-sm font-semibold text-muted-foreground">Assessment Score</div>
                                         <div className="flex items-baseline gap-2">
-                                            <span className="text-5xl font-bold text-foreground">{averageScore.value}</span>
-                                            {averageScore.isValid && <span className="text-2xl text-muted-foreground">/5.00</span>}
+                                            <span className="text-5xl font-black text-foreground">{averageScore.value}</span>
+                                            {averageScore.isValid && <span className="text-2xl font-semibold text-muted-foreground">/5.00</span>}
                                         </div>
                                     </div>
                                 </div>
@@ -125,12 +127,14 @@ export default function TraineeShowReports({
                     </div>
 
                     {/* Bottom Row - Chart and Summary */}
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                         {/* Assessment Chart Card */}
-                        <div className="flex flex-col rounded-xl border bg-card p-6">
+                        <div className="flex flex-col rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
                             <div className="mb-4 flex items-center gap-2">
-                                <Award className="size-5 text-primary" />
-                                <h2 className="text-lg font-bold text-foreground">Performance by Category</h2>
+                                <div className="rounded-md bg-primary/10 p-1.5">
+                                    <Award className="size-4 text-primary" />
+                                </div>
+                                <h2 className="font-semibold text-foreground">Performance by Category</h2>
                             </div>
                             <div className="flex-1">
                                 <AssessmentChart />

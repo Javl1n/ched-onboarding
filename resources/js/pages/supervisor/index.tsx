@@ -59,41 +59,52 @@ export default function SuperVisorIndex({ supervisors }: { supervisors: User[] }
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Supervisors" />
-            <div className="p-4">
-                <div className="mb-4 flex items-center justify-between">
-                    <div>
-                        <h2 className="text-2xl font-bold">Supervisors</h2>
-                        <p className="text-sm text-muted-foreground">
-                            {supervisors.length} {supervisors.length === 1 ? 'supervisor' : 'supervisors'} total
-                        </p>
-                    </div>
-                    <div className="flex gap-2">
-                        <CreateDepartment />
-                        <CreateSupervisor />
+            <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 lg:p-6">
+                {/* Page Header */}
+                <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm lg:p-8">
+                    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                        <div>
+                            <div className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">Manage</div>
+                            <div className="mt-1 text-3xl font-black lg:text-4xl">Supervisors</div>
+                            <p className="mt-1 text-sm text-muted-foreground">
+                                {supervisors.length} {supervisors.length === 1 ? 'supervisor' : 'supervisors'} total
+                            </p>
+                        </div>
+                        <div className="flex gap-2">
+                            <CreateDepartment />
+                            <CreateSupervisor />
+                        </div>
                     </div>
                 </div>
 
-                <div className="relative mb-4">
-                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                        type="text"
-                        placeholder="Search supervisors by name, email, or department..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-9"
-                    />
-                </div>
-
-                {filteredSupervisors.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center rounded-xl border border-dashed p-12 text-center">
-                        <UserCog className="mb-4 h-12 w-12 text-muted-foreground/50" />
-                        <h3 className="mb-2 text-lg font-semibold">No supervisors found</h3>
-                        <p className="text-sm text-muted-foreground">
-                            {searchQuery ? 'Try adjusting your search criteria.' : 'Get started by adding your first supervisor.'}
-                        </p>
+                {/* Supervisors Table with Search */}
+                <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 shadow-sm">
+                    {/* Search Bar */}
+                    <div className="border-b border-sidebar-border/50 p-4">
+                        <div className="relative">
+                            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                                type="text"
+                                placeholder="Search supervisors by name, email, or department..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-9"
+                            />
+                        </div>
                     </div>
-                ) : (
-                    <div className="rounded-xl border">
+
+                    {/* Table Content */}
+                    {filteredSupervisors.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center p-12 text-center">
+                            <div className="mb-4 flex size-16 items-center justify-center rounded-full bg-muted/50 ring-4 ring-muted/30">
+                                <UserCog className="size-8 text-muted-foreground" />
+                            </div>
+                            <h3 className="mb-2 text-lg font-semibold">No supervisors found</h3>
+                            <p className="text-sm text-muted-foreground">
+                                {searchQuery ? 'Try adjusting your search criteria.' : 'Get started by adding your first supervisor.'}
+                            </p>
+                        </div>
+                    ) : (
                         <Table>
                             <TableCaption>A list of all supervisors in the system.</TableCaption>
                             <TableHeader>
@@ -141,8 +152,8 @@ export default function SuperVisorIndex({ supervisors }: { supervisors: User[] }
                                 ))}
                             </TableBody>
                         </Table>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </AppLayout>
     );

@@ -38,7 +38,7 @@ export default function CreateSupervisor() {
             <DialogTrigger asChild>
                 <Button>Add Supervisor</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className='bg-white'>
                 <DialogHeader>
                     <DialogTitle>Add Supervisor</DialogTitle>
                     <DialogDescription>Enter supervisor information to create a new account.</DialogDescription>
@@ -77,7 +77,7 @@ export default function CreateSupervisor() {
 
                 <DialogFooter className="gap-2">
                     <DialogClose asChild>
-                        <Button variant="secondary" onClick={() => reset()}>
+                        <Button className='bg-white' variant="secondary" onClick={() => reset()}>
                             Cancel
                         </Button>
                     </DialogClose>

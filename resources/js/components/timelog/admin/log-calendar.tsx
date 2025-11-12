@@ -38,7 +38,7 @@ export default function LogCalendar() {
                         <span className="text-muted-foreground">Has logs</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                        <div className="h-3 w-3 rounded-full bg-muted" />
+                        <div className="h-3 w-3 rounded-full bg-muted border border-black" />
                         <span className="text-muted-foreground">No logs</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">

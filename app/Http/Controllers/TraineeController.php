@@ -103,9 +103,11 @@ class TraineeController extends Controller
         $supervisor = $user->department->users()->where('role', 'supervisor')->first();
 
         if ($supervisor) {
+            $supervisor = auth()->user()->roleIs('supervisor') ? auth()->user() : $supervisor;
+            
             return redirect()->route('trainees.show.assessment', [
                 'user' => $user,
-                'supervisor' => $user->department->users()->where('role', 'supervisor')->first(),
+                'supervisor' => $supervisor,
             ]);
         }
 
@@ -123,12 +125,14 @@ class TraineeController extends Controller
 
     public function showAssessment(User $user, User $supervisor)
     {
+
         return inertia()->render('trainee/show/assessment', [
             'trainee' => $user->load(['department']),
             'questions' => Question::where('for', 'supervisor')->get(),
             'supervisor' => $supervisor,
             'assessments' => $user->profile->assessments()->with('question')->where('supervisor_id', $supervisor->id)->get(),
-            'supervisors' => $user->department->users()->where('role', 'supervisor')->get(),
+
+            'supervisors' => auth()->user()->roleIs('admin') ? $user->department->users()->where('role', 'supervisor')->get() : collect([$supervisor]),
         ]);
     }
 

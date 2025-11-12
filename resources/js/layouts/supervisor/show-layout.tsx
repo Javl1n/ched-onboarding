@@ -27,33 +27,43 @@ export default function SupervisorShowLayout({ children, action }: { children?: 
     const currentPath = window.location.pathname;
 
     return (
-        <div className="flex flex-1 flex-col gap-4 rounded-xl p-4">
-            <Heading title={supervisor.name} description="All assessments about this supervisor." />
-            <div className="flex flex-1 flex-col lg:flex-row lg:space-x-12">
-                <aside className="w-full max-w-xl lg:w-48">
-                    <nav className="flex flex-col space-y-1 space-x-0">
-                        {sidebarNavItems.map((item, index) => (
-                            <Button
-                                key={`${typeof item.href === 'string' ? item.href : item.href.url}-${index}`}
-                                size="sm"
-                                variant="ghost"
-                                asChild
-                                className={cn('w-full justify-start', {
-                                    'bg-muted': currentPath === (typeof item.href === 'string' ? item.href : item.href.url),
-                                })}
-                            >
-                                <Link href={item.href} prefetch>
-                                    {item.icon && <item.icon className="h-4 w-4" />}
-                                    {item.title}
-                                </Link>
-                            </Button>
-                        ))}
-                        <div className="mt-4">{action}</div>
-                    </nav>
+        <div className="flex flex-1 flex-col gap-6 rounded-xl p-4 lg:p-6">
+            {/* Page Header */}
+            <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm lg:p-8">
+                <div className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">Supervisor</div>
+                <div className="mt-1 text-3xl font-black lg:text-4xl">{supervisor.name}</div>
+                <p className="mt-1 text-sm text-muted-foreground">All assessments about this supervisor</p>
+            </div>
+
+            <div className="flex flex-1 flex-col gap-6 lg:flex-row">
+                {/* Sidebar */}
+                <aside className="w-full lg:w-64">
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-5 shadow-sm">
+                        <h2 className="mb-4 font-semibold text-foreground">Trainees</h2>
+                        <nav className="flex flex-col space-y-1">
+                            {sidebarNavItems.map((item, index) => (
+                                <Button
+                                    key={`${typeof item.href === 'string' ? item.href : item.href.url}-${index}`}
+                                    variant="ghost"
+                                    asChild
+                                    className={cn('h-auto min-h-9 w-full justify-start whitespace-normal text-left', {
+                                        'bg-muted font-medium': currentPath === (typeof item.href === 'string' ? item.href : item.href.url),
+                                    })}
+                                >
+                                    <Link href={item.href} prefetch>
+                                        {item.icon && <item.icon className="h-4 w-4" />}
+                                        <span className="truncate">{item.title}</span>
+                                    </Link>
+                                </Button>
+                            ))}
+                        </nav>
+                        {action && <div className="mt-4">{action}</div>}
+                    </div>
                 </aside>
-                <Separator className="my-6 lg:hidden" />
+
+                {/* Main Content */}
                 <div className="flex-1">
-                    <section className="">{children}</section>
+                    <section>{children}</section>
                 </div>
             </div>
         </div>

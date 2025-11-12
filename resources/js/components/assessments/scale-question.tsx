@@ -24,8 +24,8 @@ export default function ScaleQuestion({
     ];
 
     return (
-        <div className="group rounded-lg border bg-card p-6 shadow-sm transition-all duration-200 hover:shadow-md">
-            <div className="mb-6 text-center font-medium text-foreground">{question.content}</div>
+        <div className="group rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm transition-all duration-200 hover:shadow-md">
+            <div className="mb-6 text-center font-semibold text-foreground">{question.content}</div>
 
             <div className="flex items-end justify-center gap-3">
                 {scales.map((scale) => (

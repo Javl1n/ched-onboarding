@@ -21,7 +21,7 @@ class TraineeProfileFactory extends Factory
         // dd(fake('en_PH')->mobileNumber());
         return [
             "profile" => '/empty_profile.jpg',
-            "user_id" => User::factory()->create(["role" => "trainee"])->id,
+            // "user_id" => User::factory()->create(["role" => "trainee"])->id,
             "school" => fake()->word() . " ". fake()->randomElement(["school", "university", "college"]),
             "birth" => fake()->dateTimeBetween('-21 years', '-20 years'),
             "gender" => fake()->randomElement(["Male", "Female"]),

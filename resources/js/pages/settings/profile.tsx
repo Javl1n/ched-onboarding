@@ -30,9 +30,10 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="Profile information" description="Update your name and email address" />
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
+                        <HeadingSmall title="Profile information" description="Update your name and email address" />
 
-                    <Form
+                        <Form
                         {...ProfileController.update.form()}
                         options={{
                             preserveScroll: true,
@@ -110,10 +111,11 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                 </div>
                             </>
                         )}
-                    </Form>
-                </div>
+                        </Form>
+                    </div>
 
-                {auth.user.role == 'trainee' && <EditTraineeProfile />}
+                    {auth.user.role == 'trainee' && <EditTraineeProfile />}
+                </div>
 
                 {/* <DeleteUser /> */}
             </SettingsLayout>

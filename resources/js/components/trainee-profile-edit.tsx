@@ -3,7 +3,7 @@ import { ProfilingAttributes } from '@/pages/auth/profiling';
 import { trainee } from '@/routes/profile/update';
 import { TraineeProfileInterface } from '@/types';
 import { useForm, usePage } from '@inertiajs/react';
-import { format } from 'date-fns';
+import { format, formatDate } from 'date-fns';
 import { RotateCcw } from 'lucide-react';
 import { ChangeEvent, useState } from 'react';
 import { toast } from 'sonner';
@@ -53,10 +53,10 @@ export default function EditTraineeProfile() {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
             <HeadingSmall title="Trainee Information" description="Update your trainee information" />
 
-            <div className="space-y-4">
+            <div className="mt-6 space-y-4">
                 <div className="space-y-2">
                     <div className="flex justify-between">
                         <Label className="my-auto">Profile Picture</Label>
@@ -90,8 +90,9 @@ export default function EditTraineeProfile() {
                     <InputError message={errors.profile} className="mt-2" />
                 </div>
                 <div className="space-y-2">
-                    <Label className="my-auto">School</Label>
-                    <DateInput date={data.birth} setDate={(date) => setData('birth', date)} />
+                    <Label className="my-auto">Birthdate</Label>
+                    {/* <DateInput date={data.birth} setDate={() => null} /> */}
+                    <Input value={format(data.birth, 'MMMM dd, yyyy')} onChange={(e) => null} disabled />
                     <InputError message={errors.profile} className="mt-2" />
                 </div>
                 <div className="space-y-2">

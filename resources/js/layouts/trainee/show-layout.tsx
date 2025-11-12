@@ -82,7 +82,7 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
                                 src={`/private/${trainee.profile?.profile}`}
                                 alt={`${trainee.name}'s profile`}
                             />
-                            <div className="absolute -right-1 -bottom-1 hidden rounded-full bg-background p-1.5 shadow-md md:block">
+                            <div className="absolute -right-1 -bottom-1 hidden rounded-full bg-white p-1.5 shadow-md ring-2 ring-background md:block dark:bg-gray-950">
                                 {trainee.profile?.gender === 'Male' ? (
                                     <Mars className="size-4 text-blue-500" aria-label="Male" />
                                 ) : (
@@ -157,9 +157,9 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
             {/* Content Section */}
             <div className="flex flex-1 flex-col gap-6 lg:flex-row">
                 {/* Sidebar Navigation */}
-                <aside className="w-full lg:w-56">
-                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-3 shadow-sm">
-                        <nav className="flex flex-col gap-1.5">
+                <aside className="w-full lg:w-64">
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-4 shadow-sm">
+                        <nav className="flex flex-col gap-2">
                         {sidebarNavItems.map((item, index) => {
                             const isActive = currentPath.includes(typeof item.href === 'string' ? item.href : item.href.url);
                             return (

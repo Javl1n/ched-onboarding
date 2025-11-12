@@ -8,7 +8,7 @@ import assessments from '@/routes/assessments';
 import { AssessmentInterface, BreadcrumbItem, QuestionInterface, User } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { MessageSquareText, Save, UserCircle } from 'lucide-react';
+import { Save, UserCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function SupervisorAsssessmentShow({
@@ -81,8 +81,9 @@ export default function SupervisorAsssessmentShow({
                     </Button>
                 }
             >
-                <div className="space-y-8">
-                    <div className="rounded-lg border bg-gradient-to-br from-primary/5 via-primary/3 to-background p-6 shadow-sm">
+                <div className="space-y-6">
+                    {/* Supervisor Header Card */}
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
                         <div className="flex items-start gap-4">
                             <div className="rounded-full bg-primary/10 p-3">
                                 <UserCircle className="size-6 text-primary" />
@@ -90,75 +91,70 @@ export default function SupervisorAsssessmentShow({
                             <div className="flex-1">
                                 <h2 className="text-2xl font-bold text-foreground">{supervisor.name}</h2>
                                 <p className="mt-1 text-sm text-muted-foreground">
-                                    Complete the assessment below to provide feedback on this supervisor's performance.
+                                    Complete the assessment below to provide feedback on this supervisor's performance
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    {Object.keys(questions)
-                        .filter((category) => category != 'General')
-                        .map((category, categoryIndex) => (
-                            <div key={category} className="space-y-6">
-                                <div className="sticky top-0 z-10 flex items-center gap-3 border-b bg-background/95 pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                                    <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary">
-                                        {categoryIndex + 1}
+                    {/* Assessment Content Card */}
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
+                        <div className="h-[calc(100vh-6rem)] space-y-8 overflow-auto">
+                            {Object.keys(questions)
+                                .filter((category) => category != 'General')
+                                .map((category, categoryIndex) => (
+                                    <div key={category} className="space-y-6">
+                                        <div className="border-b pb-4">
+                                            <h3 className="text-2xl font-bold text-foreground">{category}</h3>
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                {questions[category].length} {questions[category].length === 1 ? 'question' : 'questions'}
+                                            </p>
+                                        </div>
+                                        <div className="space-y-5">
+                                            {questions[category].map((question) => (
+                                                <ScaleQuestion
+                                                    value={data.questions[question.id] as number}
+                                                    setData={(value) =>
+                                                        setData('questions', {
+                                                            ...data.questions,
+                                                            [question.id]: value as number,
+                                                        })
+                                                    }
+                                                    question={question}
+                                                    key={`question-${question.id}`}
+                                                    error={errors[`questions.${question.id}`]}
+                                                />
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className="text-2xl font-bold text-foreground">{category}</h3>
-                                        <p className="mt-0.5 text-sm text-muted-foreground">
-                                            {questions[category].length} {questions[category].length === 1 ? 'question' : 'questions'}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="space-y-5">
-                                    {questions[category].map((question) => (
-                                        <ScaleQuestion
-                                            value={data.questions[question.id] as number}
-                                            setData={(value) =>
-                                                setData('questions', {
-                                                    ...data.questions,
-                                                    [question.id]: value as number,
-                                                })
-                                            }
-                                            question={question}
-                                            key={`question-${question.id}`}
-                                            error={errors[`questions.${question.id}`]}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-
-                    {questions['General'] && (
-                        <div className="space-y-6 border-t pt-12">
-                            <div className="sticky top-0 z-10 flex items-center gap-3 border-b bg-background/95 pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                                <div className="rounded-lg bg-primary/10 p-2">
-                                    <MessageSquareText className="size-5 text-primary" />
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-bold text-foreground">Additional Feedback</h3>
-                                    <p className="mt-0.5 text-sm text-muted-foreground">Detailed written feedback for the supervisor</p>
-                                </div>
-                            </div>
-                            <div className="space-y-5">
-                                {questions['General'].map((question) => (
-                                    <TextQuestion
-                                        value={data.questions[question.id] as string}
-                                        onChange={(e) =>
-                                            setData('questions', {
-                                                ...data.questions,
-                                                [question.id]: e.target.value as string,
-                                            })
-                                        }
-                                        question={question}
-                                        key={`question-${question.id}`}
-                                        error={errors[`questions.${question.id}`]}
-                                    />
                                 ))}
-                            </div>
+
+                            {questions['General'] && (
+                                <div className="space-y-6 border-t pt-8">
+                                    <div className="pb-4">
+                                        <h3 className="text-2xl font-bold text-foreground">Additional Feedback</h3>
+                                        <p className="mt-1 text-sm text-muted-foreground">Detailed written feedback for the supervisor</p>
+                                    </div>
+                                    <div className="space-y-5">
+                                        {questions['General'].map((question) => (
+                                            <TextQuestion
+                                                value={data.questions[question.id] as string}
+                                                onChange={(e) =>
+                                                    setData('questions', {
+                                                        ...data.questions,
+                                                        [question.id]: e.target.value as string,
+                                                    })
+                                                }
+                                                question={question}
+                                                key={`question-${question.id}`}
+                                                error={errors[`questions.${question.id}`]}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
             </SupervisorAssessmentLayout>
         </AppLayout>

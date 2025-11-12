@@ -31,9 +31,9 @@ export default function CreateDepartment() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline">Add Department</Button>
+                <Button className='bg-white' variant="outline">Add Department</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className='bg-white'>
                 <DialogHeader>
                     <DialogTitle>Add Department</DialogTitle>
                     <DialogDescription>Create a new department. You won't be able to update or delete it afterwards.</DialogDescription>
@@ -61,7 +61,7 @@ export default function CreateDepartment() {
 
                 <DialogFooter className="gap-2">
                     <DialogClose asChild>
-                        <Button variant="secondary" onClick={() => reset()}>
+                        <Button className='bg-white' variant="secondary" onClick={() => reset()}>
                             Cancel
                         </Button>
                     </DialogClose>

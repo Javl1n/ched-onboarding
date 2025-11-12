@@ -125,7 +125,7 @@ export default function ReportSummary() {
     };
 
     return (
-        <div className="flex h-auto flex-col rounded-xl border bg-gradient-to-br from-emerald-50 to-white p-6 lg:h-[calc(100vh-16rem)] dark:from-emerald-950/20 dark:to-background">
+        <div className="flex h-auto flex-col rounded-xl border border-sidebar-border bg-gradient-to-br from-emerald-50 via-emerald-50/30 to-muted/20 p-6 shadow-sm lg:h-[calc(100vh-16rem)] dark:border-sidebar-border dark:from-emerald-950/30 dark:via-emerald-950/10 dark:to-muted/20">
             {/* Header Section */}
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
@@ -133,7 +133,7 @@ export default function ReportSummary() {
                         <FileText className="size-6 text-white" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold text-foreground">AI Summary</h2>
+                        <h2 className="font-semibold text-foreground">AI Summary</h2>
                         <p className="text-xs text-muted-foreground">Generated performance report</p>
                     </div>
                 </div>
@@ -148,7 +148,7 @@ export default function ReportSummary() {
                             sendSaved({ id: value });
                         }}
                     >
-                        <SelectTrigger className="bg-background">
+                        <SelectTrigger className="bg-card/50">
                             <CalendarIcon className="mr-2 size-4" />
                             <SelectValue placeholder="Select saved summary" />
                         </SelectTrigger>
@@ -171,15 +171,15 @@ export default function ReportSummary() {
             </div>
 
             {/* Content Section */}
-            <div className="min-h-[20rem] flex-1 overflow-auto rounded-xl border bg-background p-5 shadow-sm">
+            <div className="min-h-[20rem] flex-1 overflow-auto rounded-xl border border-sidebar-border/50 bg-card/50 p-5 shadow-sm backdrop-blur-sm">
                 {!summary && !isFetching && !isFetchingSaved && (
                     <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-                        <div className="flex size-16 items-center justify-center rounded-full bg-muted">
-                            <Sparkles className="size-8 text-muted-foreground" />
+                        <div className="flex size-20 items-center justify-center rounded-full bg-white shadow-lg dark:bg-gray-950">
+                            <Sparkles className="size-10 text-emerald-500" />
                         </div>
                         <div className="space-y-2">
-                            <p className="text-sm font-medium text-foreground">No summary available</p>
-                            <p className="max-w-xs text-xs text-muted-foreground">
+                            <p className="font-semibold text-foreground">No summary available</p>
+                            <p className="max-w-xs text-sm text-muted-foreground">
                                 Click "Generate Summary" below to create an AI-powered performance report
                             </p>
                         </div>
@@ -213,9 +213,9 @@ export default function ReportSummary() {
             </div>
 
             {/* Actions Section */}
-            <div className="mt-6 flex flex-col gap-3 border-t border-border/50 pt-6 sm:flex-row">
+            <div className="mt-6 flex flex-col gap-3 border-t border-sidebar-border/50 pt-6 sm:flex-row">
                 <Button
-                    className="w-full gap-2 sm:w-auto"
+                    className="w-full gap-2 shadow-sm sm:w-auto"
                     disabled={isFetching || isFetchingSaved}
                     onClick={() => {
                         setSummary('');
@@ -227,7 +227,7 @@ export default function ReportSummary() {
                     <Sparkles className="size-4" />
                     Generate Summary
                 </Button>
-                <Button className="w-full gap-2 sm:w-auto" disabled={formData.summary == ''} variant={'secondary'} onClick={() => save()}>
+                <Button className="w-full gap-2 shadow-sm sm:w-auto" disabled={formData.summary == ''} variant={'secondary'} onClick={() => save()}>
                     <Save className="size-4" />
                     Save Summary
                 </Button>

@@ -56,84 +56,87 @@ export default function SupervisorShow({
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Supervisors" />
             <SupervisorShowLayout>
-                <div className="h-[calc(100vh-13.5rem)] overflow-auto px-4">
-                    <div className="mx-auto max-w-4xl space-y-12 py-6">
-                        {/* Trainee Header */}
-                        <div className="rounded-xl border bg-gradient-to-br from-card to-card/50 p-6 shadow-sm">
-                            <div className="flex items-center gap-4">
-                                <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 shadow-sm">
-                                    <UserIcon className="size-7 text-primary" />
+                <div className="space-y-6">
+                    {/* Trainee Header Card */}
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
+                        <div className="flex items-center gap-4">
+                            <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-primary/10 shadow-sm">
+                                <UserIcon className="size-7 text-primary" />
+                            </div>
+                            <div className="flex flex-1 flex-col gap-2">
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <h2 className="text-2xl font-bold text-foreground">{trainee.name}</h2>
+                                    {trainee.profile?.status && (
+                                        <Badge
+                                            variant={trainee.profile.status === 'active' ? 'default' : 'secondary'}
+                                            className={cn(
+                                                'h-fit px-2.5 py-0.5 text-xs font-medium',
+                                                trainee.profile.status === 'active' &&
+                                                    'bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-400',
+                                            )}
+                                        >
+                                            {trainee.profile.status === 'active' ? 'Active' : 'Inactive'}
+                                        </Badge>
+                                    )}
                                 </div>
-                                <div className="flex flex-1 flex-col gap-2">
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <h2 className="text-2xl font-bold text-foreground">{trainee.name}</h2>
-                                        {trainee.profile?.status && (
-                                            <Badge
-                                                variant={trainee.profile.status === 'active' ? 'default' : 'secondary'}
-                                                className={cn(
-                                                    'h-fit px-2.5 py-0.5 text-xs font-medium',
-                                                    trainee.profile.status === 'active' &&
-                                                        'bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-400',
-                                                )}
-                                            >
-                                                {trainee.profile.status === 'active' ? 'Active' : 'Inactive'}
-                                            </Badge>
-                                        )}
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">Assessment from {trainee.name}</p>
-                                </div>
+                                <p className="text-sm text-muted-foreground">Assessment from {trainee.name}</p>
                             </div>
                         </div>
+                    </div>
 
-                        {Object.keys(questions)
-                            .filter((category) => category !== 'General')
-                            .map((category) => (
-                                <div key={category} className="space-y-6">
-                                    <div className="sticky top-0 z-10 border-b bg-background/95 pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                                        <h2 className="text-2xl font-bold text-foreground">{category}</h2>
-                                        <p className="mt-1 text-sm text-muted-foreground">
-                                            {questions[category].length} {questions[category].length === 1 ? 'question' : 'questions'}
-                                        </p>
+                    {/* Assessment Content Card */}
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
+                        <div className="h-[calc(100vh-6rem)] space-y-8 overflow-auto">
+                            {Object.keys(questions)
+                                .filter((category) => category !== 'General')
+                                .map((category) => (
+                                    <div key={category} className="space-y-6">
+                                        <div className="border-b pb-4">
+                                            <h2 className="text-2xl font-bold text-foreground">{category}</h2>
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                {questions[category].length} {questions[category].length === 1 ? 'question' : 'questions'}
+                                            </p>
+                                        </div>
+                                        <div className="space-y-5">
+                                            {questions[category].map((question) => (
+                                                <ScaleQuestion
+                                                    key={`question-${question.id}`}
+                                                    disabled
+                                                    value={
+                                                        assessments.find((assessment) => assessment.question.id === question.id)
+                                                            ?.value as unknown as number
+                                                    }
+                                                    question={question}
+                                                    setData={() => null}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+
+                            {questions['General'] && (
+                                <div className="space-y-6 border-t pt-8">
+                                    <div className="pb-4">
+                                        <h2 className="text-2xl font-bold text-foreground">Additional Feedback</h2>
+                                        <p className="mt-1 text-sm text-muted-foreground">Detailed written feedback for the trainee</p>
                                     </div>
                                     <div className="space-y-5">
-                                        {questions[category].map((question) => (
-                                            <ScaleQuestion
+                                        {questions['General'].map((question) => (
+                                            <TextQuestion
                                                 key={`question-${question.id}`}
                                                 disabled
                                                 value={
-                                                    assessments.find((assessment) => assessment.question.id === question.id)
-                                                        ?.value as unknown as number
+                                                    assessments.find((assessment) => assessment.question.id === question.id)?.value as unknown as string
                                                 }
+                                                onChange={() => null}
                                                 question={question}
-                                                setData={() => null}
+                                                error=""
                                             />
                                         ))}
                                     </div>
                                 </div>
-                            ))}
-
-                        {questions['General'] && (
-                            <div className="space-y-6 border-t pt-12">
-                                <div className="sticky top-0 z-10 border-b bg-background/95 pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                                    <h2 className="text-2xl font-bold text-foreground">Additional Feedback</h2>
-                                    <p className="mt-1 text-sm text-muted-foreground">Detailed written feedback for the trainee</p>
-                                </div>
-                                <div className="space-y-5">
-                                    {questions['General'].map((question) => (
-                                        <TextQuestion
-                                            key={`question-${question.id}`}
-                                            disabled
-                                            value={
-                                                assessments.find((assessment) => assessment.question.id === question.id)?.value as unknown as string
-                                            }
-                                            onChange={() => null}
-                                            question={question}
-                                            error=""
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
             </SupervisorShowLayout>

@@ -49,29 +49,31 @@ export default function SupervisorShow({
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Supervisors" />
             <SupervisorShowLayout>
-                <div className="h-[calc(100vh-13.5rem)] overflow-auto px-4">
-                    <div className="mx-auto max-w-4xl space-y-12 py-6">
-                        {Object.keys(questions).map((category) => (
-                            <div key={category} className="space-y-6">
-                                <div className="sticky top-0 z-10 border-b bg-background/95 pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                                    <h2 className="text-2xl font-bold text-foreground">{category}</h2>
-                                    <p className="mt-1 text-sm text-muted-foreground">
-                                        {questions[category].length} {questions[category].length === 1 ? 'question' : 'questions'}
-                                    </p>
+                <div className="space-y-6">
+                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
+                        <div className="h-[calc(100vh-6rem)] space-y-8 overflow-auto">
+                            {Object.keys(questions).map((category) => (
+                                <div key={category} className="space-y-6">
+                                    <div className="border-b pb-4">
+                                        <h2 className="text-2xl font-bold text-foreground">{category}</h2>
+                                        <p className="mt-1 text-sm text-muted-foreground">
+                                            {questions[category].length} {questions[category].length === 1 ? 'question' : 'questions'}
+                                        </p>
+                                    </div>
+                                    <div className="space-y-5">
+                                        {questions[category].map((question) => (
+                                            <ScaleQuestion
+                                                key={`question-${question.id}`}
+                                                disabled
+                                                value={assessments[question.id] as number}
+                                                question={question}
+                                                setData={() => null}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className="space-y-5">
-                                    {questions[category].map((question) => (
-                                        <ScaleQuestion
-                                            key={`question-${question.id}`}
-                                            disabled
-                                            value={assessments[question.id] as number}
-                                            question={question}
-                                            setData={() => null}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </div>
             </SupervisorShowLayout>

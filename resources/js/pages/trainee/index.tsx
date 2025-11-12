@@ -87,27 +87,29 @@ export default function TraineeIndex({ trainees, filters }: TraineeIndexProps) {
                                 {status === 'active' && ' (active only)'}
                             </p>
                         </div>
-                        <Button variant="outline" onClick={handleToggleStatus} className="shadow-sm">
+                        <Button variant="outline" onClick={handleToggleStatus} className="shadow-sm bg-white">
                             {status === 'all' ? 'Hide Inactive Trainees' : 'Show All Trainees'}
                         </Button>
                     </div>
                 </div>
 
-                {/* Search Bar Card */}
-                <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-4 shadow-sm">
-                    <div className="relative">
-                        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                        <Input
-                            type="text"
-                            placeholder="Search trainees by name, department, school, contact, or gender..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="pl-9"
-                        />
-                    </div>
-                </div>
-                {/* Trainees Table */}
+                {/* Trainees Card with Search, Table, and Pagination */}
                 <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 shadow-sm">
+                    {/* Search Bar */}
+                    <div className="p-4 border-b border-sidebar-border">
+                        <div className="relative">
+                            <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                                type="text"
+                                placeholder="Search trainees by name, department, school, contact, or gender..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-9"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Trainees Table */}
                     {trainees.data.length === 0 ? (
                         <div className="flex flex-col items-center justify-center p-12 text-center">
                             <div className="rounded-full bg-muted/50 p-6 mb-4">
@@ -196,96 +198,96 @@ export default function TraineeIndex({ trainees, filters }: TraineeIndexProps) {
                             </TableBody>
                         </Table>
                     )}
-                </div>
 
-                {/* Pagination Controls */}
-                {trainees.last_page > 1 && (
-                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-4 shadow-sm">
-                        <div className="flex items-center justify-between">
-                            <div className="text-sm text-muted-foreground">
-                                Showing {trainees.from} to {trainees.to} of {trainees.total} trainees
-                            </div>
-                            <Pagination>
-                            <PaginationContent>
-                                {trainees.links[0].url && (
-                                    <PaginationItem>
-                                        <PaginationPrevious
-                                            href="#"
-                                            size="default"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                router.get(
-                                                    trainees.links[0].url!,
-                                                    { search: searchQuery || undefined, status },
-                                                    {
-                                                        preserveState: true,
-                                                        preserveScroll: true,
-                                                    },
-                                                );
-                                            }}
-                                        />
-                                    </PaginationItem>
-                                )}
-
-                                {trainees.links.slice(1, -1).map((link, index) => {
-                                    if (link.label === '...') {
-                                        return (
-                                            <PaginationItem key={`ellipsis-${index}`}>
-                                                <PaginationEllipsis />
-                                            </PaginationItem>
-                                        );
-                                    }
-
-                                    return (
-                                        <PaginationItem key={index}>
-                                            <PaginationLink
-                                                href="#"
-                                                size="icon"
-                                                isActive={link.active}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    if (link.url) {
+                    {/* Pagination Controls */}
+                    {trainees.last_page > 1 && (
+                        <div className="p-4 border-t border-sidebar-border">
+                            <div className="flex items-center justify-between">
+                                <div className="text-sm text-muted-foreground">
+                                    Showing {trainees.from} to {trainees.to} of {trainees.total} trainees
+                                </div>
+                                <Pagination>
+                                    <PaginationContent>
+                                        {trainees.links[0].url && (
+                                            <PaginationItem>
+                                                <PaginationPrevious
+                                                    href="#"
+                                                    size="default"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
                                                         router.get(
-                                                            link.url,
+                                                            trainees.links[0].url!,
                                                             { search: searchQuery || undefined, status },
                                                             {
                                                                 preserveState: true,
                                                                 preserveScroll: true,
                                                             },
                                                         );
-                                                    }
-                                                }}
-                                            >
-                                                {link.label}
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                    );
-                                })}
+                                                    }}
+                                                />
+                                            </PaginationItem>
+                                        )}
 
-                                {trainees.links[trainees.links.length - 1].url && (
-                                    <PaginationItem>
-                                        <PaginationNext
-                                            href="#"
-                                            size="default"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                router.get(
-                                                    trainees.links[trainees.links.length - 1].url!,
-                                                    { search: searchQuery || undefined, status },
-                                                    {
-                                                        preserveState: true,
-                                                        preserveScroll: true,
-                                                    },
+                                        {trainees.links.slice(1, -1).map((link, index) => {
+                                            if (link.label === '...') {
+                                                return (
+                                                    <PaginationItem key={`ellipsis-${index}`}>
+                                                        <PaginationEllipsis />
+                                                    </PaginationItem>
                                                 );
-                                            }}
-                                        />
-                                    </PaginationItem>
-                                )}
-                            </PaginationContent>
-                        </Pagination>
+                                            }
+
+                                            return (
+                                                <PaginationItem key={index}>
+                                                    <PaginationLink
+                                                        href="#"
+                                                        size="icon"
+                                                        isActive={link.active}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            if (link.url) {
+                                                                router.get(
+                                                                    link.url,
+                                                                    { search: searchQuery || undefined, status },
+                                                                    {
+                                                                        preserveState: true,
+                                                                        preserveScroll: true,
+                                                                    },
+                                                                );
+                                                            }
+                                                        }}
+                                                    >
+                                                        {link.label}
+                                                    </PaginationLink>
+                                                </PaginationItem>
+                                            );
+                                        })}
+
+                                        {trainees.links[trainees.links.length - 1].url && (
+                                            <PaginationItem>
+                                                <PaginationNext
+                                                    href="#"
+                                                    size="default"
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        router.get(
+                                                            trainees.links[trainees.links.length - 1].url!,
+                                                            { search: searchQuery || undefined, status },
+                                                            {
+                                                                preserveState: true,
+                                                                preserveScroll: true,
+                                                            },
+                                                        );
+                                                    }}
+                                                />
+                                            </PaginationItem>
+                                        )}
+                                    </PaginationContent>
+                                </Pagination>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </AppLayout>
     );

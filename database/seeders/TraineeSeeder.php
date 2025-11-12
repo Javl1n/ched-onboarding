@@ -158,6 +158,18 @@ class TraineeSeeder extends Seeder
                 'department_id' => Department::where('name', 'Technical Division')->first()->id,
             ]);
 
+        User::factory()
+            ->has(TraineeProfile::factory(state: [
+                'gender' => 'Male',
+                'school' => 'South East Asian Intitute of Technology, Inc. (SEAIT)'
+            ]), 'profile')
+            ->create([
+                'name' => 'Frank Leimbergh D. Armodia',
+                'email' => 'farmodia@gmail.com',
+                'role' => 'trainee',
+                'department_id' => Department::where('name', 'HEMIS Unit')->first()->id,
+            ]);
+
         // TraineeProfile::factory(30)->create();
 
         foreach ($schools as $school => $trainees) {
