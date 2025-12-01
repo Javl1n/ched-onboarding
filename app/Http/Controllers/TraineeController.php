@@ -6,6 +6,7 @@ use App\Models\Question;
 use App\Models\TraineeReport;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Prism\Prism\Prism;
@@ -104,7 +105,7 @@ class TraineeController extends Controller
 
         if ($supervisor) {
             $supervisor = auth()->user()->roleIs('supervisor') ? auth()->user() : $supervisor;
-            
+
             return redirect()->route('trainees.show.assessment', [
                 'user' => $user,
                 'supervisor' => $supervisor,
@@ -185,7 +186,7 @@ class TraineeController extends Controller
             Detailed Logs:
             ".$timelogs->map(fn ($log) => "{$log->date}: {$log->hours} hrs (In: {$log->morning_in} / Out: {$log->afternoon_out})"
         )->implode("\n")."
-            
+
             --- Supervisor Assessmennt ---
             {$assessmentSummary}
         ";
@@ -195,27 +196,34 @@ class TraineeController extends Controller
             $stream = Prism::text()
                 ->using('openai', 'gpt-5-nano')
                 ->withSystemPrompt('You are an HR assistant summarizing trainee performance.
-                              Always write in a neutral, professional tone.
-                              Format the response in valid HTML with semantic tags.
-                              Use <h2> for section headers and <p> for details.
-                              Structure into three sections:
-                              <h2>Attendance Summary</h2>
-                              <h2>Supervisor Assessment</h2>
-                              <h2>Overall Impression</h2>')
+                            Always write in a neutral, professional tone.
+                            Format the response in valid HTML with semantic tags.
+                            Use <h2> for section headers and <p> for details.
+                            Structure into three sections:
+                            <h2>Attendance Summary</h2>
+                            <h2>Supervisor Assessment</h2>
+                            <h2>Overall Impression</h2>')
                 ->withPrompt($prompt)
                 ->withMaxTokens(10000)
                 ->asStream();
-
+            // ob_start();
             foreach ($stream as $chunk) {
+                // yield $chunk->text;
                 echo $chunk->text;
-                ob_flush();
+
+                // Safe flush
+                if (ob_get_level() > 0) {
+                    ob_flush();
+                }
                 flush();
             }
+            // ob_end_flush();
         }, 200, [
             'Cache-Control' => 'no-cache',
             'Content-Type' => 'text/event-stream',
             'X-Accel-Buffering' => 'no',
         ]);
+
     }
 
     public function savedReport(User $user, Request $request)
@@ -228,7 +236,9 @@ class TraineeController extends Controller
         return response()->stream(function () use ($report) {
             foreach (str_split($report, 10) as $chunk) {
                 echo $chunk;
-                ob_flush();
+                 if (ob_get_level() > 0) {
+                    ob_flush();
+                }
                 flush();
                 usleep(10 * 1000);
             }

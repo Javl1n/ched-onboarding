@@ -9,7 +9,7 @@ import supervisor from '@/routes/supervisor';
 import trainees from '@/routes/trainees';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { ClipboardCheck, FileUser, LayoutGrid, UserRoundCog, Users } from 'lucide-react';
+import { ClipboardCheck, FileUser, LayoutGrid, Notebook, NotebookTabs, UserRoundCog, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const traineeNavItems: NavItem[] = [
@@ -18,10 +18,15 @@ const traineeNavItems: NavItem[] = [
         href: dashboard.trainee(),
         icon: LayoutGrid,
     },
+    // {
+    //     title: 'About CHED',
+    //     href: onboarding.index(),
+    //     icon: FileUser,
+    // },
     {
-        title: 'About CHED',
-        href: onboarding.index(),
-        icon: FileUser,
+        title: 'Journal',
+        href: dashboard.trainee(),
+        icon: NotebookTabs,
     },
     {
         title: 'Supervisor Assessments',
@@ -36,11 +41,11 @@ const supervisorNavItems: NavItem[] = [
         href: dashboard.supervisor(),
         icon: LayoutGrid,
     },
-    {
-        title: 'Onboarding',
-        href: onboarding.index(),
-        icon: FileUser,
-    },
+    // {
+    //     title: 'Onboarding',
+    //     href: onboarding.index(),
+    //     icon: FileUser,
+    // },
     // {
     //     title: 'Assessments',
     //     href: assessments.supervisor.index(),
@@ -59,11 +64,11 @@ const adminNavItems: NavItem[] = [
         href: dashboard.admin(),
         icon: LayoutGrid,
     },
-    {
-        title: 'Onboarding',
-        href: onboarding.index(),
-        icon: FileUser,
-    },
+    // {
+    //     title: 'Onboarding',
+    //     href: onboarding.index(),
+    //     icon: FileUser,
+    // },
     {
         title: 'Trainees',
         href: trainees.index(),

@@ -32,7 +32,7 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
         <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4 lg:p-6">
             <div className="flex flex-col gap-6 lg:flex-row lg:gap-8">
                 {/* Enhanced Sidebar Navigation */}
-                <aside className="w-full lg:w-80 lg:shrink-0">
+                {/* <aside className="w-full lg:w-80 lg:shrink-0">
                     <div className="lg:sticky lg:top-6">
                         <div className="overflow-hidden rounded-xl border border-sidebar-border bg-gradient-to-br from-blue-50 to-blue-100 p-4 shadow-md dark:from-blue-950/30 dark:to-blue-900/30">
                             <div className="mb-4 flex items-center gap-3 rounded-lg bg-gradient-to-br from-blue-100 to-blue-50 p-3 dark:from-blue-900/40 dark:to-blue-950/40">
@@ -92,13 +92,13 @@ export default function OnboardingLayout({ children }: PropsWithChildren) {
                             </nav>
                         </div>
                     </div>
-                </aside>
+                </aside> */}
 
                 <Separator className="lg:hidden" />
 
                 {/* Main Content Area */}
-                <div className="min-w-0 flex-1">
-                    <div className="max-w-5xl 2xl:max-w-6xl">
+                <div className="flex-1">
+                    <div className="">
                         {children}
                     </div>
                 </div>

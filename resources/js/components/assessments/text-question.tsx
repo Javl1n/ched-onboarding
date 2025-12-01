@@ -17,7 +17,7 @@ export default function TextQuestion({
                 <div className="font-semibold text-foreground">{question.content}</div>
             </div>
             {!disabled ? (
-                <Textarea className="mt-4 min-h-32 bg-white" placeholder="Enter your evaluation here..." {...props}></Textarea>
+                <Textarea className="mt-4 min-h-32 bg-background" placeholder="Enter your evaluation here..." {...props}></Textarea>
             ) : (
                 <div className="mt-4 min-h-32 rounded-lg border bg-muted/30 p-4">
                     {props.value ? (

@@ -29,7 +29,7 @@ export default function AssessmentChart() {
     const chartConfig = {
         score: {
             label: 'Score',
-            color: '#2563eb',
+            color: '#0ccb1fff',
         },
     } satisfies ChartConfig;
 
@@ -41,23 +41,30 @@ export default function AssessmentChart() {
         })),
     ];
 
-    console.log(data);
 
-    return (
-        <ChartContainer config={chartConfig} className="h-full w-full">
-            <BarChart data={data}>
-                {/* <PolarAngleAxis dataKey="category" tickFormatter={(value) => value.split(" ")[0]} /> */}
-                {/* <PolarGrid /> */}
-                {/* <PolarRadiusAxis type="number" angle={90} axisLine={false} hide={true} domain={[0, 5]}/> */}
-                <XAxis dataKey="category" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar
-                    dataKey="score"
-                    fill="var(--color-score)"
-                    // fillOpacity={0.6}
-                />
-            </BarChart>
-        </ChartContainer>
-    );
+    if (data.length > 0)
+    {
+        return (
+            <ChartContainer config={chartConfig} className="h-full w-full">
+                <BarChart data={data}>
+                    <XAxis dataKey="category" />
+                    <YAxis dataKey={'fullMark'} />
+                    <ChartTooltip content={<ChartTooltipContent className='bg-background' />} />
+                    <Bar
+                        dataKey="score"
+                        fill="var(--color-score)"
+                        // fillOpacity={0.6}
+                    />
+                </BarChart>
+            </ChartContainer>
+        );
+    } else {
+        return (
+            <div className='h-full'>
+                <div className='text-sm font-bold text-center'>
+                    No Assessments Yet
+                </div>
+            </div>
+        )
+    }
 }

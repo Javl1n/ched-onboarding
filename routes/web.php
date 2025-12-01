@@ -118,7 +118,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/{user}/report/summary/saved', 'savedReport')->name('summary.saved');
             Route::post('/{user}/summary/store', 'storeReport')->name('summary.store');
         });
+
+    Route::prefix('/journal');
 });
+
+Route::post('trainees/{user}/report/summary/test', [TraineeController::class, 'summary']);
+
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

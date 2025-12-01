@@ -151,7 +151,7 @@ export default function TraineeShowAssessment({
                             </div>
                         )}
 
-                        <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-5 shadow-sm">
+                        {user.role == 'admin' && <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-5 shadow-sm">
                             <h2 className="mb-4 font-semibold text-foreground">Supervisors</h2>
                             <div className="space-y-1">
                                 {supervisors.filter((sup) => user.role == 'admin' || sup.id == user.id).map((sup) => (
@@ -168,7 +168,7 @@ export default function TraineeShowAssessment({
                                     </Button>
                                 ))}
                             </div>
-                        </div>
+                        </div>}
 
                         {supervisor.id === user.id && (
                             <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-5 shadow-sm">
@@ -224,7 +224,7 @@ export default function TraineeShowAssessment({
                                     {questions['General'].map((question) => (
                                         <TextQuestion
                                             disabled={supervisor.id !== user.id}
-                                            
+
                                             value={data.questions[question.id] as string}
                                             onChange={(e) =>
                                                 setData('questions', {
