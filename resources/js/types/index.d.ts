@@ -122,3 +122,39 @@ export interface PaginatedData<T> {
         active: boolean;
     }[];
 }
+
+export interface TraineeJournalInterface {
+    id: number;
+    trainee_id: number;
+    date: string;
+    content: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface AnnouncementInterface {
+    id: number;
+    user_id: number | null;
+    department_id: number | null;
+    title: string;
+    content: string;
+    priority: 'low' | 'normal' | 'high' | 'urgent';
+    status: 'draft' | 'published';
+    published_at: string | null;
+    expires_at: string | null;
+    created_at: string;
+    updated_at: string;
+    user?: User;
+    department?: DepartmentInterface;
+    is_read?: boolean;
+}
+
+export interface AnnouncementNotificationInterface {
+    id: number;
+    announcement_id: number;
+    user_id: number;
+    read_at: string | null;
+    created_at: string;
+    updated_at: string;
+    announcement?: AnnouncementInterface;
+}

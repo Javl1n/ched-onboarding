@@ -17,7 +17,7 @@ import { ChangeEvent } from 'react';
 export interface ProfilingAttributes {
     profile: File | undefined | string;
     school: string;
-    birth: Date;
+    birth: string;
     gender: 'Male' | 'Female';
     contact: string;
     address: string;
@@ -31,7 +31,7 @@ export default function Profiling() {
     const { data, setData, errors, processing, post } = useForm<ProfilingAttributes>({
         profile: undefined,
         school: '',
-        birth: new Date(new Date().setFullYear(new Date().getFullYear() - 21)),
+        birth: new Date(new Date().setFullYear(new Date().getFullYear() - 21)).toDateString(),
         gender: 'Male',
         contact: '',
         address: '',
@@ -62,7 +62,15 @@ export default function Profiling() {
                     </div>
                     <div className="grid gap-2">
                         <Label>Date of Birth</Label>
-                        <DateInput date={data.birth} setDate={(date) => setData('birth', date)} />
+                        {/* <DateInput date={data.birth} setDate={(date) => setData('birth', date)} /> */}
+                        <Input
+                            id="date"
+                            type="date"
+                            value={data.birth}
+                            onChange={(e) => setData('birth', e.target.value)}
+                            max={new Date().toISOString().split('T')[0]}
+                            required
+                        />
                         <InputError message={errors.school} className="mt-2" />
                     </div>
                     <div className="grid gap-2">

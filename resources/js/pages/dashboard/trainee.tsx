@@ -61,11 +61,11 @@ export default function DashboardTrainee({
                 <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm lg:p-8">
                     <div className="flex gap-6">
                         <img
-                            className="hidden size-20 rounded-xl border-2 border-primary/20 object-cover shadow-md md:block lg:size-24"
+                            className="hidden size-20 rounded-xl border-2 border-primary/20 object-cover shadow-md md:block lg:size-36 h-full aspect-square"
                             src={`/private/${profile}`}
                             alt={user.name}
                         />
-                        <div className="flex flex-1 flex-col justify-between">
+                        <div className="flex-1">
                             <div>
                                 <div className="text-sm font-semibold tracking-wide text-muted-foreground uppercase">Welcome Back</div>
                                 <div className="mt-1 text-3xl font-black lg:text-4xl">{user.name}</div>

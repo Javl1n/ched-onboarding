@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('time_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('trainee_id')->constrained('trainee_profiles', 'id')->cascadeOnDelete();
-            $table->date("date");
+            $table->date('date');
             $table->unique(['date', 'trainee_id']);
-            $table->time("morning_in")->nullable();
-            $table->time("morning_out")->nullable();
-            $table->time("afternoon_in")->nullable();
-            $table->time("afternoon_out")->nullable();
-            $table->float("hours")->nullable();
+            $table->time('morning_in')->nullable();
+            $table->time('morning_out')->nullable();
+            $table->time('afternoon_in')->nullable();
+            $table->time('afternoon_out')->nullable();
+            $table->float('hours')->nullable();
             $table->timestamps();
         });
     }

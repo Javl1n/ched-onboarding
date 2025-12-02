@@ -30,21 +30,21 @@ class DepartmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "password" => "required|string"
+            'password' => 'required|string',
         ]);
 
         if (! Hash::check($request->password, auth()->user()->password)) {
             return back()->withErrors([
-                "password" => "Incorrect password"
+                'password' => 'Incorrect password',
             ]);
         }
 
         $request->validate([
-            "name" => "required|string|unique:departments,name",
+            'name' => 'required|string|unique:departments,name',
         ]);
 
         Department::create([
-            "name" => $request->name
+            'name' => $request->name,
         ]);
 
         return back();

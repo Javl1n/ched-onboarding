@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Question;
 use App\Models\SupervisorAssessment;
-use App\Models\TraineeAssessment;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -19,7 +18,7 @@ class SupervisorAssessmentController extends Controller
 
         if ($supervisor) {
             return redirect()->route('assessments.supervisor.show', [
-                "supervisor" => $supervisor
+                'supervisor' => $supervisor,
             ]);
         }
 
@@ -40,23 +39,23 @@ class SupervisorAssessmentController extends Controller
     public function store(User $supervisor, Request $request)
     {
         $request->validate([
-            'questions.*' => 'required'
+            'questions.*' => 'required',
         ], messages: [
-            "questions.*" => [
-                "required" => "This field is required."
-            ]
+            'questions.*' => [
+                'required' => 'This field is required.',
+            ],
         ]);
 
         $questions = $request->questions;
 
         foreach ($questions as $id => $value) {
-            SupervisorAssessment ::updateOrCreate([
+            SupervisorAssessment::updateOrCreate([
                 'trainee_id' => auth()->user()->profile->id,
                 'question_id' => $id,
                 'supervisor_id' => $supervisor->id,
             ], [
                 'value' => $value,
-            ]); 
+            ]);
         }
 
         return back();
@@ -69,15 +68,15 @@ class SupervisorAssessmentController extends Controller
     {
         $supervisors = auth()->user()->department->users()->where('role', 'supervisor')->get();
 
-        $questions = Question::where('for', "trainee")->get();
-        
+        $questions = Question::where('for', 'trainee')->get();
+
         $assessments = $supervisors->find($id)->supervisorAssessments()->with('question')->where('trainee_id', auth()->user()->profile->id)->get();
 
         return inertia()->render('assessment/supervisor/show', [
-            "supervisors" => $supervisors,
-            "supervisor" => $supervisors->find($id),
-            "questions" => $questions,
-            "assessments" => $assessments
+            'supervisors' => $supervisors,
+            'supervisor' => $supervisors->find($id),
+            'questions' => $questions,
+            'assessments' => $assessments,
         ]);
     }
 

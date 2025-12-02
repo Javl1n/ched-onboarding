@@ -6,7 +6,6 @@ use App\Models\Question;
 use App\Models\TraineeReport;
 use App\Models\User;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Prism\Prism\Prism;
@@ -175,6 +174,10 @@ class TraineeController extends Controller
             .'}';
         })->implode("\n");
 
+        $journals = $user->profile->journals()->orderBy('date', 'desc')->get();
+
+        $journalSummary = $journals->isEmpty() ? 'No journal entries recorded.' : $journals->map(fn ($journal) => "{$journal->date}: {$journal->content}")->implode("\n\n");
+
         $prompt = "
             Trainee: {$user->name}\n
             Department: {$user->department->name}\n
@@ -189,6 +192,9 @@ class TraineeController extends Controller
 
             --- Supervisor Assessmennt ---
             {$assessmentSummary}
+
+            --- Journal Entries ---
+            {$journalSummary}
         ";
 
         return response()->stream(function () use ($prompt) {
@@ -236,7 +242,7 @@ class TraineeController extends Controller
         return response()->stream(function () use ($report) {
             foreach (str_split($report, 10) as $chunk) {
                 echo $chunk;
-                 if (ob_get_level() > 0) {
+                if (ob_get_level() > 0) {
                     ob_flush();
                 }
                 flush();

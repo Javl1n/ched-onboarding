@@ -12,15 +12,14 @@ class Question extends Model
 
     public function assessment()
     {
-        if (auth()->user()->role() !== "trainee") {
-            return $this->hasMany(TraineeAssessment::class, "");
+        if (auth()->user()->role() !== 'trainee') {
+            return $this->hasMany(TraineeAssessment::class, '');
         }
-        
-        return;
+
     }
 
     public function supervisorAssessments()
-    {   
-        return $this->hasMany(SupervisorAssessment::class, "");
+    {
+        return $this->hasMany(SupervisorAssessment::class, '');
     }
 }

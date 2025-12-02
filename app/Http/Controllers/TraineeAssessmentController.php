@@ -31,14 +31,14 @@ class TraineeAssessmentController extends Controller
     {
         if (auth()->user()->id != $supervisor->id) {
             abort(403, 'Unauthorized action.');
-        };
+        }
 
         $request->validate([
-            'questions.*' => 'required'
+            'questions.*' => 'required',
         ], messages: [
-            "questions.*" => [
-                "required" => "This field is required."
-            ]
+            'questions.*' => [
+                'required' => 'This field is required.',
+            ],
         ]);
 
         $questions = $request->questions;
@@ -50,7 +50,7 @@ class TraineeAssessmentController extends Controller
                 'supervisor_id' => auth()->user()->id,
             ], [
                 'value' => $value,
-            ]); 
+            ]);
         }
 
         return back();

@@ -26,7 +26,7 @@ export default function EditTraineeProfile() {
     const { data, setData, errors, processing, post } = useForm<ProfilingAttributes>({
         profile: profile.profile,
         school: profile.school,
-        birth: new Date(profile.birth),
+        birth: profile.birth,
         gender: profile.gender,
         contact: profile.contact,
         address: profile.address,

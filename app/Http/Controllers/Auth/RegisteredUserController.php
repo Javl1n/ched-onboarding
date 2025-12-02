@@ -22,7 +22,7 @@ class RegisteredUserController extends Controller
     public function create(): Response
     {
         return Inertia::render('auth/register', [
-            "departments" => Department::get()->except([Department::where("name", "Admin")->first()->id]),
+            'departments' => Department::get()->except([Department::where('name', 'Admin')->first()->id]),
         ]);
     }
 
@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'trainee',
-            "department_id" => $request->department,
+            'department_id' => $request->department,
         ]);
 
         event(new Registered($user));

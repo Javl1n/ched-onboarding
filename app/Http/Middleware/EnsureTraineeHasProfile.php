@@ -16,7 +16,7 @@ class EnsureTraineeHasProfile
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->user()->role == 'trainee') {
-            if (!$request->user()->profile) {
+            if (! $request->user()->profile) {
                 return redirect()->route('register.profiling');
             }
 

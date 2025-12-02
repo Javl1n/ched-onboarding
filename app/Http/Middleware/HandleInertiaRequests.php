@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\AnnouncementNotification;
 use App\Models\Page;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -48,6 +49,11 @@ class HandleInertiaRequests extends Middleware
             ],
             'onboarding' => Page::getSidebarModels(),
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'unread_announcements_count' => $request->user()
+                ? AnnouncementNotification::where('user_id', $request->user()->id)
+                    ->whereNull('read_at')
+                    ->count()
+                : 0,
         ];
     }
 }

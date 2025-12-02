@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Department;
 use App\Models\Question;
-use App\Models\TraineeProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,9 +18,9 @@ class SupervisorController extends Controller
         $supervisors = User::with(['department'])->where('role', 'supervisor')->get();
 
         return inertia('supervisor/index', [
-            "supervisors" => $supervisors,
-            "departments" => Department::all()->except(
-                Department::where('name', "Admin")->first()->id
+            'supervisors' => $supervisors,
+            'departments' => Department::all()->except(
+                Department::where('name', 'Admin')->first()->id
             ),
         ]);
     }
@@ -40,18 +39,18 @@ class SupervisorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "name" => "required",
-            "email" => "required|email|unique:users,email",
-            "password" => "required",
-            "department" => "required|exists:departments,id"
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+            'department' => 'required|exists:departments,id',
         ]);
 
         $supervisor = User::create([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => Hash::make($request->password),
-            "department_id" => $request->department,
-            "role" => "supervisor",
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'department_id' => $request->department,
+            'role' => 'supervisor',
         ]);
 
         return back();
@@ -72,23 +71,23 @@ class SupervisorController extends Controller
         });
 
         return inertia()->render('supervisor/show', [
-            "supervisor" => $supervisor,
-            "assessments" => $assessments,
-            "questions" => $questions,
-            "trainees" => $supervisor->department->users()->where('role', 'trainee')->get()
+            'supervisor' => $supervisor,
+            'assessments' => $assessments,
+            'questions' => $questions,
+            'trainees' => $supervisor->department->users()->where('role', 'trainee')->get(),
         ]);
     }
 
-    public function showTrainee(User $supervisor, User $trainee) 
+    public function showTrainee(User $supervisor, User $trainee)
     {
         $questions = Question::where('for', 'trainee')->get();
 
         return inertia()->render('supervisor/show-trainee', [
-            "supervisor" => $supervisor,
-            "trainee" => $trainee,
-            "questions" => $questions,
-            "assessments" => $supervisor->supervisorAssessments()->where('trainee_id', $trainee->profile->id)->with('question')->get(),
-            "trainees" => $supervisor->department->users()->where('role', 'trainee')->get(),
+            'supervisor' => $supervisor,
+            'trainee' => $trainee,
+            'questions' => $questions,
+            'assessments' => $supervisor->supervisorAssessments()->where('trainee_id', $trainee->profile->id)->with('question')->get(),
+            'trainees' => $supervisor->department->users()->where('role', 'trainee')->get(),
         ]);
     }
 

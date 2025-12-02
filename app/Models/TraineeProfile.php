@@ -47,6 +47,11 @@ class TraineeProfile extends Model
         return $this->hasMany(SupervisorAssessment::class, 'trainee_id');
     }
 
+    public function journals()
+    {
+        return $this->hasMany(TraineeJournal::class, 'trainee_id');
+    }
+
     /**
      * Scope a query to only include active trainee profiles.
      */

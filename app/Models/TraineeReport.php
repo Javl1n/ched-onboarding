@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TraineeReport extends Model
 {
-protected $fillable = ['content', "trainee_id"];
+    protected $fillable = ['content', 'trainee_id'];
 
     public function trainee()
     {

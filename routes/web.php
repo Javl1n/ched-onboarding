@@ -119,11 +119,40 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/{user}/summary/store', 'storeReport')->name('summary.store');
         });
 
-    Route::prefix('/journal');
+    Route::prefix('/journal')
+        ->middleware(['role:trainee', 'profiled'])
+        ->controller(\App\Http\Controllers\TraineeJournalController::class)
+        ->name('journal.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('/{journal}', 'show')->name('show');
+            Route::get('/{journal}/edit', 'edit')->name('edit');
+            Route::patch('/{journal}', 'update')->name('update');
+            Route::delete('/{journal}', 'destroy')->name('destroy');
+        });
+
+    Route::prefix('/announcements')
+        ->controller(\App\Http\Controllers\AnnouncementController::class)
+        ->name('announcements.')->group(function () {
+            // View routes (all authenticated users)
+            Route::get('/', 'index')->name('index');
+
+            // Management routes (admin/supervisor only)
+            Route::middleware('role:admin,supervisor')->group(function () {
+                Route::get('/create', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{announcement}/edit', 'edit')->name('edit');
+                Route::patch('/{announcement}', 'update')->name('update');
+                Route::delete('/{announcement}', 'destroy')->name('destroy');
+            });
+
+            // Must be last to avoid matching 'create' or 'edit' as IDs
+            Route::get('/{announcement}', 'show')->name('show');
+        });
 });
 
 Route::post('trainees/{user}/report/summary/test', [TraineeController::class, 'summary']);
-
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

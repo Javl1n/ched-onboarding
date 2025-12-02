@@ -4,12 +4,13 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import assessments from '@/routes/assessments';
 import dashboard from '@/routes/dashboard';
+import journal from '@/routes/journal';
 import onboarding from '@/routes/onboarding';
 import supervisor from '@/routes/supervisor';
 import trainees from '@/routes/trainees';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { ClipboardCheck, FileUser, LayoutGrid, Notebook, NotebookTabs, UserRoundCog, Users } from 'lucide-react';
+import { ClipboardCheck, FileUser, LayoutGrid, Megaphone, Notebook, NotebookTabs, UserRoundCog, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const traineeNavItems: NavItem[] = [
@@ -24,8 +25,13 @@ const traineeNavItems: NavItem[] = [
     //     icon: FileUser,
     // },
     {
+        title: 'Announcements',
+        href: '/announcements',
+        icon: Megaphone,
+    },
+    {
         title: 'Journal',
-        href: dashboard.trainee(),
+        href: journal.index(),
         icon: NotebookTabs,
     },
     {
@@ -46,6 +52,11 @@ const supervisorNavItems: NavItem[] = [
     //     href: onboarding.index(),
     //     icon: FileUser,
     // },
+    {
+        title: 'Announcements',
+        href: '/announcements',
+        icon: Megaphone,
+    },
     // {
     //     title: 'Assessments',
     //     href: assessments.supervisor.index(),
@@ -69,6 +80,11 @@ const adminNavItems: NavItem[] = [
     //     href: onboarding.index(),
     //     icon: FileUser,
     // },
+    {
+        title: 'Announcements',
+        href: '/announcements',
+        icon: Megaphone,
+    },
     {
         title: 'Trainees',
         href: trainees.index(),
