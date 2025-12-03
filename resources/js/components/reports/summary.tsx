@@ -48,18 +48,18 @@ export default function ReportSummary() {
             setData('summary', streamData);
         },
         onError: (error) => {
-            if (
-                error.message.includes('419') ||
-                error.message.toLowerCase().includes('csrf') ||
-                error.message.toLowerCase().includes('page expired')
-            ) {
-                setError('Your session has expired. Please refresh the page and try again.');
-                toast.error('Session Expired', {
-                    description: 'Please refresh the page and try again.',
-                });
-            } else {
+            // if (
+            //     error.message.includes('419') ||
+            //     error.message.toLowerCase().includes('csrf') ||
+            //     error.message.toLowerCase().includes('page expired')
+            // ) {
+            //     setError('Your session has expired. Please refresh the page and try again.');
+            //     toast.error('Session Expired', {
+            //         description: 'Please refresh the page and try again.',
+            //     });
+            // } else {
                 setError(error.message);
-            }
+            // }
         },
     });
 

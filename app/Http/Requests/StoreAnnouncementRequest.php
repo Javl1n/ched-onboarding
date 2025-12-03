@@ -17,8 +17,14 @@ class StoreAnnouncementRequest extends FormRequest
         // Check if supervisor is trying to set wrong department or create global
         if ($user->role === 'supervisor') {
             $departmentId = $this->input('department_id');
-            // Supervisors cannot create global announcements (department_id null)
-            if ($departmentId === null || $departmentId !== $user->department_id) {
+
+            // Supervisors cannot create global announcements (department_id null or empty)
+            if (empty($departmentId)) {
+                return false;
+            }
+
+            // Supervisors can only create announcements for their own department
+            if ((int) $departmentId !== $user->department_id) {
                 return false;
             }
         }

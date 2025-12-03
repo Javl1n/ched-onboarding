@@ -11,7 +11,7 @@ import show from '@/routes/trainees/show';
 import type { NavItem, User } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import { format, formatDistanceToNow } from 'date-fns';
-import { BookText, Cake, Calendar, ClipboardList, Clock, Contact, House, Mail, Mars, Phone, School, Venus } from 'lucide-react';
+import { BookOpen, BookText, Cake, Calendar, ClipboardList, Clock, Contact, House, Mail, Mars, Phone, School, Venus } from 'lucide-react';
 import React, { type ReactNode, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -59,6 +59,11 @@ export default function TraineeShowLayout({ children, action }: { children?: Rea
             title: 'Assessments',
             href: assessment.redirect(trainee),
             icon: ClipboardList,
+        },
+        {
+            title: 'Journal',
+            href: show.journal(trainee),
+            icon: BookOpen,
         },
         {
             title: 'Reports',

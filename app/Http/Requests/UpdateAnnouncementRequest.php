@@ -23,7 +23,14 @@ class UpdateAnnouncementRequest extends FormRequest
         if ($user->role === 'supervisor' && $announcement->user_id === $user->id) {
             // Check if trying to change department
             $departmentId = $this->input('department_id');
-            if ($departmentId !== null && $departmentId !== $user->department_id) {
+
+            // Supervisors cannot set global (empty department_id)
+            if (empty($departmentId)) {
+                return false;
+            }
+
+            // Supervisors can only set their own department
+            if ((int) $departmentId !== $user->department_id) {
                 return false;
             }
 

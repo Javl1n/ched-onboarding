@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { DepartmentInterface, type BreadcrumbItem, User, SharedData } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { Megaphone, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,23 +33,34 @@ export default function AnnouncementCreate({
     const { auth } = usePage<SharedData>().props;
     const isAdmin = auth.user.role === 'admin';
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, processing, errors, setError, clearErrors } = useForm({
         title: '',
         content: '',
         priority: 'normal',
         status: 'draft',
-        department_id: isAdmin ? '' : (userDepartmentId?.toString() || ''),
+        department_id: isAdmin ? 'global' : (userDepartmentId?.toString() || 'global'),
         expires_at: '',
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        post('/announcements', {
+
+        // Transform 'global' to empty string for backend (nullable)
+        const submitData = {
+            ...data,
+            department_id: data.department_id === 'global' ? '' : data.department_id,
+        };
+
+        router.post('/announcements', submitData, {
             onSuccess: () => {
                 toast.success('Announcement created successfully');
             },
-            onError: () => {
+            onError: (errors) => {
                 toast.error('Failed to create announcement');
+                // Set errors from response
+                Object.keys(errors).forEach((key) => {
+                    setError(key as any, errors[key] as string);
+                });
             },
         });
     };
@@ -135,7 +146,7 @@ export default function AnnouncementCreate({
                                                 <SelectValue placeholder="Global (All departments)" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="">Global (All departments)</SelectItem>
+                                                <SelectItem value="global">Global (All departments)</SelectItem>
                                                 {departments.map((dept) => (
                                                     <SelectItem key={dept.id} value={dept.id.toString()}>
                                                         {dept.name}

@@ -113,6 +113,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/{user}/assessment/supervisor/{supervisor}', 'showAssessment')->name('show.assessment');
 
             Route::get('/{user}/report', 'showReport')->name('show.report');
+            Route::get('/{user}/journal', 'showJournal')->name('show.journal');
 
             Route::post('/{user}/report/summary', 'summary')->name('summary');
             Route::post('/{user}/report/summary/saved', 'savedReport')->name('summary.saved');

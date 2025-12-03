@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { AnnouncementInterface, DepartmentInterface, type BreadcrumbItem, User } from '@/types';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,12 +35,12 @@ export default function AnnouncementEdit({
     const { auth } = usePage().props as { auth: { user: User } };
     const isAdmin = auth.user.role === 'admin';
 
-    const { data, setData, patch, processing, errors } = useForm({
+    const { data, setData, processing, errors, setError } = useForm({
         title: announcement.title,
         content: announcement.content,
         priority: announcement.priority,
         status: announcement.status,
-        department_id: announcement.department_id?.toString() || '',
+        department_id: announcement.department_id?.toString() || 'global',
         expires_at: announcement.expires_at
             ? new Date(announcement.expires_at).toISOString().slice(0, 16)
             : '',
@@ -48,12 +48,23 @@ export default function AnnouncementEdit({
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        patch(`/announcements/${announcement.id}`, {
+
+        // Transform 'global' to empty string for backend (nullable)
+        const submitData = {
+            ...data,
+            department_id: data.department_id === 'global' ? '' : data.department_id,
+        };
+
+        router.patch(`/announcements/${announcement.id}`, submitData, {
             onSuccess: () => {
                 toast.success('Announcement updated successfully');
             },
-            onError: () => {
+            onError: (errors) => {
                 toast.error('Failed to update announcement');
+                // Set errors from response
+                Object.keys(errors).forEach((key) => {
+                    setError(key as any, errors[key] as string);
+                });
             },
         });
     };
@@ -139,7 +150,7 @@ export default function AnnouncementEdit({
                                                 <SelectValue placeholder="Global (All departments)" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="">Global (All departments)</SelectItem>
+                                                <SelectItem value="global">Global (All departments)</SelectItem>
                                                 {departments.map((dept) => (
                                                     <SelectItem key={dept.id} value={dept.id.toString()}>
                                                         {dept.name}

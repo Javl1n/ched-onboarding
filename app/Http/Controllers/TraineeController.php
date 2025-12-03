@@ -148,6 +148,23 @@ class TraineeController extends Controller
         ]);
     }
 
+    public function showJournal(User $user)
+    {
+        $month = request()->input('month', now()->month);
+        $year = request()->input('year', now()->year);
+
+        return inertia()->render('trainee/show/journal', [
+            'trainee' => $user->load(['department', 'profile']),
+            'month' => $month,
+            'year' => $year,
+            'journals' => $user->profile->journals()
+                ->whereMonth('date', $month)
+                ->whereYear('date', $year)
+                ->orderBy('date', 'desc')
+                ->get(),
+        ]);
+    }
+
     public function summary(User $user)
     {
         // $key = "summary:" . $user->id;
@@ -157,6 +174,8 @@ class TraineeController extends Controller
         // }
 
         // RateLimiter::hit($key, now()->addDay());
+
+        $user = $user->load(['profile.logs', 'profile.assessments', 'profile.journals']);
 
         $timelogs = $user->profile->logs;
 
@@ -207,11 +226,14 @@ class TraineeController extends Controller
                             Use <h2> for section headers and <p> for details.
                             Structure into three sections:
                             <h2>Attendance Summary</h2>
+                            <h2>Journal Summary</h2>
                             <h2>Supervisor Assessment</h2>
                             <h2>Overall Impression</h2>')
                 ->withPrompt($prompt)
                 ->withMaxTokens(10000)
                 ->asStream();
+
+            // dd($stream);
             // ob_start();
             foreach ($stream as $chunk) {
                 // yield $chunk->text;
