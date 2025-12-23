@@ -8,7 +8,8 @@ import assessments from '@/routes/assessments';
 import { AssessmentInterface, BreadcrumbItem, QuestionInterface, User } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { format } from 'date-fns';
-import { Save, UserCircle } from 'lucide-react';
+import { ChevronUp, Save, UserCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function SupervisorAsssessmentShow({
@@ -47,6 +48,30 @@ export default function SupervisorAsssessmentShow({
             questionList.map((question) => [question.id, assessmentList.find((assessment) => assessment.question.id == question.id)?.value || '']),
         ),
     });
+    const [showScroll, setShowScroll] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 200) {
+                setShowScroll(true);
+            } else {
+                setShowScroll(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+    };
 
     const save = () => {
         toast.promise(
@@ -98,8 +123,8 @@ export default function SupervisorAsssessmentShow({
                     </div>
 
                     {/* Assessment Content Card */}
-                    <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
-                        <div className="h-[calc(100vh-6rem)] space-y-8 overflow-auto">
+                    <div className="space-y-8 overflow-auto">
+                        <div className="rounded-xl border border-sidebar-border bg-gradient-to-br from-card to-muted/20 p-6 shadow-sm">
                             {Object.keys(questions)
                                 .filter((category) => category != 'General')
                                 .map((category, categoryIndex) => (
@@ -157,6 +182,17 @@ export default function SupervisorAsssessmentShow({
                     </div>
                 </div>
             </SupervisorAssessmentLayout>
+            {showScroll && (
+                <div className="pointer-events-none fixed bottom-8 left-0 right-0 flex justify-center">
+                    <button
+                        onClick={scrollToTop}
+                        className="pointer-events-auto rounded-full bg-primary p-3 text-primary-foreground shadow-lg transition-all hover:scale-110 hover:shadow-xl dark:bg-primary dark:text-primary-foreground"
+                        aria-label="Scroll to top"
+                    >
+                        <ChevronUp className="size-5" />
+                    </button>
+                </div>
+            )}
         </AppLayout>
     );
 }
