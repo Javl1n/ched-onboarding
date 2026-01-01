@@ -1,18 +1,18 @@
 import { SharedData } from "@/types";
 import { Link, usePage } from "@inertiajs/react";
-import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem } from "./ui/sidebar";
+import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarMenuSubItem, useSidebar } from "./ui/sidebar";
 import onboarding from "@/routes/onboarding";
 import { FileUser, Plus } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
 
-export function OnboardingNavGroup () {
+export function OnboardingNavGroup() {
     const page = usePage<SharedData>();
     const {
         auth: { user },
         onboarding: pages,
     } = page.props;
 
-
+    const { setOpen } = useSidebar();
 
     return (
         <Collapsible defaultOpen className="group/collapsible">
@@ -24,7 +24,8 @@ export function OnboardingNavGroup () {
                     <SidebarMenuButton
                         asChild
                         isActive={page.url.startsWith(onboarding.index().url)}
-                        // tooltip={{ children: item.title }}
+                        onClick={() => setOpen(true)}
+                    // tooltip={{ children: item.title }}
                     >
                         {/* <Link href={onboarding.index()} prefetch> */}
                         <div>
