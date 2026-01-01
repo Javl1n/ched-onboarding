@@ -1,8 +1,6 @@
 <?php
+
 use App\Http\Controllers\SupervisorAssessmentController;
-
-?><?php
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PageController;
@@ -24,7 +22,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('admin', 'admin')->middleware('role:admin')->name('admin');
         Route::get('supervisor', 'supervisor')->middleware('role:supervisor')->name('supervisor');
         Route::get('trainee', 'trainee')->middleware(['role:trainee', 'profiled'])->name('trainee');
-
     });
 
     Route::controller(PageController::class)
@@ -37,7 +34,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::get('/create', 'create')->name('create');
                 Route::get('{page:slug}/edit', 'edit')->name('edit');
                 Route::post('{page:slug}/update', 'update')->name('update');
-
             });
 
             Route::get('/', 'index')->name('index');
@@ -54,7 +50,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/', 'store')->name('store');
             Route::get('/{supervisor}', 'show')->name('show.all');
             Route::get('/{supervisor}/trainee/{trainee}', 'showTrainee')->name('show.trainee');
-
         });
 
     Route::controller(DepartmentController::class)
@@ -64,7 +59,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->group(function () {
 
             Route::post('/', 'store')->name('store');
-
         });
 
     Route::controller(TimeLogController::class)
@@ -72,7 +66,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::middleware(['role:admin'])->group(function () {
 
                 Route::post('/time-log', 'store')->name('timelog.post');
-
             });
         });
 
@@ -166,5 +159,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::post('trainees/{user}/report/summary/test', [TraineeController::class, 'summary']);
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
