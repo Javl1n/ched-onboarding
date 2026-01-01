@@ -10,7 +10,7 @@ import supervisor from '@/routes/supervisor';
 import trainees from '@/routes/trainees';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { ClipboardCheck, FileUser, LayoutGrid, Megaphone, Notebook, NotebookTabs, UserRoundCog, Users } from 'lucide-react';
+import { ClipboardCheck, ClipboardList, FileUser, LayoutGrid, Megaphone, Notebook, NotebookTabs, UserRoundCog, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const traineeNavItems: NavItem[] = [
@@ -94,6 +94,11 @@ const adminNavItems: NavItem[] = [
         title: 'Supervisors',
         href: supervisor.index(),
         icon: UserRoundCog,
+    },
+    {
+        title: 'Questions',
+        href: '/questions',
+        icon: ClipboardList,
     },
 ];
 

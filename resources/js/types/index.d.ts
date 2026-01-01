@@ -97,7 +97,12 @@ export interface QuestionInterface {
     content: string;
     type: 'text' | 'scale';
     category: string;
+    order: number;
+    created_at: string;
+    updated_at: string;
 }
+
+export type GroupedQuestions = Record<string, QuestionInterface[]>;
 
 export interface AssessmentInterface {
     id: string | number;

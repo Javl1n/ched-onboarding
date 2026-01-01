@@ -1,0 +1,54 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('questions', function (Blueprint $table) {
+            $table->unsignedInteger('order')->default(0)->after('category');
+            $table->index(['for', 'order']);
+        });
+
+        // Populate existing questions with sequential order
+        $supervisorQuestions = DB::table('questions')
+            ->where('for', 'supervisor')
+            ->orderBy('id')
+            ->get();
+
+        foreach ($supervisorQuestions as $index => $question) {
+            DB::table('questions')
+                ->where('id', $question->id)
+                ->update(['order' => $index + 1]);
+        }
+
+        $traineeQuestions = DB::table('questions')
+            ->where('for', 'trainee')
+            ->orderBy('id')
+            ->get();
+
+        foreach ($traineeQuestions as $index => $question) {
+            DB::table('questions')
+                ->where('id', $question->id)
+                ->update(['order' => $index + 1]);
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('questions', function (Blueprint $table) {
+            $table->dropIndex(['for', 'order']);
+            $table->dropColumn('order');
+        });
+    }
+};

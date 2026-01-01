@@ -151,6 +151,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // Must be last to avoid matching 'create' or 'edit' as IDs
             Route::get('/{announcement}', 'show')->name('show');
         });
+
+    Route::prefix('/questions')
+        ->middleware('role:admin')
+        ->controller(\App\Http\Controllers\QuestionController::class)
+        ->name('questions.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::get('/{question}/edit', 'edit')->name('edit');
+            Route::patch('/{question}', 'update')->name('update');
+            Route::post('/reorder', 'reorder')->name('reorder');
+        });
 });
 
 Route::post('trainees/{user}/report/summary/test', [TraineeController::class, 'summary']);
